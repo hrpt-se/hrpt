@@ -4,6 +4,15 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'epiwork',
+        'HOST': 'localhost',
+        'USER': 'admin',
+        'PASSWORD': 'admin'
+    }
+}
 
 ADMINS = (
     ('halsorapport Admin', 'admin.halsorapport@folkhalsomyndigheten.se'),
@@ -211,8 +220,3 @@ LOGIN_REDIRECT_URL = '/survey/thanks/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
 
-
-# Now let's load overrides for the specific environmt.
-# local_settings.py is generated from local_settings.py.in in the bootstrap script
-# and it is not commited to git.
-from local_settings import *
