@@ -44,7 +44,7 @@ To work around this problem:
   1. Retrieve the root certificates for the network in PEM format with .crt suffix and place in the vagrant/certs/ folder
   2. Download the Ubuntu box without SSL certificate validation and then set up the environment.
 ```bash
-$ vagrant box add "ubuntu/trusty64"
+$ vagrant box add "ubuntu/trusty64" --insecure
 ==> box: Loading metadata for box 'ubuntu/trusty64'
     box: URL: https://atlas.hashicorp.com/ubuntu/trusty64
 ==> box: Adding box 'ubuntu/trusty64' (v20170422.0.0) for provider: virtualbox
