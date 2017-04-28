@@ -9,8 +9,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'epiwork',
         'HOST': 'localhost',
-        'USER': 'admin',
-        'PASSWORD': 'admin'
+        'USER': 'epiwork',
+        'PASSWORD': 'epiwork'
     }
 }
 

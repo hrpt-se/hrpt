@@ -16,7 +16,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: pollster_results_intake; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
+-- Name: pollster_results_intake; Type: TABLE; Schema: public; Owner: epiwork; Tablespace:
 --
 
 CREATE TABLE pollster_results_intake (
@@ -84,10 +84,10 @@ CREATE TABLE pollster_results_intake (
 );
 
 
-ALTER TABLE public.pollster_results_intake OWNER TO admin;
+ALTER TABLE public.pollster_results_intake OWNER TO epiwork;
 
 --
--- Name: pollster_results_intake_id_seq1; Type: SEQUENCE; Schema: public; Owner: admin
+-- Name: pollster_results_intake_id_seq1; Type: SEQUENCE; Schema: public; Owner: epiwork
 --
 
 CREATE SEQUENCE pollster_results_intake_id_seq1
@@ -98,17 +98,17 @@ CREATE SEQUENCE pollster_results_intake_id_seq1
     CACHE 1;
 
 
-ALTER TABLE public.pollster_results_intake_id_seq1 OWNER TO admin;
+ALTER TABLE public.pollster_results_intake_id_seq1 OWNER TO epiwork;
 
 --
--- Name: pollster_results_intake_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+-- Name: pollster_results_intake_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: epiwork
 --
 
 ALTER SEQUENCE pollster_results_intake_id_seq1 OWNED BY pollster_results_intake.id;
 
 
 --
--- Name: pollster_results_weekly; Type: TABLE; Schema: public; Owner: admin; Tablespace: 
+-- Name: pollster_results_weekly; Type: TABLE; Schema: public; Owner: epiwork; Tablespace:
 --
 
 CREATE TABLE pollster_results_weekly (
@@ -216,10 +216,10 @@ CREATE TABLE pollster_results_weekly (
 );
 
 
-ALTER TABLE public.pollster_results_weekly OWNER TO admin;
+ALTER TABLE public.pollster_results_weekly OWNER TO epiwork;
 
 --
--- Name: pollster_results_weekly_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+-- Name: pollster_results_weekly_id_seq; Type: SEQUENCE; Schema: public; Owner: epiwork
 --
 
 CREATE SEQUENCE pollster_results_weekly_id_seq
@@ -230,31 +230,31 @@ CREATE SEQUENCE pollster_results_weekly_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pollster_results_weekly_id_seq OWNER TO admin;
+ALTER TABLE public.pollster_results_weekly_id_seq OWNER TO epiwork;
 
 --
--- Name: pollster_results_weekly_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+-- Name: pollster_results_weekly_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: epiwork
 --
 
 ALTER SEQUENCE pollster_results_weekly_id_seq OWNED BY pollster_results_weekly.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: admin
+-- Name: id; Type: DEFAULT; Schema: public; Owner: epiwork
 --
 
 ALTER TABLE ONLY pollster_results_intake ALTER COLUMN id SET DEFAULT nextval('pollster_results_intake_id_seq1'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: admin
+-- Name: id; Type: DEFAULT; Schema: public; Owner: epiwork
 --
 
 ALTER TABLE ONLY pollster_results_weekly ALTER COLUMN id SET DEFAULT nextval('pollster_results_weekly_id_seq'::regclass);
 
 
 --
--- Data for Name: pollster_results_intake; Type: TABLE DATA; Schema: public; Owner: admin
+-- Data for Name: pollster_results_intake; Type: TABLE DATA; Schema: public; Owner: epiwork
 --
 
 COPY pollster_results_intake (id, "user", global_id, channel, "timestamp", "Q1", "Q3", "Q2", "Q6f", "Q6ff", "Q6g", "Q6gg", "Q0", "Q3hh", "Q4d", "Q4d1", "Q4", "Q4e1", "Q4c", "Q4c1", "Q13", "Q13e1", "Q7gg", "Q4gg", "Q4d2", "Q4e2", "Q4c2", "Q13e2", "Q14b", "Q14c", "Q14d", "Q18a", "Q18b", "Q18c_0", "Q18c_1", "Q18c_2", "Q18c_3", "Q18c_4", "Q18c_5", "Q18d_0", "Q18d_1", "Q18d_2", "Q18d_3", "Q18d_4", "Q18d_5") FROM stdin;
@@ -262,14 +262,14 @@ COPY pollster_results_intake (id, "user", global_id, channel, "timestamp", "Q1",
 
 
 --
--- Name: pollster_results_intake_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: admin
+-- Name: pollster_results_intake_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: epiwork
 --
 
 SELECT pg_catalog.setval('pollster_results_intake_id_seq1', 1, false);
 
 
 --
--- Data for Name: pollster_results_weekly; Type: TABLE DATA; Schema: public; Owner: admin
+-- Data for Name: pollster_results_weekly; Type: TABLE DATA; Schema: public; Owner: epiwork
 --
 
 COPY pollster_results_weekly (id, "user", global_id, channel, "timestamp", "Q0", "Q6k", "Q1a", "Q1aa", "Q1b", "Q1bb", "Q1c", "Q1_0", "Q1_1", "Q1_2", "Q1_4", "Q1_5", "Q1_3", "Q1_6", "Q1_13", "Q1_7", "Q1_10", "Q1_11", "Q1_9", "Q1_8", "Q1_12", "Q1_14", "Q1_18", "Q1_22", "Q1_15", "Q1_16", "Q1_17", "Q1_20", "Q1_21", "Q1_19", "Q111_0", "Q111_1", "Q111_2", "Q111_4", "Q111_5", "Q111_3", "Q111_6", "Q111_13", "Q111_7", "Q111_10", "Q111_11", "Q111_9", "Q111_8", "Q111_12", "Q111_14", "Q111_18", "Q111_22", "Q111_15", "Q111_16", "Q111_17", "Q111_20", "Q111_21", "Q111_19", "Q5", "Q6d", "Q6b", "Q6e", "Q6ee", "Q6f", "Q6ff", "Q3", "Q3_0_open", "Q11", "Q6g", "Q6h", "Q6i", "Q6j", "Q1d", "Q1e", "Q14c_0", "Q14c_1", "Q14c_2", "Q14c_3", "Q14c_4", "Q14c_5", "Q14d_0", "Q14d_1", "Q14d_2", "Q14d_3", "Q14d_4", "Q14d_5") FROM stdin;
@@ -277,14 +277,14 @@ COPY pollster_results_weekly (id, "user", global_id, channel, "timestamp", "Q0",
 
 
 --
--- Name: pollster_results_weekly_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+-- Name: pollster_results_weekly_id_seq; Type: SEQUENCE SET; Schema: public; Owner: epiwork
 --
 
 SELECT pg_catalog.setval('pollster_results_weekly_id_seq', 1, false);
 
 
 --
--- Name: pollster_results_intake_pkey1; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
+-- Name: pollster_results_intake_pkey1; Type: CONSTRAINT; Schema: public; Owner: epiwork; Tablespace:
 --
 
 ALTER TABLE ONLY pollster_results_intake
@@ -292,7 +292,7 @@ ALTER TABLE ONLY pollster_results_intake
 
 
 --
--- Name: pollster_results_weekly_pkey; Type: CONSTRAINT; Schema: public; Owner: admin; Tablespace: 
+-- Name: pollster_results_weekly_pkey; Type: CONSTRAINT; Schema: public; Owner: epiwork; Tablespace:
 --
 
 ALTER TABLE ONLY pollster_results_weekly
