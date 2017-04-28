@@ -72,7 +72,13 @@
 					{% endblock menubar %}
 				</div>
 			</div>
-		</div>
+
+            {% if debug %}
+            <div class="banner-warning">
+                This site is in debug mode, running on {{ request.META.HTTP_HOST }}
+            </div>
+            {% endif %}
+        </div>
 
 		{% block content %}{% endblock content %}
 

@@ -1,6 +1,8 @@
 # Django settings for epiweb project.
 # -*- coding: utf-8 -*-
 
+from utils import PrivateIPs
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -109,6 +111,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.request",
     "django.core.context_processors.media",
+    "django.core.context_processors.debug",
     "sekizai.context_processors.sekizai",
     "django.contrib.messages.context_processors.messages",
     "cms.context_processors.media",
@@ -220,3 +223,4 @@ LOGIN_REDIRECT_URL = '/survey/thanks/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
 
+INTERNAL_IPS = PrivateIPs()

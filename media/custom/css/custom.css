@@ -148,3 +148,9 @@ form.contact_form .helptext {
 .matrix th{
     font-size:12px;
 }
+
+.banner-warning {
+	background-color: #ffc900;
+	clear: both;
+	padding: 3px;
+}

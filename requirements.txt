@@ -13,6 +13,7 @@ django-pure-pagination==0.2.1
 django-sekizai==0.7
 django-simple-captcha==0.4.0
 html5lib==0.95
+ipaddress==1.0.18
 mock==1.0.1
 Pillow==4.1.0
 psycopg2==2.5.1
