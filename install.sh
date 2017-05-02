@@ -15,10 +15,10 @@ apt-get install -y build-essential \
                    python-dev \
                    python-pip \
                    git \
-                   postgresql-9.3 \
-                   postgresql-contrib-9.3 \
-                   postgresql-client-9.3 \
-                   postgresql-server-dev-9.3 \
+                   postgresql-9.5 \
+                   postgresql-contrib-9.5 \
+                   postgresql-client-9.5 \
+                   postgresql-server-dev-9.5 \
                    libjpeg8 \
                    libjpeg8-dev \
                    libfreetype6 \
@@ -29,7 +29,7 @@ apt-get install -y build-essential \
 apt-get clean
 
 # Update PostgreSQL configuration to allow md5 authentication without password for user admin
-cp /vagrant/vagrant/pg_hba.conf /etc/postgresql/9.3/main/pg_hba.conf
+cp /vagrant/vagrant/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
 service postgresql restart
 echo "*:*:$DB_NAME:$DB_USERNAME:$DB_PASSWORD" >> ~/.pgpass
 chmod 600 ~/.pgpass
