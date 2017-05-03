@@ -31,7 +31,7 @@ apt-get clean
 # Update PostgreSQL configuration to allow md5 authentication without password for user admin
 cp /vagrant/vagrant/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
 service postgresql restart
-echo "*:*:$DB_NAME:$DB_USERNAME:$DB_PASSWORD" >> ~/.pgpass
+echo "*:*:$DB_NAME:$DB_USERNAME:$DB_PASSWORD" > ~/.pgpass
 chmod 600 ~/.pgpass
 
 # Install Python dependencies
@@ -45,8 +45,11 @@ sudo -u postgres psql <<EOF
   CREATE DATABASE $DB_NAME WITH OWNER = $DB_USERNAME;
 EOF
 
-psql --username=$DB_USERNAME $DB_NAME < /vagrant/db_dump.sql
+cd /vagrant/
+python manage.py syncdb
+python manage.py migrate --noinput
+python manage.py createcachetable django_cache
+python manage.py loaddata_workaround db/django_dump.json
 
-for migration in `find /vagrant/db/migrations -name "*.sql" | sort`; do
-  psql --username=$DB_USERNAME $DB_NAME -w -f $migration
-done
+psql --username=$DB_USERNAME $DB_NAME -w -f db/migrations/011_create_intake_table.sql
+
