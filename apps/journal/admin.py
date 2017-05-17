@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from django.http import HttpResponse
 from django.core import serializers
-from nani.admin import TranslatableAdmin
+from hvad.admin import TranslatableAdmin
 
 from .forms import EntryForm
 from .models import Entry, Category
@@ -14,7 +14,7 @@ class EntryAdmin(TranslatableAdmin):
         Admin for entry
     """
     date_hierarchy = 'pub_date'
-    list_display = ('__unicode__', 'slug', 'category', 'is_published', 'pub_date')
+    list_display = ('__unicode__', 'slug', 'get_category', 'is_published', 'pub_date')
     list_filter = ('is_published', 'category')
     search_fields = ['title', 'excerpt', 'content']
     #prepopulated_fields = {'slug': ('title',)} # doesn't work with Nani
@@ -22,10 +22,26 @@ class EntryAdmin(TranslatableAdmin):
 
     actions = ['make_published', 'make_unpublished']
 
-    fieldsets = ((None, {'fields': ('title', 'slug', 'category')}),
-                 ('Entry', {'fields': ('excerpt', 'content')}),
-                 ('Image', {'fields': ('image', 'alignment')}),
-                 ('Publishing', {'fields': ('is_published', 'pub_date')}))
+    def get_category(self, obj):
+        return obj.category
+
+    get_category.short_description = _('category')
+
+    def get_fieldsets(self, request, obj=None):
+        return (
+            (None, {
+                'fields': ('title', 'slug', 'category')
+            }),
+            ('Entry', {
+                'fields': ('excerpt', 'content')
+            }),
+            ('Image', {
+                'fields': ('image', 'alignment')
+            }),
+            ('Publishing', {
+                'fields': ('is_published', 'pub_date')
+            })
+        )
 
     save_as = True
     save_on_top = True

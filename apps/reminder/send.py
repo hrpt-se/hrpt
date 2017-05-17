@@ -18,11 +18,12 @@ from apps.partnersites.context_processors import site_context
 
 from .models import get_reminders_for_users, UserReminderInfo, ReminderError
 
-SITE_URL = 'http://%s' % Site.objects.get_current().domain
 
 def create_message(user, message, language):
     if language:
         activate(language)
+
+    SITE_URL = 'http://%s' % Site.objects.get_current().domain
 
     inner_template = Template(message.message)
 

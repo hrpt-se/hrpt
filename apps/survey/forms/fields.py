@@ -7,13 +7,12 @@ import re
 from django import forms
 from django.utils.safestring import mark_safe
 from django.conf import settings
-from django.contrib.localflavor.it.forms import ITZipCodeField
-from django.contrib.localflavor.nl.forms import NLZipCodeField
-from django.contrib.localflavor.uk.forms \
-     import UKPostcodeField as fullUKPostcodeField
-from django.contrib.localflavor.be.forms import BEPostalCodeField
-from django.contrib.localflavor.pt.forms import PTZipCodeField
-from django.contrib.localflavor.se.forms import SEPostalCodeField
+from localflavor.it.forms import ITZipCodeField
+from localflavor.nl.forms import NLZipCodeField
+from localflavor.gb.forms import GBPostcodeField as fullGBPostcodeField
+from localflavor.be.forms import BEPostalCodeField
+from localflavor.pt.forms import PTZipCodeField
+from localflavor.se.forms import SEPostalCodeField
 
 from .widgets import ( AdviseWidget, MonthYearWidget,
                        DatePickerWidget, DateOrOptionPickerWidget,
@@ -53,12 +52,12 @@ class MonthYearField(forms.Field):
             pass
         raise forms.ValidationError(self.error_messages['invalid'])
 
-class UKPostcodeField(fullUKPostcodeField):
+class UKPostcodeField(fullGBPostcodeField):
     """Accept and check only the outcode_pattern of the UK postcode. This is
     necessary for privacy reasons since the full post code gives too accurate a
     fix on the participant.
     """
-    outcode_pattern = fullUKPostcodeField.outcode_pattern
+    outcode_pattern = fullGBPostcodeField.outcode_pattern
     postcode_regex = re.compile(r'^(GIR|%s)$' % outcode_pattern)
 
     def clean(self, value):

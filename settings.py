@@ -1,14 +1,17 @@
 # Django settings for epiweb project.
 # -*- coding: utf-8 -*-
 
+import os
 from utils import PrivateIPs
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'epiwork',
         'HOST': 'localhost',
         'USER': 'epiwork',
@@ -60,6 +63,23 @@ LANGUAGES = (
    ('es', u'Español'),
 )
 
+CMS_LANGUAGES = {
+    'default': {
+        'public': True,
+        'hide_untranslated': False,
+        'redirect_on_fallback': True,
+    },
+    1: [
+        {
+            'public': True,
+            'code': 'sv',
+            'hide_untranslated': False,
+            'name': 'sv',
+            'redirect_on_fallback': True,
+        }
+    ],
+}
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 import os
@@ -73,7 +93,8 @@ POLLSTER_CACHE_PATH = PROJECT_PATH
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-STATIC_URL = MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -86,44 +107,61 @@ CMS_FILE_ICON_URL = os.path.join(MEDIA_URL, 'file_icons/')
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'swgm*3%po62mg76m4iq!k8h3j+_)x=8b--7skjc_0wiak^wksr'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#    'django.template.loaders.eggs.load_template_source',
-)
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = (
+    'cms.middleware.utils.ApphookReloadMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.media.PlaceholderMediaMiddleware',
-    'cms.middleware.multilingual.MultilingualURLMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'cms.middleware.language.LanguageCookieMiddleware'
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.request",
-    "django.core.context_processors.media",
-    "django.core.context_processors.debug",
-    "sekizai.context_processors.sekizai",
-    "django.contrib.messages.context_processors.messages",
-    "cms.context_processors.media",
-    "apps.partnersites.context_processors.customizations",
-    "django.core.context_processors.static",
-)
+
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': ['templates'],
+
+    'OPTIONS': {
+        'context_processors': (
+            "django.contrib.auth.context_processors.auth",
+            "django.template.context_processors.i18n",
+            "django.template.context_processors.request",
+            "django.template.context_processors.media",
+            "django.template.context_processors.debug",
+            "sekizai.context_processors.sekizai",
+            "django.contrib.messages.context_processors.messages",
+            "apps.partnersites.context_processors.customizations",
+            "django.template.context_processors.static",
+            'cms.context_processors.cms_settings'
+        ),
+        'loaders': [
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+            'django.template.loaders.eggs.Loader'
+        ],
+    }
+}]
+
 
 CMS_TEMPLATES = (
     ('base/threecol.html', "3 Columns"),
     ('base/twocol.html', "2 Columns"),
     ('base/influhome.html', "European Map"),
+    ('base/sitebase.html', "Base")
 )
+
+# CMS_TEMPLATES = (
+#     ## Customize this
+#     ('fullwidth.html', 'Fullwidth'),
+#     ('sidebar_left.html', 'Sidebar Left'),
+#     ('sidebar_right.html', 'Sidebar Right')
+# )
 
 GEOMETRY_TABLES = (
  ('pollster_zip_codes','zip level'),
@@ -131,20 +169,16 @@ GEOMETRY_TABLES = (
 
 ROOT_URLCONF = 'urls'
 
-TEMPLATE_DIRS = (
-    os.path.join(PROJECT_PATH, 'custom_templates'),
-    os.path.join(PROJECT_PATH, 'templates'),
-)
 
 INSTALLED_APPS = (
-    'nani',
-    'south',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.admin',
     'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'hvad',
     'sekizai',
     'registration',
     'loginurl',
@@ -157,20 +191,16 @@ INSTALLED_APPS = (
     'apps.partnersites',
     'apps.count',
     'cms',
-    'cms.plugins.text',
-    'cms.plugins.picture',
-    'cms.plugins.link',
-    'cms.plugins.file',
-    'cms.plugins.snippet',
+    'treebeard',
     'menus',
-    'mptt',
-    'appmedia',
-    'publisher',
     'apps.pollster',
     'captcha',
     'pytils',
     'sorl.thumbnail',
     'pure_pagination',
+    'djangocms_text_ckeditor',
+    'djangocms_link',
+    'djangocms_admin_style'
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -182,6 +212,8 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 CMSPLUGIN_NEWS_RSS_TITLE = "News"
 CMSPLUGIN_NEWS_RSS_DESCRIPTION = "News List"
+
+CMS_MEDIA_URL = '/media/cms/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
@@ -204,13 +236,6 @@ SURVEY_PROFILE_ID = 'gold-standard-intake-1.5'
 MOBILE_INTERFACE_ACTIVE = False
 
 STORE_RESPONSES_LOCALLY = False
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'django_cache',
-    }
-}
 
 # SEO Settings
 

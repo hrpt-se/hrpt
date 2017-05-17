@@ -2,10 +2,9 @@ from datetime import datetime
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from djangocms_text_ckeditor.widgets import TextEditorWidget
 
-from cms.plugins.text.widgets.wymeditor_widget import WYMEditor
-
-from nani.forms import TranslatableModelForm
+from hvad.forms import TranslatableModelForm
 
 from .models import NO_INTERVAL, ReminderSettings, NewsLetterTemplate, NewsLetter, get_default_for_newsitem, get_upcoming_dates, get_settings
 
@@ -19,15 +18,18 @@ class ReminderSettingsForm(forms.ModelForm):
 
     class Meta:
         model = ReminderSettings
+        fields = '__all__'
+
 
 class NewsLetterTemplateForm(TranslatableModelForm):
-    message = forms.CharField(widget=WYMEditor())
+    message = forms.CharField(widget=TextEditorWidget())
 
     class Meta:
         model = NewsLetterTemplate
 
+
 class NewsLetterForm(TranslatableModelForm):
-    message = forms.CharField(widget=WYMEditor())
+    message = forms.CharField(widget=TextEditorWidget())
     date = forms.ChoiceField(help_text=_("If no dates are shown here, check your site settings"))
 
     def __init__(self, *args, **kwargs):

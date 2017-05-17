@@ -46,10 +46,7 @@ sudo -u postgres psql <<EOF
 EOF
 
 cd /vagrant/
-python manage.py syncdb
 python manage.py migrate --noinput
-python manage.py createcachetable django_cache
-python manage.py loaddata_workaround db/django_dump.json
-
-psql --username=$DB_USERNAME $DB_NAME -w -f db/migrations/011_create_intake_table.sql
+python manage.py loaddata db/fixtures.json
+python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
 

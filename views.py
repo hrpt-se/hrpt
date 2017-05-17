@@ -4,7 +4,6 @@ from django.template import Context, loader, RequestContext
 from django.shortcuts import render_to_response
 from django import forms
 from django.contrib.auth import authenticate, login
-from django.utils import simplejson
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.db import connection

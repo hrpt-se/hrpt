@@ -13,12 +13,16 @@ class ListUserSurveysPlugin(CMSPluginBase):
     model = SurveyListPlugin
     render_template = "survey/cms_plugin_survey_list.html"
     name = "User Survey List"
-
+    cache = False
 
 
     def render(self, context, instance, placeholder):
         request = context['request']
-        global_id = request.GET.get('gid', None)
+
+        try:
+            global_id = request.user.surveyuser_set.first().global_id
+        except AttributeError:
+            global_id = None
 
         #no idea why this is being evaluated on every page view
         # but oh well.. make it return the original contect anyway

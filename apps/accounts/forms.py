@@ -7,7 +7,7 @@ from django.contrib.auth.forms import PasswordResetForm
 
 # Needed in pre 1.7 Django to create field specific errors durinng cross field
 # checks in clean(). Should be replaced with add_error if upgraded!
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 
 from registration.forms import RegistrationForm
 from apps.reminder.models import UserReminderInfo
@@ -136,10 +136,10 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
 
     def clean(self):
         #import pdb; pdb.set_trace()
-        cleaned_data = super(CaptchaUnicodeRegistrationForm, self).clean() #Perform cleaning of the orginal form first!
+        super(CaptchaUnicodeRegistrationForm, self).clean() #Perform cleaning of the orginal form first!
 
-        data = cleaned_data.get('idcode')
-        captcha = cleaned_data.get('captcha')
+        data = self.cleaned_data.get('idcode')
+        captcha = self.cleaned_data.get('captcha')
 
         #Only check if captcha correct
         if captcha and data:
@@ -176,7 +176,7 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
             #     self.add_error("idcode", "Check the code in you letter. This code is incorrect")
             # if in_use:
             #     self.add_error("idcode", "This code has already been used. Is the code correct? Or did you already register?")
-        return cleaned_data
+        return self.cleaned_data
 
 
 

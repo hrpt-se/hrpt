@@ -3,9 +3,8 @@ import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from cms.models import CMSPlugin
-from nani.models import TranslatableModel, TranslatedFields
-from nani.manager import TranslationManager
+from cms.models.pluginmodel import CMSPlugin
+from hvad.models import TranslatableModel, TranslatedFields
 
 class Category(TranslatableModel):
     slug            = models.SlugField(_('Slug'), unique=True,
@@ -45,7 +44,7 @@ class Entry(TranslatableModel):
     alignment       = models.CharField(_("Alignment"), help_text=_("Alignment of the image"), max_length=5, choices=((_("Left"), "left"), (_("Right"), "right")), blank=True, null=True)
     
     is_published    = models.BooleanField(_('Published'), default=True)
-    pub_date        = models.DateTimeField(_('Publication date'), default=datetime.datetime.now())
+    pub_date        = models.DateTimeField(_('Publication date'), auto_now_add=True)
     
     created         = models.DateTimeField(auto_now_add=True, editable=False)
     updated         = models.DateTimeField(auto_now=True, editable=False)
@@ -74,13 +73,13 @@ class Entry(TranslatableModel):
 
     def get_relative_url(self):
         return self.get_relative_url_archive_index()
-    
+
 class LatestEntryPlugin(CMSPlugin):
     """
         Model for the settings when using the latest entries cms plugin
     """
     title = models.CharField(_('Title'), max_length=255)
-    limit = models.PositiveIntegerField(_('Number of entries to show'), 
+    limit = models.PositiveIntegerField(_('Number of entries to show'),
                     help_text=_('Limits the number of entries that will be displayed'))
     category = models.ManyToManyField(Category, blank=True, null=True, help_text=_("Leave this field blank to match all categories"))
 

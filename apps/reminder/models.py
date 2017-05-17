@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
-from nani.models import TranslatableModel, TranslatedFields
+from hvad.models import TranslatableModel, TranslatedFields
 
 from apps.survey.models import SurveyUser
 

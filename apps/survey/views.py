@@ -7,7 +7,7 @@ from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db import connection, transaction, DatabaseError
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils.safestring import mark_safe
@@ -333,7 +333,8 @@ def show_survey(request, survey_short_name):
         else:
             survey.set_form(form)
 
-    return render_to_response(
+    return render(
+        request,
         'pollster/survey_run.html',
         {
             "language": language,
@@ -344,12 +345,11 @@ def show_survey(request, survey_short_name):
             "form": form,
             "person": survey_user
         },
-        context_instance=RequestContext(request)  #don't know why this is necessairy, nobody does apparently. See https://github.com/django-compressor/django-compressor/issues/483#issuecomment-52243164
     )
 
 
 def _save_survey_response_draft(request):
-    raw_data = json.loads(request.raw_post_data) # on django 1.4 and latter, this changes to request.body instead
+    raw_data = json.loads(request.body)
     survey_id = raw_data['survey_id']
     questions_data = raw_data['form_data']
 

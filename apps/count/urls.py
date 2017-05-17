@@ -1,6 +1,6 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^counter', views.counter, name='counter'),
-)
+]

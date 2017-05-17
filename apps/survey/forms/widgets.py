@@ -3,10 +3,10 @@ import re
 import codecs
 
 from django import forms
-from django.forms.widgets import Widget, Select, RadioInput
+from django.forms.widgets import Widget, Select, RadioSelect
 from django.utils.dates import MONTHS
 from django.utils.safestring import mark_safe
-from django.utils.encoding import StrAndUnicode, force_unicode
+from django.utils.encoding import python_2_unicode_compatible, force_unicode
 
 __all__ = ['AdviseWidget', 'DatePickerWidget', 'MonthYearWidget',
            'TableOptionsSingleWidget']
@@ -36,7 +36,7 @@ class DateOrOptionPickerWidget(forms.MultiWidget):
             else:
                 return [None, value]
 
-class RadioInputNoLabel(RadioInput):
+class RadioInputNoLabel(RadioSelect):
     """
     An object used by RadioFieldRenderer that represents a single
     <input type='radio'>.
@@ -45,7 +45,8 @@ class RadioInputNoLabel(RadioInput):
     def __unicode__(self):
         return mark_safe(u'%s' % self.tag())
 
-class TableOptionsSingleRowRenderer(StrAndUnicode):
+@python_2_unicode_compatible
+class TableOptionsSingleRowRenderer(object):
     """
     An object used by RadioSelect to enable customization of radio widgets.
     """
@@ -66,6 +67,9 @@ class TableOptionsSingleRowRenderer(StrAndUnicode):
 
     def __unicode__(self):
         return self.render()
+
+    def __str__(self):
+        return self.__unicode__()
 
     def render(self):
         """Outputs a <ul> for this set of radio fields."""

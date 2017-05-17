@@ -6,7 +6,6 @@ import sys
 import pprint
 
 from django.core import serializers
-from django.db.models import get_model
 from . import models
 
 ModelKey = namedtuple('ModelKey', ['model', 'pk'])

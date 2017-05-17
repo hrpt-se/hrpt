@@ -1,5 +1,5 @@
 from django.template import Context, loader, RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.urlresolvers import reverse
@@ -9,7 +9,7 @@ from .forms import EmailSettingsForm, UsernameForm, DeactivationForm
 
 def index(request):
     return render_to_response('registration/index.html',
-        context_instance=RequestContext(request))
+                              context=RequestContext(request))
 
 @login_required
 def my_settings(request, form=None):
@@ -35,4 +35,4 @@ def my_settings(request, form=None):
         username_form = UsernameForm(instance=request.user)
         deactivate_form = DeactivationForm(instance=request.user)
 
-    return render_to_response('accounts/my_settings.html', locals(), RequestContext(request))
+    return render(request, 'accounts/my_settings.html', locals())

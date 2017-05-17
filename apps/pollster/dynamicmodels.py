@@ -1,7 +1,7 @@
 # taken from https://code.djangoproject.com/wiki/DynamicModels and http://www.agmweb.ca/blog/andy/2249/
 from django import forms
 from django.db import models, connection
-from django.db.models.loading import cache
+from django.apps import apps as cache
 from django.core.management import color
 
 """
@@ -24,6 +24,7 @@ def create(name, fields=None, app_label='', module='', options=None, admin_opts=
     """
     class Meta:
         # Using type('Meta', ...) gives a dictproxy error during model creation
+        managed = False
         pass
 
     if app_label:
@@ -46,7 +47,7 @@ def create(name, fields=None, app_label='', module='', options=None, admin_opts=
     model = type(name, (models.Model,), attrs)
 
     # Ensure that the dynamic class is not cached
-    del cache.app_models[app_label][model._meta.object_name]
+    del cache.all_models[app_label][model._meta.object_name]
 
     # Create an Admin class if admin options were provided
     if admin_opts is not None:
@@ -67,19 +68,15 @@ def install(model):
     # indexes will have to be handled manually.
     # This installs only the basic table definition.
 
-    # disable terminal colors in the sql statements
-    style = color.no_style()
-
-    cursor = connection.cursor()
-    statements, pending = connection.creation.sql_create_model(model, style)
-
-    for statement in statements:
-        cursor.execute(statement)
+    with connection.schema_editor() as schema_editor:
+        schema_editor.create_model(model)
 
 def to_form(model, fields=None):
     class Meta:
         pass
     Meta.model = model
+    Meta.fields = '__all__'
+
     attrs = {'Meta': Meta}
     if fields:
         attrs.update(fields)

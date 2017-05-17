@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from nani.admin import TranslatableAdmin
+from hvad.admin import TranslatableAdmin
 
 from .models import UserReminderInfo, ReminderSettings, NewsLetterTemplate, NewsLetter, ReminderError
 from .forms import ReminderSettingsForm, NewsLetterTemplateForm, NewsLetterForm

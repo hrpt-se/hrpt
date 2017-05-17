@@ -14,5 +14,5 @@
     {% endfor %}
 </ul>
 {% endif %}
-                <p>{% trans "Enter your username and password to log in." %} <a href="{% url django.contrib.auth.views.password_reset %}">{% trans "Forgot your password?" %}</a></p>
+                <p>{% trans "Enter your username and password to log in." %} <a href="{% url 'auth_password_reset' %}">{% trans "Forgot your password?" %}</a></p>
                 {% spaceless %}<form method="post" id="login">{% csrf_token %}{{ form.as_p }}<p><input type="submit" id="boxsubmit" value="{% trans "Log in" %}" /></p></form>{% endspaceless %}{% endblock content %}

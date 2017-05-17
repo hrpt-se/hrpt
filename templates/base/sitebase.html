@@ -46,7 +46,8 @@
 	</head>
 
 	<body{% spaceless %}{% block add_body %}{% endblock add_body %}{% endspaceless %}">
-	<div id="page">
+	{%  cms_toolbar %}
+    <div id="page">
 
 		<div id="header">
 			{% if site_logo %}
@@ -93,7 +94,7 @@
 
             <div id="footerclose">
                 &copy; {% now "Y" %} {{ site_name }} &nbsp;|&nbsp;
-                <a href="{% url contact_form %}" title="{% trans "Contact us" %}">{% trans "Contact" %}</a>
+                <a href="{% url 'contact_form' %}" title="{% trans "Contact us" %}">{% trans "Contact" %}</a>
             </div>
 			</div>{% endblock footercontent %}
 		</div>
