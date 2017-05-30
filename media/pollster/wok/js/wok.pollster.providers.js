@@ -363,7 +363,7 @@
                 getRulesByOption($survey, self.$element.attr('id')).addClass('deleted');
             }
             self.detach();
-            $(this).closest('.property-group').nextAll('.property-group').andSelf().hide();
+            $(this).closest('.property-group').nextAll('.property-group').addBack().hide();
         });
 
         $properties.find("[name=field_choice_text]").keyup(function(evt) {
@@ -701,7 +701,7 @@
 
         function updateUI($element) {
             var $type = $properties.find("[name=field_rule_type]");
-            $type.val($element.attr("data-type")).change();
+            $type.change();
 
             var $isSufficient = $properties.find("[name=field_rule_is_sufficient]");
             var val = $element.hasClass('sufficient') ? "true" : "false";
@@ -725,7 +725,7 @@
                 );
             });
 
-            $object_question.val($element.attr('data-object-question')).change();
+            $object_question.change();
         }
 
         // Events.
@@ -738,7 +738,7 @@
             else
                 self.$element.addClass('deleted');
             self.detach();
-            $(this).closest('.property-group').nextAll('.property-group').andSelf().hide();
+            $(this).closest('.property-group').nextAll('.property-group').addBack().hide();
         });
 
         $properties.find("[name=field_rule_type]").change(function(evt) {

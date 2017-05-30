@@ -51,10 +51,10 @@
                 {{ question.translated_description|safe }}
             </p>
             {% if question.is_text %}
-            	{% if not question.option_set.all %}
-            		<textarea rows="3" name="{{ question.data_name }}" id="question-{{ question.id }}-field" class="user-field">{{ question.form_value }}</textarea>
-            	{% else %}
+            	{% if question.option_set.all or question.data_type.css_class == 'date-type' %}
             		<input type="text" name="{{ question.data_name }}" id="question-{{ question.id }}-field" value="{{ question.form_value }}" class="user-field" />
+            	{% else %}
+                    <textarea rows="3" name="{{ question.data_name }}" id="question-{{ question.id }}-field" class="user-field">{{ question.form_value }}</textarea>
             	{% endif %}
             <p class="error-message">{{ question.translated_error_message }}</p>
             <ul class="derived-values">
@@ -224,8 +224,8 @@
 
         function save_response_draft(){
           var survey_id = {{ survey.id }};
-          var form_data_array = $('form.survey').serializeArray()
-          var form_data_obj = {}
+          var form_data_array = $('form.survey').serializeArray();
+          var form_data_obj = {};
           form_data_array.forEach(
             function(f){
               form_data_obj[f.name] = f.value;
@@ -234,9 +234,10 @@
 
           delete form_data_obj['csrfmiddlewaretoken']; //this is included on the form by default but it is not used
           var request_body = JSON.stringify({ "survey_id": survey_id, "form_data":form_data_obj });
-          var separator = window.location.search === "" ? "?" : "&";
+          var separator = window.location.search ? "&" : "?";
+          var parameter = "draft=save";
 
-          $.post( window.location + separator + 'draft=save', request_body );
+          $.post( window.location + separator + parameter, request_body );
 
         }
 
