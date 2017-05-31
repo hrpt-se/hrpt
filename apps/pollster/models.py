@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import warnings
 
+from django.contrib.gis.db.models import MultiPolygonField
 from django.db import models, connection, transaction, IntegrityError, DatabaseError
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -1284,3 +1285,9 @@ class GoogleProjection:
 
 class SurveyChartPlugin(CMSPlugin):
     chart = models.ForeignKey(Chart)
+
+
+class ZipCodes(models.Model):
+    country = models.TextField()
+    zip_code_key = models.TextField()
+    geometry = MultiPolygonField()
