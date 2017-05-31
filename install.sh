@@ -19,6 +19,7 @@ apt-get install -y build-essential \
                    postgresql-contrib-9.5 \
                    postgresql-client-9.5 \
                    postgresql-server-dev-9.5 \
+                   postgresql-9.5-postgis-2.2 \
                    libjpeg8 \
                    libjpeg8-dev \
                    libfreetype6 \
