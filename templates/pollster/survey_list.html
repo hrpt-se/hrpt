@@ -39,7 +39,7 @@
             {% if survey.is_published %}
             <li class="status-{{survey.status}}">
                 {{ survey.title }}
-                (<a href="{% url 'pollster_survey_translation_list' survey.id %}">test</a>
+                (<a href="{% url 'pollster_survey_test' survey.id %}">test</a>
                 | <a href="{% url 'pollster_survey_translation_list' survey.id %}">translate</a>
                 | <a href="{% url 'pollster_survey_chart_list' survey.id %}">charts</a>
                 | <a href="{% url 'pollster_survey_export' survey.id %}">export</a>

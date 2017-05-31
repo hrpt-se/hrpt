@@ -234,7 +234,9 @@
 
           delete form_data_obj['csrfmiddlewaretoken']; //this is included on the form by default but it is not used
           var request_body = JSON.stringify({ "survey_id": survey_id, "form_data":form_data_obj });
-          $.post( window.location + '&draft=save', request_body );
+          var separator = window.location.search === "" ? "?" : "&";
+
+          $.post( window.location + separator + 'draft=save', request_body );
 
         }
 

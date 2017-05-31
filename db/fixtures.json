@@ -3062,7 +3062,7 @@
       "password": "pbkdf2_sha256$30000$ex9OGKNjCf46$+uKWcVp9vdvhO3fSQRIuRu2sIYav2gIx96O/4FRpFO0=",
       "last_login": "2017-05-17T09:41:16",
       "is_superuser": true,
-      "username": "admin",
+      "username": "root",
       "first_name": "",
       "last_name": "",
       "email": "admin.halsorapport@folkhalsomyndigheten.se",

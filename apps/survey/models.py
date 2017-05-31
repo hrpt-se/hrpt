@@ -19,9 +19,12 @@ class SurveyListPlugin(CMSPlugin):
 
 
 class SurveyIdCode(models.Model):
-
-    surveyuser_global_id = models.CharField(max_length=36,unique=True,blank=True,null=True)
-    #surveyuser_global_id = models.ForeignKey('SurveyUser',null=True)
+    surveyuser_global_id = models.ForeignKey(
+        'SurveyUser',
+        on_delete=models.CASCADE,
+        to_field='global_id',
+        null=True
+    )
 
     idcode = models.CharField(max_length=10,unique=True)
     fodelsedatum = models.CharField(max_length=10,blank=True,null=True)

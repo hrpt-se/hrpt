@@ -156,13 +156,6 @@ CMS_TEMPLATES = (
     ('base/sitebase.html', "Base")
 )
 
-# CMS_TEMPLATES = (
-#     ## Customize this
-#     ('fullwidth.html', 'Fullwidth'),
-#     ('sidebar_left.html', 'Sidebar Left'),
-#     ('sidebar_right.html', 'Sidebar Right')
-# )
-
 GEOMETRY_TABLES = (
  ('pollster_zip_codes','zip level'),
 )
