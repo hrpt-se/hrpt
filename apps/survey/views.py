@@ -95,7 +95,7 @@ def thanks(request):
             raise SurveyIdCodeNotValid
         elif (not SurveyIdcode_obj.surveyuser_global_id):
             #if global_id not set then assign the one from the survey_user
-            SurveyIdcode_obj.surveyuser_global_id=survey_user.global_id
+            SurveyIdcode_obj.surveyuser_global_id=survey_user
             #And assign the birthyear from the user_profile
             SurveyIdcode_obj.fodelsedatum=str(userprofile.yearofbirth)
             #save
