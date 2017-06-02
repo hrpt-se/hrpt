@@ -22,7 +22,7 @@ class UsedActivationKeys(models.Model):
         User,
         unique=True,
         verbose_name=_('user'),
-        on_delete=models.DO_NOTHING
+        on_delete=models.CASCADE
     )
 
     activation_key = models.CharField(
