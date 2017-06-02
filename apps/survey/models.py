@@ -223,8 +223,12 @@ class LocalFluSurvey(models.Model):
     data = models.TextField() # pickled
     survey_id = models.CharField(max_length=50)
 
+
 class SurveyResposeDraft(models.Model):
     global_id = models.CharField(max_length=36,unique=False,blank=False,null=False)
     survey_id = models.IntegerField(blank=False, null=False)
     timestamp = models.IntegerField()
     form_data = models.TextField()
+
+    class Meta:
+        index_together = ('global_id', 'survey_id')

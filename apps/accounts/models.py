@@ -18,5 +18,15 @@ class UsedActivationKeys(models.Model):
     Not the most orthodox solution, but I do not want to impact the registration_profile
     model, since it is defined and used inside django registration module.
     """
-    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
-    activation_key = models.CharField(_('activation key'), max_length=40,db_index=True)
+    user = models.ForeignKey(
+        User,
+        unique=True,
+        verbose_name=_('user'),
+        on_delete=models.DO_NOTHING
+    )
+
+    activation_key = models.CharField(
+        _('activation key'),
+        max_length=40,
+        db_index=True
+    )
