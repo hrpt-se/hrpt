@@ -1,14 +1,15 @@
 import datetime
 from collections import namedtuple
-import json as vanilajson
+import json
 import itertools
 import sys
-import pprint
 
 from django.core import serializers
 from django.apps import apps
+from django.core.serializers.json import DjangoJSONEncoder
 
 from . import models
+
 
 ModelKey = namedtuple('ModelKey', ['model', 'pk'])
 
@@ -99,7 +100,7 @@ IMPORT_ENTITIES_DEFINITIONS = [
 
 
 def create_survey_from_json(json_string):
-    data_from_json = vanilajson.loads(json_string)
+    data_from_json = json.loads(json_string)
 
     # we use this to map old keys present in the exported file, to new keys obtained on insert
     keys_save = {}
@@ -156,7 +157,7 @@ def survey_to_json(survey):
         "translation_option":     serializers.serialize("python", all_transl_options),
     }
     
-    return vanilajson.dumps(serialize_this,indent=2)
+    return json.dumps(serialize_this, indent=2, cls=DjangoJSONEncoder)
 
 
 def _normalize_fkey_definitions(import_entities_definition):
