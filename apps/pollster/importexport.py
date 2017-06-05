@@ -6,6 +6,8 @@ import sys
 import pprint
 
 from django.core import serializers
+from django.apps import apps
+
 from . import models
 
 ModelKey = namedtuple('ModelKey', ['model', 'pk'])
@@ -235,7 +237,7 @@ def _save_m2m_relationships(instance, serialized_instance, entity_definition):
     for m2mdef in entity_definition.m2ms:
         attr = getattr(instance, m2mdef.field_name)
         full_model_name = "pollster." + m2mdef.model
-        TargetModelClass = get_model(*full_model_name.split('.',1))
+        TargetModelClass = apps.get_model(*full_model_name.split('.',1))
         models_instances_to_add = []
         for model_key_to_insert in serialized_instance["m2m_fields"][m2mdef.field_name]:
             models_instances_to_add.append(TargetModelClass.objects.get(pk=model_key_to_insert.pk))
@@ -243,7 +245,7 @@ def _save_m2m_relationships(instance, serialized_instance, entity_definition):
 
 
 def _save_model_from_serialized_data(serialized_instance, entity_definition, keys_save):
-    ModelClass = get_model(*serialized_instance["model"].split('.',1) )
+    ModelClass = apps.get_model(*serialized_instance["model"].split('.',1) )
     serialized_instance = _prepare_m2m_fields(serialized_instance, entity_definition.m2ms, keys_save)
     serialized_instance = _prepare_fkey_fields(serialized_instance, entity_definition.fkeys, keys_save)
     new_instance = ModelClass(**serialized_instance["fields"])
