@@ -23,7 +23,8 @@ class SurveyIdCode(models.Model):
         'SurveyUser',
         on_delete=models.CASCADE,
         to_field='global_id',
-        null=True
+        null=True,
+        blank=True
     )
 
     idcode = models.CharField(max_length=10,unique=True)
