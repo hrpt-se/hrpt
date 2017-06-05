@@ -2,22 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from utils import PrivateIPs
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'epiwork',
-        'HOST': 'localhost',
-        'USER': 'epiwork',
-        'PASSWORD': 'epiwork'
-    }
-}
 
 ADMINS = (
     ('halsorapport Admin', 'admin.halsorapport@folkhalsomyndigheten.se'),
@@ -84,9 +70,9 @@ CMS_LANGUAGES = {
 # Example: "/home/media/media.lawrence.com/"
 import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, '../media')
 LOCALE_PATHS = (
-    os.path.join(PROJECT_PATH, 'locale'),
+    os.path.join(PROJECT_PATH, '../locale'),
 )
 POLLSTER_CACHE_PATH = PROJECT_PATH
 
@@ -225,8 +211,6 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # the site managers.
 DEFAULT_FROM_EMAIL = 'Hälsorapport <halsorapport@folkhalsomyndigheten.se>'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # Subject-line prefix for email messages send with django.core.mail.mail_admins
 # or ...mail_managers.  Make sure to include the trailing space.
 EMAIL_SUBJECT_PREFIX = '[Influenzanet] '
@@ -252,4 +236,3 @@ LOGIN_REDIRECT_URL = '/survey/thanks/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
 
-INTERNAL_IPS = PrivateIPs()

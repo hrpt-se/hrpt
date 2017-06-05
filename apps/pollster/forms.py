@@ -1,8 +1,9 @@
 from django import forms
-from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
-from settings import LANGUAGES
+
+from settings.base import LANGUAGES
 from .models import Chart
+
 
 class SurveyXmlForm(forms.Form):
     surveyxml = forms.CharField(required=True)
