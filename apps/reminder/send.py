@@ -31,7 +31,7 @@ def create_message(user, message, language):
 
     context_dict = {
         'url': get_self_authenticating_url(user, survey_list_url),
-        'unsubscribe_url': get_self_authenticating_url(user, reverse('apps.reminder.views.unsubscribe')),
+        'unsubscribe_url': get_self_authenticating_url(user, reverse('unsubscribe')),
         'first_name': user.first_name,
         'last_name': user.last_name,
         'username': user.username,
