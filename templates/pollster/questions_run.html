@@ -320,7 +320,7 @@
             var t;
             {% for question in survey.questions %}
             t = d[{{question.id}}] = [];
-            {% for rule in question.subject_of_rules.all %}
+            {% for rule in question.subject_of_rules.all|dictsortreversed:"id" %}
             t.push(new {{rule.js_class}}(
                                          {{ rule.subject_question.id }},
                                          [ {% for option in rule.subject_options.all %}
