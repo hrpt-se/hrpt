@@ -193,7 +193,11 @@ INSTALLED_APPS = (
     'pure_pagination',
     'djangocms_text_ckeditor',
     'djangocms_link',
-    'djangocms_admin_style'
+    'djangocms_file',
+    'djangocms_admin_style',
+    'filer',  # Required for djangocms_picture
+    'easy_thumbnails', # Required for djangocms_picture
+    'djangocms_picture'
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -207,6 +211,13 @@ CMSPLUGIN_NEWS_RSS_TITLE = "News"
 CMSPLUGIN_NEWS_RSS_DESCRIPTION = "News List"
 
 CMS_MEDIA_URL = '/media/cms/'
+
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters',
+)
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
