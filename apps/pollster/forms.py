@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from settings.base import LANGUAGES
+from settings import LANGUAGES
 from .models import Chart
 
 
