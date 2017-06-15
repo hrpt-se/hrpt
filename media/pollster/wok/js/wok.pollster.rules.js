@@ -466,7 +466,7 @@
                 $survey.find("#question-"+this.subjectQuestion+" :checked").each(function() {
                     var oid = parseInt(($(this).closest("li").attr("id") || '').replace("option-",""))
                     if (so.indexOf(oid) < 0)
-                        $(this).attr('checked', false).trigger('change', extra);
+                        $(this).prop('checked', false).trigger('change', extra);
                 });
             }
         });

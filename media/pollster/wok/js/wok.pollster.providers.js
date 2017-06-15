@@ -700,8 +700,14 @@
         // Dynamic UI generation and properties dependencies.
 
         function updateUI($element) {
-            var $type = $properties.find("[name=field_rule_type]");
-            $type.change();
+            var $typeSelect = $properties.find("[name=field_rule_type]");
+            var selectedType = $element.attr("data-type");
+
+            if (selectedType) {
+                $typeSelect.val(selectedType);
+            }
+
+            $typeSelect.change();
 
             var $isSufficient = $properties.find("[name=field_rule_is_sufficient]");
             var val = $element.hasClass('sufficient') ? "true" : "false";
@@ -725,7 +731,13 @@
                 );
             });
 
-            $object_question.change();
+            var selectedObjectQuestion = $element.attr('data-object-question');
+
+            if (selectedObjectQuestion) {
+                $object_question.val(selectedObjectQuestion)
+            }
+
+            $object_question.change()
         }
 
         // Events.

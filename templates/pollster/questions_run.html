@@ -253,7 +253,10 @@
           function(){
             var attr_name = $(this).attr('name');
             var saved_val = data_from_draft[attr_name];
-            $(this).val(saved_val);
+
+            if (saved_val) {
+                $(this).val(saved_val);
+            }
           }
         );
 
