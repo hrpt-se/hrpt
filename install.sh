@@ -1,53 +1,95 @@
 #!/bin/bash
 
-DB_NAME="epiwork"
-DB_USERNAME="epiwork"
-DB_PASSWORD="epiwork"
+if [ -z "$DB_NAME" ] || [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ];
+then
+    echo "Environment variables DB_NAME, DB_USERNAME and DB_PASSWORD must be properly configured before installation in performed"
+    exit 1
+fi
 
-# Install custom certificates
-cp /vagrant/vagrant/certs/*.crt /usr/local/share/ca-certificates/
-update-ca-certificates
+if [ ! -z "$1" ];
+then
+    ENVIRONMENT=$1
+else
+    ENVIRONMENT="local"
+    DB_HOST="localhost"
+fi
 
-# Install dependencies from apt
-apt-get update -y
+function install_certificates {
+    cp /var/www/hrpt/vagrant/certs/*.crt /usr/local/share/ca-certificates/
+    update-ca-certificates
+}
 
-apt-get install -y build-essential \
-                   python-dev \
-                   python-pip \
-                   git \
-                   postgresql-9.5 \
-                   postgresql-contrib-9.5 \
-                   postgresql-client-9.5 \
-                   postgresql-server-dev-9.5 \
-                   postgresql-9.5-postgis-2.2 \
-                   libjpeg8 \
-                   libjpeg8-dev \
-                   libfreetype6 \
-                   libfreetype6-dev \
-                   gettext \
-                   zlib1g-dev
+function install_apt_dependencies {
+    apt-get update -y
 
-apt-get clean
+    apt-get install -y build-essential \
+                       python-dev \
+                       python-pip \
+                       git \
+                       libjpeg8 \
+                       libjpeg8-dev \
+                       libfreetype6 \
+                       libfreetype6-dev \
+                       libmysqlclient-dev \
+                       gettext \
+                       zlib1g-dev
 
-# Update PostgreSQL configuration to allow md5 authentication without password for user admin
-cp /vagrant/vagrant/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
-service postgresql restart
-echo "*:*:$DB_NAME:$DB_USERNAME:$DB_PASSWORD" > ~/.pgpass
-chmod 600 ~/.pgpass
+    apt-get clean
+}
 
-# Install Python dependencies
-pip install -r /vagrant/requirements.txt
+function setup_mariadb {
+    apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://ftp.ddg.lth.se/mariadb/repo/10.2/ubuntu xenial main'
+    sudo apt-get -y update
 
-# Drop DB (if existing) and recreate from dump-file and migration files
-sudo -u postgres psql <<EOF
-  DROP DATABASE IF EXISTS $DB_NAME;
-  DROP USER IF EXISTS $DB_USERNAME;
-  CREATE USER $DB_USERNAME WITH PASSWORD '$DB_PASSWORD' SUPERUSER;
-  CREATE DATABASE $DB_NAME WITH OWNER = $DB_USERNAME;
+    echo "mysql-server-5.6 mysql-server/root_password password root" | sudo debconf-set-selections
+    echo "mysql-server-5.6 mysql-server/root_password_again password root" | sudo debconf-set-selections
+
+    apt-get install -y mariadb-server
+
+    service mysql stop
+    mysql_install_db
+    service mysql start
+}
+
+function install_python_dependencies {
+    pip install -r /var/www/hrpt/requirements.txt
+}
+
+function setup_environment_variables {
+    echo "export DJANGO_SETTINGS_MODULE=settings.$ENVIRONMENT" > /etc/profile.d/hrpt.sh
+    echo "export DB_NAME=$DB_NAME" >> /etc/profile.d/hrpt.sh
+    echo "export DB_USERNAME=$DB_USERNAME" >> /etc/profile.d/hrpt.sh
+    echo "export DB_PASSWORD=$DB_PASSWORD" >> /etc/profile.d/hrpt.sh
+    echo "export DB_HOST=$DB_HOST" >> /etc/profile.d/hrpt.sh
+
+    source /etc/profile.d/hrpt.sh
+}
+
+function something_something_scaffolding {
+    mysql -uroot -proot <<EOF
+      DROP DATABASE IF EXISTS $DB_NAME;
+      DROP USER IF EXISTS $DB_USERNAME;
+      CREATE USER $DB_USERNAME IDENTIFIED BY '$DB_PASSWORD';
+      CREATE DATABASE $DB_NAME;
+      GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USERNAME'@'%';
 EOF
 
-cd /vagrant/
-python manage.py migrate --noinput
-python manage.py loaddata db/fixtures.json
-python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
+    cd /var/www/hrpt/
+    python manage.py migrate --noinput
+    python manage.py loaddata db/fixtures.json
+    python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
+}
 
+
+install_certificates
+install_apt_dependencies
+
+if [ $ENVIRONMENT == "local" ];
+then
+    setup_mariadb
+fi
+
+install_python_dependencies
+setup_environment_variables
+something_something_scaffolding
