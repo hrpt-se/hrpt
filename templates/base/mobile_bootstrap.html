@@ -19,13 +19,13 @@
         {% block add_head %}{% endblock add_head %}
 
        
-        <link rel="stylesheet" type="text/css" href="/media/survey/bootstrap.css"/>
-        <link rel="stylesheet" type="text/css" href="/media/survey/bootstrap_custom.css"/>
+        <link rel="stylesheet" type="text/css" href="{% static "/survey/bootstrap.css" %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static "/survey/bootstrap_custom.css" %}"/>
 
-		<script type="text/javascript" src="/media/base/js/jquery-3.2.1.min.js"></script>
-		<script type="text/javascript" src="/media/base/js/influenzanet.js"></script>
-		<script type="text/javascript" src="/media/custom/js/custom.js"></script>
-<!--		<script type="text/javascript" src="/media/base/js/fancybox/jquery.fancybox-1.3.4.pack.js"></script> -->
+		<script type="text/javascript" src="{% static "/base/js/jquery-3.2.1.min.js" %}"></script>
+		<script type="text/javascript" src="{% static "/base/js/influenzanet.js" %}"></script>
+		<script type="text/javascript" src="{% static "/custom/js/custom.js" %}"></script>
+<!--		<script type="text/javascript" src="{% static "/base/js/fancybox/jquery.fancybox-1.3.4.pack.js" %}"></script> -->
         
         {% block add_css %}{% endblock add_css %}
         {% block add_js %}{% endblock add_js %}
