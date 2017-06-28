@@ -80,9 +80,14 @@ CMS_LANGUAGES = {
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
-MEDIA_ROOT = os.path.join(PROJECT_PATH, '../media')
+MEDIA_ROOT = '/var/lib/hrpt/upload'
+STATIC_ROOT = '/var/lib/hrpt/static'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'media')
+]
+
 LOCALE_PATHS = (
     os.path.join(PROJECT_PATH, '../locale'),
 )
@@ -92,7 +97,7 @@ POLLSTER_CACHE_PATH = PROJECT_PATH
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+MEDIA_URL = '/upload/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -208,7 +213,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 CMSPLUGIN_NEWS_RSS_TITLE = "News"
 CMSPLUGIN_NEWS_RSS_DESCRIPTION = "News List"
 
-CMS_MEDIA_URL = '/media/cms/'
+CMS_MEDIA_URL = '/static/cms/'
 
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',

@@ -1,16 +1,16 @@
 {% extends "registration/boxbase.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}{{ block.super }}: {% trans "Register" %}{% endblock %}
 
 {% comment %}
-{% block add_js %} <script type="text/javascript" src="{{ MEDIA_URL }}base/js/influenzanet.js"></script>{% endblock add_js %}
+{% block add_js %} <script type="text/javascript" src="{% static "base/js/influenzanet.js" %}"></script>{% endblock add_js %}
 {% block add_body %} onload="document.getElementsByTagName('input') [1].focus(); forcefancy();"{% endblock add_body %}
 {% endcomment %}
 
 {% block add_js %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}custom/js/captcha-refresh.js"></script>
+<script type="text/javascript" src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+<script type="text/javascript" src="{% static "custom/js/captcha-refresh.js" %}"></script>
 {% endblock add_js %}
 
 

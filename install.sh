@@ -66,21 +66,31 @@ function setup_environment_variables {
     source /etc/profile.d/hrpt.sh
 }
 
-function something_something_scaffolding {
+function create_data_directories {
+    mkdir -p /var/lib/hrpt/upload
+    mkdir -p /var/lib/hrpt/static
+
+    chown -R www-data:www-data /var/lib/hrpt
+}
+
+function setup_django_scaffolding {
     mysql -uroot -proot <<EOF
       DROP DATABASE IF EXISTS $DB_NAME;
       DROP USER IF EXISTS $DB_USERNAME;
       CREATE USER $DB_USERNAME IDENTIFIED BY '$DB_PASSWORD';
-      CREATE DATABASE $DB_NAME;
+      CREATE DATABASE $DB_NAME CHARACTER SET = 'utf8' COLLATE = 'utf8_bin';
       GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USERNAME'@'%';
 EOF
 
     cd /var/www/hrpt/
     python manage.py migrate --noinput
+    python manage.py collectstatic --noinput
+}
+
+function install_fixtures {
     python manage.py loaddata db/fixtures.json
     python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
 }
-
 
 install_certificates
 install_apt_dependencies
@@ -92,4 +102,10 @@ fi
 
 install_python_dependencies
 setup_environment_variables
-something_something_scaffolding
+create_data_directories
+setup_django_scaffolding
+
+if [ $ENVIRONMENT == "local" ];
+then
+    install_fixtures
+fi

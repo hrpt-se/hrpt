@@ -1,4 +1,5 @@
 {% extends "base/mobile_bootstrap.html" %}
+{% load static %}
 
 {% block add_css %}
     <!--
@@ -28,7 +29,7 @@
     <script type="text/javascript" src="/media/pollster/datejs/js/date.js"></script>
     {% endif %}
 
-    <script type="text/javascript" src="{{ CMS_MEDIA_URL }}js/csrf.js"></script>
+    <script type="text/javascript" src="{% static "js/csrf.js" %}"></script>
     <script type="text/javascript">jQuery().cmsPatchCSRF()</script>
 
     <script type="text/javascript" src="/media/pollster/wok/js/wok.jquery.js"></script>

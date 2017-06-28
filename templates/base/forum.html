@@ -1,19 +1,19 @@
-{% load cms_tags menu_tags partnersites i18n count sekizai_tags pytils_numeral %}
+{% load cms_tags menu_tags partnersites i18n count sekizai_tags pytils_numeral static %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="content-type" content="application/html; charset=utf-8">
 	<meta name="viewport" content="initial-scale=0.75, user-scalable=yes" />
 	<meta name="robots" content="index, follow" />
-    <link rel="shortcut icon" href="{{ MEDIA_URL }}base/img/favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" href="{{ MEDIA_URL }}base/img/apple-touch-icon.png" />      
+    <link rel="shortcut icon" href="{% static "base/img/favicon.ico" %}" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="{% static "base/img/apple" %}-touch-icon.png" />
     <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="{{ STATIC_URL }}pybb_bootstrap.css" type='text/css'>
-    <link type="text/css" rel="stylesheet" media="all" href="{{ MEDIA_URL }}base/css/default.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="{% static "base/css/default.css" %}" />
     <link type="text/css" rel="stylesheet" media="all" href="/colors.css" />
-    <link type="text/css" rel="stylesheet" media="all" href="{{ MEDIA_URL }}custom/css/custom.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="{% static "custom/css/custom.css" %}" />
         
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
@@ -22,8 +22,8 @@
     <script src="http://yandex.st/json2/2011-01-18/json2.min.js"></script>
     <script src="{{ STATIC_URL }}csrf.js"></script>
 
-	<script type="text/javascript" src="{{ MEDIA_URL }}base/js/influenzanet.js"></script>
-	<script type="text/javascript" src="{{ MEDIA_URL }}custom/js/custom.js"></script>
+	<script type="text/javascript" src="{% static "base/js/influenzanet.js" %}"></script>
+	<script type="text/javascript" src="{% static "custom/js/custom.js" %}"></script>
 
     <title>Forum</title>
 
@@ -39,24 +39,24 @@
 				<div class="_toggle influenzabarcontent" id="top">
 					<div id="epiwork">
 						<a href="http://www.influenzanet.eu/" title="Influenzanet website" rel="external">http://www.influenzanet.eu/</a><br /><br />
-						<img src="{{ MEDIA_URL }}base/img/influbar/epiwork.gif" alt="Epiwork Logo" title="Epiwork" /><br />
+						<img src="{% static "base/img/influbar/epiwork.gif" %}" alt="Epiwork Logo" title="Epiwork" /><br />
 						Developing the framework for an epidemic forecast infrastructure.<br />
 						<a href="http://www.epiwork.eu/" title="Epiwork website" rel="external">http://www.epiwork.eu/</a><br /><br />
 						The Seventh Framework Programme (FP7) bundles all research-related EU initiatives.<br /><br />
-						<img src="{{ MEDIA_URL }}base/img/influbar/7thframework.gif" alt="7th Framework Logo" title="7th Framework" />
+						<img src="{% static "base/img/influbar/" %}7thframework.gif" alt="7th Framework Logo" title="7th Framework" />
 					</div>
 				    <div id="participants">
 						Participating countries and volunteers:<br /><br />
-						<a href="http://www.degrotegriepmeting.nl/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/nl.png" title="The Netherlands" alt="The Netherlands" /></a> {% member_count "nl" %}<br />
-						<a href="http://www.degrotegriepmeting.be/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/be.png" title="Belgium" alt="Belgium" /></a> {% member_count "be" %}<br />
-						<a href="http://www.gripenet.pt/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/pt.png" title="Portugal" alt="Portugal" /></a> {% member_count "pt" %}<br />
-						<a href="http://www.influweb.it/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/it.png" title="Italy" alt="Italy" /></a> {% member_count "it" %}<br />
-						<a href="http://flusurvey.org.uk/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/gb.png" title="Great Britain" alt="Great Britain" /></a> {% member_count "uk" %}<br />
-						<a href="http://www.halsorapport.se/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/se.png" title="Sweden" alt="Sweden" /></a> {% member_count "se" %}<br />
-						<a href="http://www.aktivgegengrippe.de/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/de.png" title="Germany" alt="Germany" /></a> {% member_count "de" %}<br />
-						<a href="http://www.aktivgegengrippe.at/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/at.png" title="Austria" alt="Austria" /></a> {% member_count "at" %}<br />
-						<a href="http://www.aktivgegengrippe.ch/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/ch.png" title="Switzerland" alt="Switzerland" /></a> {% member_count "ch" %}<br />
-						<a href="http://www.grippenet.fr/" rel="external"><img src="{{ MEDIA_URL }}base/img/influbar/fr.png" title="France" alt="France" /></a> {% member_count "fr" %}<br />
+						<a href="http://www.degrotegriepmeting.nl/" rel="external"><img src="{% static "base/img/influbar/nl.png" %}" title="The Netherlands" alt="The Netherlands" /></a> {% member_count "nl" %}<br />
+						<a href="http://www.degrotegriepmeting.be/" rel="external"><img src="{% static "base/img/influbar/be.png" %}" title="Belgium" alt="Belgium" /></a> {% member_count "be" %}<br />
+						<a href="http://www.gripenet.pt/" rel="external"><img src="{% static "base/img/influbar/pt.png" %}" title="Portugal" alt="Portugal" /></a> {% member_count "pt" %}<br />
+						<a href="http://www.influweb.it/" rel="external"><img src="{% static "base/img/influbar/it.png" %}" title="Italy" alt="Italy" /></a> {% member_count "it" %}<br />
+						<a href="http://flusurvey.org.uk/" rel="external"><img src="{% static "base/img/influbar/gb.png" %}" title="Great Britain" alt="Great Britain" /></a> {% member_count "uk" %}<br />
+						<a href="http://www.halsorapport.se/" rel="external"><img src="{% static "base/img/influbar/se.png" %}" title="Sweden" alt="Sweden" /></a> {% member_count "se" %}<br />
+						<a href="http://www.aktivgegengrippe.de/" rel="external"><img src="{% static "base/img/influbar/de.png" %}" title="Germany" alt="Germany" /></a> {% member_count "de" %}<br />
+						<a href="http://www.aktivgegengrippe.at/" rel="external"><img src="{% static "base/img/influbar/at.png" %}" title="Austria" alt="Austria" /></a> {% member_count "at" %}<br />
+						<a href="http://www.aktivgegengrippe.ch/" rel="external"><img src="{% static "base/img/influbar/ch.png" %}" title="Switzerland" alt="Switzerland" /></a> {% member_count "ch" %}<br />
+						<a href="http://www.grippenet.fr/" rel="external"><img src="{% static "base/img/influbar/fr.png" %}" title="France" alt="France" /></a> {% member_count "fr" %}<br />
 					</div>
 				    <div id="influenzatext">
 						InfluenzaNet is a system to monitor the activity of influenza-like-illness (ILI) with the aid of volunteers via the internet. It has been operational in The Netherlands and Belgium (since 2003), Portugal (since 2005) and Italy (since 2008), and the current objective is to implement InfluenzaNet in more European countries.<br /><br />
@@ -135,7 +135,7 @@
 				</div>
             {% else %}
 				<div id="footercontent-main">
-					<div id="footercol1"><img src="{{ MEDIA_URL }}base/img/main/influenzanetlogo.png" alt="Influenzanet logo" /><p>Influenzanet is a system to monitor the activity of influenza-like-illness (ILI) via the internet with the aid of volunteers.<br />We have tried to ensure that all information we provide through this website is correct at the time we include it.</p></div>
+					<div id="footercol1"><img src="{% static "base/img/main/influenzanetlogo.png" %}" alt="Influenzanet logo" /><p>Influenzanet is a system to monitor the activity of influenza-like-illness (ILI) via the internet with the aid of volunteers.<br />We have tried to ensure that all information we provide through this website is correct at the time we include it.</p></div>
 					<div id="footercol2"><h2>Partners</h2>
 							<a href="http://www.aktivgegengrippe.de/" rel="external" title="Aktiv gegen Grippe Deutschland">Aktiv gegen Grippe Deutschland</a><br />
 							<a href="http://www.aktivgegengrippe.at/" rel="external" title="Aktiv gegen Grippe Österreich">Aktiv gegen Grippe Österreich</a><br />

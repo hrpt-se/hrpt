@@ -1,13 +1,9 @@
 # this is used to run the website with apache and mod_wsgi
 
 import os
-import sys
-import site
 
-sys.path.append('/var/www/hrpt')
-site.addsitedir('/var/www/hrpt/lib/python2.7/site-packages')
+from django.core.wsgi import get_wsgi_application
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.chdir(os.path.dirname(__file__))
 
-import django.core.handlers.wsgi
-application = django.core.handlers.wsgi.WSGIHandler()
+application = get_wsgi_application()

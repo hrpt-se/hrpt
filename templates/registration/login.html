@@ -1,7 +1,7 @@
 {% extends "registration/boxbase.html" %}
-
+{% load static %}
 {% comment %}
-{% block add_js %}<script type="text/javascript" src="{{ MEDIA_URL }}base/js/influenzanet.js"></script>{% endblock add_js %}
+{% block add_js %}<script type="text/javascript" src="{% static "base/js/influenzanet.js" %}"></script>{% endblock add_js %}
 
 {% block add_body %}onload="document.getElementsByTagName('input') [1].focus(); forcefancy();"{% endblock add_body %}
 {% endcomment %}
