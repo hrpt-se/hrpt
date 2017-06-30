@@ -195,7 +195,7 @@
 
         $(".sortable > *").hoverIntent(
             function() {
-                var $tmpl = $(".wok-templates .sort-buttons").clone();
+                var $tmpl = $(".wok-templates .sort-buttons").clone(true);
                 $(this).append($tmpl);
             },
             function() {
@@ -203,7 +203,7 @@
             }
         );
 
-        $(".sortable .sort-buttons .up").on("click", function(){
+        $(".sort-buttons .up").on("click", function() {
             var $item = $(this).closest('.sortable > *');
             var $prev = $item.prev();
             if ($prev.length) {
@@ -213,7 +213,7 @@
             return false;
         });
 
-        $(".sortable .sort-buttons .down").on("click", function(){
+        $(".sort-buttons .down").on("click", function() {
             var $item = $(this).closest('.sortable > *');
             var $next = $item.next();
             if ($next.length) {
