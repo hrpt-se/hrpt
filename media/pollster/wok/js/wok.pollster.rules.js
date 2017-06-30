@@ -382,7 +382,7 @@
                     return;
 
                 var selectors = self.objectOptions.map(function(o){return '#option-'+o+' :input'}).join(',');
-                var options = $survey.find(selectors).attr('checked', true);
+                var options = $survey.find(selectors).prop('checked', true);
                 options.trigger('change', { synthetic: true });
             }
         });
@@ -421,7 +421,7 @@
                     return;
 
                 var selectors = self.objectOptions.map(function(o){return '#option-'+o+' :input'}).join(',');
-                var options = $survey.find(selectors).attr('checked', false);
+                var options = $survey.find(selectors).prop('checked', false);
                 options.trigger('change', { synthetic: true });
             }
         });
