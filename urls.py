@@ -58,7 +58,7 @@ if settings.DEBUG:
     urlpatterns = [
         url(r'^404/$', page_not_found),
         url(r'^500/$', server_error),
-        url(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+        url(r'upload/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
     ] + urlpatterns
 
 

@@ -6,12 +6,18 @@ then
     exit 1
 fi
 
-if [ ! -z "$1" ];
+while getopts e: opt; do
+    case $opt in
+        e)
+            ENVIRONMENT=$OPTARG
+            ;;
+    esac
+done
+
+if [ -z "$ENVIRONMENT" ];
 then
-    ENVIRONMENT=$1
-else
-    ENVIRONMENT="local"
     DB_HOST="localhost"
+    ENVIRONMENT="local"
 fi
 
 function install_certificates {
@@ -50,6 +56,14 @@ function setup_mariadb {
     service mysql stop
     mysql_install_db
     service mysql start
+
+    mysql -uroot -proot <<EOF
+      DROP DATABASE IF EXISTS $DB_NAME;
+      DROP USER IF EXISTS $DB_USERNAME;
+      CREATE USER $DB_USERNAME IDENTIFIED BY '$DB_PASSWORD';
+      CREATE DATABASE $DB_NAME CHARACTER SET = 'utf8' COLLATE = 'utf8_bin';
+      GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USERNAME'@'%';
+EOF
 }
 
 function install_python_dependencies {
@@ -74,14 +88,6 @@ function create_data_directories {
 }
 
 function setup_django_scaffolding {
-    mysql -uroot -proot <<EOF
-      DROP DATABASE IF EXISTS $DB_NAME;
-      DROP USER IF EXISTS $DB_USERNAME;
-      CREATE USER $DB_USERNAME IDENTIFIED BY '$DB_PASSWORD';
-      CREATE DATABASE $DB_NAME CHARACTER SET = 'utf8' COLLATE = 'utf8_bin';
-      GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USERNAME'@'%';
-EOF
-
     cd /var/www/hrpt/
     python manage.py migrate --noinput
     python manage.py collectstatic --noinput
@@ -102,6 +108,19 @@ fi
 
 install_python_dependencies
 setup_environment_variables
+
+if [ $ENVIRONMENT != "local" ];
+then
+    apt-get install -y apache2 \
+                       libapache2-mod-wsgi
+
+    git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
+    cd /var/www/hrpt/
+    cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
+    a2ensite 000-hrpt.conf
+    service apache2 reload
+fi
+
 create_data_directories
 setup_django_scaffolding
 
