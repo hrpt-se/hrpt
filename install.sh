@@ -106,7 +106,7 @@ then
     setup_mariadb
 fi
 
-install_python_dependencies
+
 setup_environment_variables
 
 if [ $ENVIRONMENT != "local" ];
@@ -117,11 +117,13 @@ then
     git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
     cd /var/www/hrpt/
     cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
+    echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
     a2ensite 000-hrpt.conf
     service apache2 reload
 fi
 
 create_data_directories
+install_python_dependencies
 setup_django_scaffolding
 
 if [ $ENVIRONMENT == "local" ];
