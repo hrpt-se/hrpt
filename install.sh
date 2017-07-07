@@ -80,6 +80,18 @@ function setup_environment_variables {
     source /etc/profile.d/hrpt.sh
 }
 
+function setup_apache {
+    apt-get install -y apache2 \
+                       libapache2-mod-wsgi
+
+    git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
+    cd /var/www/hrpt/
+    cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
+    echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
+    a2ensite 000-hrpt.conf
+    service apache2 restart
+}
+
 function create_data_directories {
     mkdir -p /var/lib/hrpt/upload
     mkdir -p /var/lib/hrpt/static
@@ -111,15 +123,7 @@ setup_environment_variables
 
 if [ $ENVIRONMENT != "local" ];
 then
-    apt-get install -y apache2 \
-                       libapache2-mod-wsgi
-
-    git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
-    cd /var/www/hrpt/
-    cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
-    echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
-    a2ensite 000-hrpt.conf
-    service apache2 reload
+    setup_apache
 fi
 
 create_data_directories

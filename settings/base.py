@@ -199,7 +199,7 @@ INSTALLED_APPS = (
     'djangocms_file',
     'djangocms_admin_style',
     'filer',  # Required for djangocms_picture
-    'easy_thumbnails', # Required for djangocms_picture
+    'easy_thumbnails',  # Required for djangocms_picture
     'djangocms_picture'
 )
 
