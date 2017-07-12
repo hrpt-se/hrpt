@@ -1,276 +1,57 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import logging
+import json
 import time
 
 from django import forms
-from django.template import Context, loader, RequestContext
+from django.db import OperationalError
+from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.db import connection, transaction, DatabaseError
-from django.db.utils import OperationalError
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
-from django.db import connection
-from django.utils.datastructures import MultiValueDictKeyError
-from django.utils.translation import to_locale, get_language
-import re, locale
+from django.utils.translation import get_language
 
-from apps.survey import utils, models, forms
-
-#Next lines for linking survey_user to idcode
-from apps.accounts.models import user_profile
-from apps.survey.models import SurveyIdCode, SurveyResposeDraft
-
-from apps.pollster.models import Survey, TranslationSurvey
-from apps.pollster import views as pollster_views
-from apps.pollster import utils as pollster_utils
+from apps.survey.models import SurveyIdCode, SurveyResposeDraft, SurveyUser
+from apps.pollster.models import TranslationSurvey, Survey
 from apps.pollster import fields as pollser_field_types
-from .survey import ( Specification,
-                      FormBuilder,
-                      JavascriptBuilder,
-                      get_survey_context, )
-import apps.pollster as pollster
-import pickle
-from django.contrib.auth import logout
-
-import sys
-import datetime
-from django.conf import settings
-import json
 
 
 logger = logging.getLogger(__name__)
 
 
-survey_form_helper = None
-profile_form_helper = None
+def _get_active_survey_user(request):
+    """
+    Currently the system only allows one respondent (surveyuser) per user.
+    Therefore, each user is only mapped to one survey user and the active
+    surveyuser is that only user.
 
-
-def get_active_survey_user(request):
-    gid = request.GET.get('gid', None)
-    if gid is None:
-        return None
-    else:
-        try:
-            survey_user = models.SurveyUser.objects.get(global_id=gid,
-                                                 user=request.user)
-            err = False
-            if survey_user.user == None:
-                err = True
-            else:
-                # WTF... why isn't this in the above query? Kill me now.
-                #TODO: fix it, obviously.
-                if survey_user.user.is_active == False:
-                        err = True
-
-            if err:
-                logout(request)
-
-            return survey_user
-        except models.SurveyUser.DoesNotExist:
-            raise ValueError()
-
-
-
-@login_required
-def thanks(request):
-    try:
-        survey_user = get_active_survey_user(request)
-        if not survey_user:
-            url = '%s?next=%s' % (reverse(select_survey_user), reverse(thanks))
-            return HttpResponseRedirect(url)
-    except ValueError:
-        #TODO: this cannot be... we should probably remove thte try...except
-        pass
-
-    idcode = models.SurveyIdCode.objects.filter(surveyuser_global_id=survey_user.global_id)
-    if not idcode: #This means this is the frist login and the age and idcode still need to be set.
-        #get the user_profile
-        userprofile = user_profile.objects.get(user=survey_user.user)
-        #get the SurveyIdCode
-        SurveyIdcode_obj = SurveyIdCode.objects.get(idcode=userprofile.idcode)
-        #check if the global_id has not been set
-        if (not SurveyIdcode_obj):
-            raise SurveyIdCodeNotValid
-        elif (not SurveyIdcode_obj.surveyuser_global_id):
-            #if global_id not set then assign the one from the survey_user
-            SurveyIdcode_obj.surveyuser_global_id=survey_user
-            #And assign the birthyear from the user_profile
-            SurveyIdcode_obj.fodelsedatum=str(userprofile.yearofbirth)
-            #save
-            SurveyIdcode_obj.save()
-            #continue to welcome page.
-        else:
-            #Deactivate user
-            survey_user.user.is_active=False
-            survey_user.user.save()
-            #logout
-            logout(request)
-
-            #Redirect to error message
-
-            return render_to_response('registration/registration_problem.html',
-                                        context_instance=RequestContext(request))
-
-        #if global_id has been set=> message to user that the idcode has already been used for another user.
-        #maybe return username that has taken the code????
-
-
-
-    #CHANGE FROM HERE EvS 2016-08-09
-    #Check idcode
-    # redirect = _get_redirect_url_if_not_idcode('apps.survey.views.thanks',survey_user)
-    # if redirect:
-    #     # it didn't have an idcode in the url, so we got a url in redirect, now with idcode
-    #     # don't balme me for this spaghetti
-    #     return HttpResponseRedirect(redirect)
-    #
-    # # if we're here, he have an idcode!!!!! And a survey_user!!!
-    # # the road was long and painful
-
-    return HttpResponseRedirect('/sv/valkommen/?gid=%s' % survey_user.global_id)
-
-
-
-@login_required
-def thanks_profile(request):
-    try:
-        survey_user = get_active_survey_user(request)
-    except ValueError:
-        pass
-
-    return render_to_response('survey/thanks_profile.html', {'base_template': "survey/base.html", 'person': survey_user},
-        context_instance=RequestContext(request))
-
-@login_required
-def idcode_save(request):
-    idcode_id = None
-    fodelsedatum = None
-    gid = None
-    error = False
-    idcode = None
-    survey_user = None
-
-    try:
-        idcode_id = request.POST['idkod']
-        fodelsedatum = request.POST['fodelsedatum']
-        gid = request.POST['global_id']
-        survey_user = models.SurveyUser.objects.get(global_id=gid)
-        specialPrint("idcode_save person:" + gid)
-    except MultiValueDictKeyError:
-        messages.add_message(request, messages.ERROR, (u'Ett tekniskt fel skedde då formuläret skickades in.'))
-        error = True
-
-    if not error:
-        specialPrint("idcode_save person:" + gid)
-        if idcode_id == None or idcode_id == '':
-            error = True
-            messages.add_message(request, messages.ERROR, (u'Du måste ange en kod.'))
-
-        if fodelsedatum == None or fodelsedatum == '':
-            error = True
-            messages.add_message(request, messages.ERROR, (u'Du måste ange ett födelsedatum.'))
-        elif re.match('^[0-9]{4}$', fodelsedatum) is None:
-            error = True
-            messages.add_message(request, messages.ERROR, (u'Födelsedatum måste vara angivet i formatet ÅÅÅÅ.'))
-        else:
-            year = int(fodelsedatum)
-            current_year = datetime.date.today().year
-            old_age_threshold = current_year - 85
-            if year > current_year or year < old_age_threshold:
-                error = True
-                messages.add_message(request, messages.ERROR, ('Årtalet måste vara mellan' + str(old_age_threshold) + ' och ' + str(current_year) + '.'))
-
-    if not error:
-        try:
-            idcode = models.SurveyIdCode.objects.get(idcode=idcode_id)
-        except:
-            error = True
-            specialPrint("Hittade inte idkod med varde" + idcode_id)
-            messages.add_message(request, messages.ERROR, ('Hittade ingen kod med värdet ' + str(idcode_id) + '. Var vänlig kontrollera att du matat in koden rätt.'))
-
-        if idcode != None and idcode.surveyuser_global_id!=None and idcode.surveyuser_global_id!=survey_user.global_id:
-            error = True
-            specialPrint("Idkod med varde" + idcode_id + "ar redan upptaget")
-            messages.add_message(request, messages.ERROR, ('Koden ' + str(idcode_id) + ' är redan upptagen'))
-
-        if idcode != None and idcode.fodelsedatum!=None and idcode.fodelsedatum != fodelsedatum:
-            error = True
-            messages.add_message(request, messages.ERROR, ('Angivet födelsedatum verkar inte stämma'))
-
-    if error:
-
-        return render_to_response('survey/id_code.html', {'idcode': idcode_id,
-                                                          'birthdate': fodelsedatum,
-                                                          'base_template': "survey/base.html",
-                                                          'person': survey_user},
-                                  context_instance=RequestContext(request))
-
-    idcode.surveyuser_global_id = gid
-    if idcode.fodelsedatum == None:
-        idcode.fodelsedatum = fodelsedatum
-    idcode.save()
-    return thanks(request)
+    If the system should be extended to support multiple respondents, this
+    method should be refactored to return the selected active respondent.
+    """
+    return request.user.surveyuser_set.first()
 
 
 @login_required
 def select_survey_user(request, template='survey/select_user.html'):
     next = request.GET.get('next', None)
     if next is None:
-        next = reverse(index)
+        next = '/'
 
-    users = models.SurveyUser.objects.filter(user=request.user, deleted=False)
+    users = SurveyUser.objects.filter(user=request.user, deleted=False)
     total = len(users)
-    if total == 0:
-        survey_user = models.SurveyUser.objects.create(
-            user=request.user,
-            name=request.user.username,
-        )
-        url = '%s?gid=%s' % (next, survey_user.global_id)
-        return HttpResponseRedirect(url)
-
-    elif total == 1:
+    if total == 1:
         survey_user = users[0]
         url = '%s?gid=%s' % (next, survey_user.global_id)
         return HttpResponseRedirect(url)
 
-    #This should never happen as we do not have users with multiple profiles! EvS
-    return render_to_response(template, {
+    return render(request, template, {
         'users': users,
         'next': next,
-    }, context_instance=RequestContext(request))
-
-
-@login_required
-def idcode_open(request):
-    try:
-        survey_user = get_active_survey_user(request)
-    except ValueError:
-        raise Http404()
-
-    return render_to_response(
-        'survey/id_code.html',
-        {
-            'base_template': "survey/base.html",
-            'person': survey_user},
-        context_instance=RequestContext(request)
-    )
-
-# def _get_redirect_url_if_not_idcode(str_url_next,survey_user):
-#     idcode = models.SurveyIdCode.objects.filter(surveyuser_global_id=survey_user.global_id)
-#     if not idcode:
-#         specialPrint("redirect to idcode page!!")
-#         url = reverse('apps.survey.views.idcode_open')
-#         url_next = reverse(str_url_next)
-#         url = '%s?gid=%s&next=%s' % (url, survey_user.global_id, url_next)
-#         specialPrint(url)
-#         return url
-#     return None
+    })
 
 
 @login_required
@@ -315,16 +96,16 @@ def show_survey(request, survey_short_name):
     translation = TranslationSurvey.objects.get(survey=survey, language=language, status="PUBLISHED")
     survey.set_translation_survey(translation)
 
-    global_id = request.GET.get('gid', None)
-    survey_user = models.SurveyUser.objects.get(global_id=global_id, user=request.user)
+    survey_user = _get_active_survey_user(request)
+    global_id = survey_user.global_id
 
     if survey.get_last_participation_data(request.user.id, global_id):
         return HttpResponseRedirect('/already-answered')
 
-    IdCodeObject = get_object_or_404(models.SurveyIdCode, surveyuser_global_id=global_id)
+    IdCodeObject = get_object_or_404(SurveyIdCode, surveyuser_global_id=global_id)
 
     try:
-        survey_response_draft = models.SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey.id)
+        survey_response_draft = SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey.id)
         prefilled_data = json.loads(survey_response_draft.form_data)
     except:
         prefilled_data = {}
@@ -335,19 +116,18 @@ def show_survey(request, survey_short_name):
     prefilled_data['PREFIL_BIRTHYEAR'] = IdCodeObject.fodelsedatum
 
     form = survey.as_form()(prefilled_data)
-    #survey.set_form(form)
 
     if request.method == 'POST':
         data = request.POST.copy()
         data['user'] = request.user.id
         data['global_id'] = global_id
-        data['timestamp'] = datetime.datetime.now()
+        data['timestamp'] = datetime.now()
 
         form = survey.as_form()(data)
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/sv/valkommen/?gid=%s' % survey_user.global_id)
+            return HttpResponseRedirect('/sv/valkommen/')
         else:
             survey.set_form(form)
 
@@ -411,7 +191,7 @@ def _save_survey_response_draft(request):
 @login_required
 def people_edit(request):
     try:
-        survey_user = get_active_survey_user(request)
+        survey_user = _get_active_survey_user(request)
     except ValueError:
         raise Http404()
     if survey_user is None:
@@ -438,7 +218,7 @@ def people_edit(request):
 @login_required
 def people_remove(request):
     try:
-        survey_user = get_active_survey_user(request)
+        survey_user = _get_active_survey_user(request)
     except ValueError:
         raise Http404()
 

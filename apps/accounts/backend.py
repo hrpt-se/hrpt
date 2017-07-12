@@ -1,12 +1,6 @@
-from registration.views import ActivationView
-
 from registration import signals
 from registration.models import RegistrationProfile
-from django.contrib.auth.models import User
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
-import sys
-
+from registration.views import ActivationView
 
 from .models import UsedActivationKeys
 
@@ -20,8 +14,6 @@ class TweakedDefaultActivationView(ActivationView):
     activated his account, but would get an activation error message.
     """
     def activate(self, request, activation_key):
-        #print >> sys.stderr, "into activate!!!!!!!"
-
         #First we check if the key is used
         try:
             used_act_key = UsedActivationKeys.objects.get(activation_key=activation_key)
@@ -41,4 +33,3 @@ class TweakedDefaultActivationView(ActivationView):
 
     def get_success_url(self, user):
         return 'registration_activation_complete', (), {}
-
