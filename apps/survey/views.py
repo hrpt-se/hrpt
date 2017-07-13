@@ -241,8 +241,6 @@ def select_survey_user(request, template='survey/select_user.html'):
         'next': next,
     }, context_instance=RequestContext(request))
 
-def specialPrint(msg):
-    print >> sys.stderr,msg
 
 @login_required
 def idcode_open(request):
@@ -301,7 +299,6 @@ def show_survey(request, survey_short_name):
 
     IdCodeObject = get_object_or_404(models.SurveyIdCode, surveyuser_global_id=global_id)
 
-
     try:
         survey_response_draft = models.SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey.id)
         prefilled_data = json.loads(survey_response_draft.form_data)
@@ -323,9 +320,6 @@ def show_survey(request, survey_short_name):
         data['timestamp'] = datetime.datetime.now()
 
         form = survey.as_form()(data)
-
-        # import pdb; pdb.Pdb(skip=['django.*']).set_trace() # Start tracing here. Skip django framework library calls
-        # import pdb; pdb.set_trace()
 
         if form.is_valid():
             form.save()
@@ -355,29 +349,14 @@ def _save_survey_response_draft(request):
 
     global_id = request.GET.get('gid')
 
-    #this is to make sure the guid belongs to this user
-    # it will blow up otherwise as it should.
-    models.SurveyUser.objects.get(global_id=global_id, user=request.user)
-
-    try:
-        survey_draft = models.SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey_id)
-    except:
-        survey_draft = models.SurveyResposeDraft(
-            global_id = global_id,
-            survey_id = survey_id
-        )
-
-    survey_draft.timestamp = int(time.time())
-    survey_draft.form_data = json.dumps(raw_data['form_data'])
-    survey_draft.save()
-
-
-def no_thanks(request):
-    """
-    redirects to link in survey generator.
-    This is the main
-    """
-    return HttpResponseRedirect('https://reply.surveygenerator.com/go.aspx?U=22277ih5v4DGFEKv7gWjt')
+    SurveyResposeDraft.objects.update_or_create(
+        global_id=survey_user.global_id,
+        survey_id=survey_id,
+        defaults={
+            'timestamp': int(time.time()),
+            'form_data': json.dumps(questions_data)
+        }
+    )
 
 
 # end of [relatively] sane code.
