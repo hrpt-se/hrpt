@@ -15,9 +15,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.utils.translation import get_language
 
-from apps.survey.models import SurveyIdCode, SurveyResposeDraft, SurveyUser
 from apps.pollster.models import TranslationSurvey, Survey
 from apps.pollster import fields as pollser_field_types
+from apps.survey.forms import AddPeople
+from apps.survey.models import SurveyResposeDraft, SurveyIdCode, SurveyUser
 
 
 logger = logging.getLogger(__name__)
@@ -105,7 +106,11 @@ def show_survey(request, survey_short_name):
     IdCodeObject = get_object_or_404(SurveyIdCode, surveyuser_global_id=global_id)
 
     try:
-        survey_response_draft = SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey.id)
+        survey_response_draft = SurveyResposeDraft.objects.get(
+            global_id = global_id,
+            survey_id=survey.id
+        )
+
         prefilled_data = json.loads(survey_response_draft.form_data)
     except:
         prefilled_data = {}
@@ -156,11 +161,11 @@ def _save_survey_response_draft(request):
     survey_id = raw_data['survey_id']
     questions_data = raw_data['form_data']
 
-    global_id = request.GET.get('gid')
+    survey_user = _get_active_survey_user(request)
 
     try:
         SurveyResposeDraft.objects.update_or_create(
-            global_id=global_id,
+            global_id=survey_user.global_id,
             survey_id=survey_id,
             defaults={
                 'timestamp': int(time.time()),
@@ -201,7 +206,7 @@ def people_edit(request):
         raise Http404()
 
     if request.method == 'POST':
-        form = forms.AddPeople(request.POST)
+        form = AddPeople(request.POST)
         if form.is_valid():
             survey_user.name = form.cleaned_data['name']
             survey_user.save()
@@ -250,7 +255,7 @@ def people_add(request):
     if request.method == 'POST':
         form = forms.AddPeople(request.POST)
         if form.is_valid():
-            survey_user = models.SurveyUser()
+            survey_user = SurveyUser()
             survey_user.user = request.user
             survey_user.name = form.cleaned_data['name']
             survey_user.save()
