@@ -13,9 +13,11 @@
     <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.form.js" %}"></script>
     <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.cookie.js" %}"></script>
     {% if locale_code %}
-    <script type="text/javascript" src="{% static "/pollster/datejs/js/date-{{ locale_code }}.js" %}"></script>
+        {% with "/pollster/datejs/js/date-"|add:locale_code|add:".js" as locale_file %}
+            <script type="text/javascript" src="{% static locale_file %}"></script>
+        {% endwith %}
     {% else %}
-    <script type="text/javascript" src="{% static "/pollster/datejs/js/date.js" %}"></script>
+        <script type="text/javascript" src="{% static "/pollster/datejs/js/date.js" %}"></script>
     {% endif %}
 
     <script type="text/javascript" src="{% static "js/csrf.js" %}"></script>
