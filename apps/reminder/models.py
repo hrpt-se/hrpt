@@ -112,9 +112,10 @@ class ReminderError(models.Model):
 
 
 def get_settings():
-    if ReminderSettings.objects.count() == 0:
+    try:
+        return ReminderSettings.objects.first()
+    except ReminderSettings.DoesNotExist:
         return None
-    return ReminderSettings.objects.all()[0]
 
 def get_upcoming_dates(now):
     settings = get_settings()

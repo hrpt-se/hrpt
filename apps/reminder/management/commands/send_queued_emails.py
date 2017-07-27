@@ -1,6 +1,3 @@
-from optparse import make_option
-from datetime import datetime, timedelta
-
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMultiAlternatives
 
@@ -10,7 +7,6 @@ from ...send import create_message
 
 import time
 import traceback
-import datetime
 
 
 
@@ -26,11 +22,13 @@ class Command(BaseCommand):
 
 
     help = "Send emails queued manually from a template."
-    option_list = BaseCommand.option_list + (
-        make_option('--queues', action='store_true', dest='queues', default=False,
-            help='Print debug info'),
-    )
 
+    def add_arguments(self, parser):
+        parser.add_argument('--queues',
+                            action='store_true',
+                            dest='queues',
+                            default=False,
+                            help='Print debug info')
 
     def handle(self, *args, **options):
         if options.get('queues'):

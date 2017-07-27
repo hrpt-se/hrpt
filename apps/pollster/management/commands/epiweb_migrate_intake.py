@@ -18,20 +18,34 @@ def setmulti(intake, dest, data, src, index):
 
 class Command(BaseCommand):
     help = 'Register a question data type.'
-    option_list = BaseCommand.option_list + (
-        make_option(None, '--host', action='store', type="string",
-                    dest='host',
-                    help='Source database host'),
-        make_option('-p', '--password', action='store', type="string",
-                    dest='password',
-                    help='Source database password'),
-        make_option('-d', '--database', action='store', type="string",
-                    dest='database',
-                    help='Source database name'),
-        make_option('-u', '--username', action='store', type="string",
-                    dest='username',
-                    help='User name to connect to the source database'),
-    )
+
+    def add_arguments(self, parser):
+        parser.add_argument('--host',
+                            action='store',
+                            type=str,
+                            dest='host',
+                            help='Source database host')
+
+        parser.add_argument('-p',
+                            '--password',
+                            action='store',
+                            type=str,
+                            dest='password',
+                            help='Source database password')
+
+        parser.add_argument('-d',
+                            '--database',
+                            action='store',
+                            type=str,
+                            dest='database',
+                            help='Source database name')
+
+        parser.add_argument('-u',
+                            '--username',
+                            action='store',
+                            type=str,
+                            dest='username',
+                            help='User name to connect to the source database')
 
     def convert(self, data, intake):
         intake.Q1 = data["IntakeQ1"]

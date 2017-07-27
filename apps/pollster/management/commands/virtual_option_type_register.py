@@ -1,19 +1,29 @@
-from optparse import make_option
-from django.core.management.base import CommandError, BaseCommand
+from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = 'Register a virtual option type.'
-    option_list = BaseCommand.option_list + (
-        make_option('-t', '--title', action='store', type="string",
-                    dest='title',
-                    help='Rule title.'),
-        make_option('-q', '--question-data-type-title', action='store', type="string",
-                    dest='question_data_type_title',
-                    help='Question data type title'),
-        make_option('-j', '--jsclass', action='store', type="string",
-                    dest='jsclass',
-                    help='JavaScript class.'),
-    )
+
+    def add_arguments(self, parser):
+        parser.add_argument('-t',
+                            '--title',
+                            action='store',
+                            type=str,
+                            dest='title',
+                            help='Rule title.')
+
+        parser.add_argument('-q',
+                            '--question-data-type-title',
+                            action='store',
+                            type=str,
+                            dest='question_data_type_title',
+                            help='Question data type title')
+
+        parser.add_argument('-j',
+                            '--jsclass',
+                            action='store',
+                            type=str,
+                            dest='jsclass',
+                            help='JavaScript class.')
 
     def handle(self, *args, **options):
         from apps.pollster import models
