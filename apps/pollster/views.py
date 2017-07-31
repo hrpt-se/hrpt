@@ -97,7 +97,7 @@ def survey_publish(request, id):
             messages.error(request, 'Unable to publish the survey, please check the errors below')
             for error in errors[:5]:
                 messages.warning(request, error)
-        return redirect(survey)
+        return redirect(survey_list)
     return redirect(survey)
 
 @staff_member_required
@@ -105,7 +105,7 @@ def survey_unpublish(request, id):
     survey = get_object_or_404(models.Survey, pk=id)
     if (request.method == 'POST'):
         survey.unpublish()
-        return redirect(survey)
+        return redirect(survey_list)
     return redirect(survey)
 
 
