@@ -1,43 +1,20 @@
 # -*- coding: utf-8 -*-
+import csv
+import datetime
 import json
+import re
 
-from django.core.urlresolvers import get_resolver, reverse, RegexURLResolver
+from django.core.urlresolvers import reverse, RegexURLResolver
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response, redirect, get_object_or_404
-from django.utils.safestring import mark_safe
-from django.utils.translation import to_locale, get_language
-from django.template import RequestContext
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.translation import get_language
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.views import redirect_to_login
-from django.contrib.auth import authenticate, login
 from django.conf import settings
 
 from apps.survey.models import SurveyUser, SurveyIdCode
-from .utils import get_user_profile
 from . import models, forms, fields, parser, importexport
-import re, datetime, locale, csv, urlparse, urllib
-import sys
 
-
-
-def render_with_context(req, *args, **kwargs):
-    """
-    So why is this in here? why do we need this method?
-    Apparently no one knows. This method was here when I took over this codebase
-
-    This was obviously added to prevent this error:
-    > You must enable the 'sekizai.context_processors.sekizai'
-
-    Now, what that means, why it occurs and why we need to manually set the context as a kwarg, is a whole other story.
-    For now let's just rename this function to something a bit more descriptive.
-    Naming this 'request_render_to_response', which was the previouns name, is either trolling or obfuscation
-
-    https://github.com/django-compressor/django-compressor/issues/483#issuecomment-52243164
-    """
-    # kwargs['context_instance'] = RequestContext(req)
-    return render(req, *args, **kwargs)
 
 
 #This stuff is ... intense
@@ -61,9 +38,10 @@ def retry(f, *args, **kwargs):
 
 @staff_member_required
 def survey_list(request):
-    surveys = models.Survey.objects.all()
+    surveys = models.Survey.objects.all().order_by('-updated')
     form_import = forms.SurveyImportForm()
-    return render_with_context(request, 'pollster/survey_list.html', {
+
+    return render(request, 'pollster/survey_list.html', {
         "surveys": surveys,
         "form_import": form_import
     })
@@ -81,12 +59,12 @@ def survey_add(request):
     virtual_option_types = models.VirtualOptionType.objects.all()
     question_data_types = models.QuestionDataType.objects.all()
     rule_types = models.RuleType.objects.all()
-    return render_with_context(request, 'pollster/survey_edit.html', {
+
+    return render(request, 'pollster/survey_edit.html', {
         "survey": survey,
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
-        "rule_types": rule_types,
-        "CMS_MEDIA_URL": settings.CMS_MEDIA_URL,
+        "rule_types": rule_types
     })
 
 @staff_member_required
@@ -102,12 +80,12 @@ def survey_edit(request, id):
     virtual_option_types = models.VirtualOptionType.objects.all()
     question_data_types = models.QuestionDataType.objects.all()
     rule_types = models.RuleType.objects.all()
-    return render_with_context(request, 'pollster/survey_edit.html', {
+
+    return render(request, 'pollster/survey_edit.html', {
         "survey": survey,
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
-        "rule_types": rule_types,
-        "CMS_MEDIA_URL": settings.CMS_MEDIA_URL,
+        "rule_types": rule_types
     })
 
 @staff_member_required
@@ -209,7 +187,7 @@ def survey_translation_list_or_add(request, id):
                         column.translation_column.save()
 
             return redirect(translation)
-    return render_with_context(request, 'pollster/survey_translation_list.html', {
+    return render(request, 'pollster/survey_translation_list.html', {
         "survey": survey,
         "form_add": form_add
     })
@@ -236,7 +214,8 @@ def survey_translation_edit(request, id, language):
                 form.save()
             messages.success(request, 'Translation saved successfully.')
             return redirect(translation)
-    return render_with_context(request, 'pollster/survey_translation_edit.html', {
+
+    return render(request, 'pollster/survey_translation_edit.html', {
         "survey": survey,
         "translation": translation
     })
@@ -257,7 +236,8 @@ def survey_chart_list_or_add(request, id):
                 chart.type = models.ChartType.objects.all().order_by('id')[0]
                 chart.save()
             return redirect(chart)
-    return render_with_context(request, 'pollster/survey_chart_list.html', {
+
+    return render(request, 'pollster/survey_chart_list.html', {
         "survey": survey,
         "form_add": form_add
     })
@@ -279,7 +259,8 @@ def survey_chart_edit(request, id, shortname):
                 else:
                     messages.warning(request, msg)
             return redirect(chart)
-    return render_with_context(request, 'pollster/survey_chart_edit.html', {
+
+    return render(request, 'pollster/survey_chart_edit.html', {
         "survey": survey,
         "chart": chart,
         "form_chart": form_chart,
@@ -331,7 +312,7 @@ def survey_results_csv_extended(request, id):
         if form.is_valid():
             # Process the data in form.cleaned_data
             now = datetime.datetime.now()
-            response = HttpResponse(mimetype='text/csv')
+            response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename=survey-results-%d-%s.csv' % (survey.id, format(now, '%Y%m%d%H%M'))
             response.write(u'\ufeff'.encode('utf8'))
             #side effecting the response... great...
@@ -343,10 +324,11 @@ def survey_results_csv_extended(request, id):
         #http://stackoverflow.com/questions/5263722/in-django-how-do-i-late-bind-an-unbound-form
         form = forms.SurveyExtendedResultsForm() # An unbound form
 
-    return render_to_response('pollster/extended_results.html', {
+
+    return render(request, 'pollster/extended_results.html', {
         'form': form,
         'survey': survey,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @staff_member_required
@@ -436,7 +418,7 @@ def urls(request, prefix=''):
 
             urls[name] = "/" + url_regex[:-1]
 
-    return render_with_context(request, "pollster/urls.js", {'urls':urls}, content_type="application/javascript")
+    return render(request, "pollster/urls.js", {'urls': urls}, content_type="application/javascript")
 
 def _get_active_survey_user(request):
     gid = request.GET.get('gid', None)
@@ -451,7 +433,3 @@ def _get_next_url(request, default):
     if survey_user:
         url = '%s?gid=%s' % (url, survey_user.global_id)
     return url
-
-
-def specialPrint(msg):
-    print >> sys.stderr,msg
