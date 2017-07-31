@@ -8,7 +8,18 @@
     <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.datatypes.js" %}"></script>
     <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.rules.js" %}"></script>
     <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.virtualoptions.js" %}"></script>
-    <script type="text/javascript">$(function() { wok.pollster.createPollsterRuntime(null, {}); })</script>
+    <script type="text/javascript">
+        // Disable the submit button once the survey is submitted (to avoid double responses)
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var $submit = $(this).find('input[type=submit]');
+
+                $submit.prop('disabled', true);
+            });
+        });
+
+        $(function() { wok.pollster.createPollsterRuntime(null, {}); })
+    </script>
 {% endblock %}
 
 {% block col1 %}
