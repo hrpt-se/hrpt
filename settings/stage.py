@@ -1,8 +1,11 @@
-from os import environ
-
 from base import *
 
 DEBUG = False
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher'
+]
 
 ALLOWED_HOSTS = '*'
 
