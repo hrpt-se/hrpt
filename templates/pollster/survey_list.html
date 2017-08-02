@@ -33,7 +33,7 @@
                 <tr>
                     <td>
                         <a href="{% url 'pollster_survey_edit' survey.id %}">
-                            {{ survey.title }}
+                            {{ survey.title }} ({{ survey.shortname }})
                         </a>
                     </td>
                     <td>{{ survey.updated|naturaltime }}</td>
