@@ -145,13 +145,14 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
     max_birthyear = datetime.today().year
     min_birthyear = max_birthyear - 86 # Should be max 85 years old, but if born 31 december it could be 86 years ago
 
-    yearofbirth = forms.IntegerField(
+    year_of_birth = forms.IntegerField(
         max_value=max_birthyear,
         min_value=min_birthyear,
         label=_("Year of birth"),
         help_text=_("Please enter the 4 digits of your year of birth. "
                     "For example: 1989"),
-        error_messages={'invalid': _("This value must contain 4 digits.")
+        error_messages={
+            'invalid': _("This value must contain 4 digits.")
         }
     )
 
