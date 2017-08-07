@@ -22,9 +22,9 @@ from apps.survey import utils, models, forms
 
 #Next lines for linking survey_user to idcode
 from apps.accounts.models import user_profile
-from apps.survey.models import SurveyIdCode
+from apps.survey.models import SurveyIdCode, SurveyResposeDraft
 
-from apps.pollster.models import TranslationSurvey
+from apps.pollster.models import Survey, TranslationSurvey
 from apps.pollster import views as pollster_views
 from apps.pollster import utils as pollster_utils
 from apps.pollster import fields as pollser_field_types
@@ -286,7 +286,29 @@ def show_survey(request, survey_short_name):
 
     #locale_code = locale.locale_alias.get(language)
 
-    survey = get_object_or_404(pollster.models.Survey, shortname=survey_short_name, status="PUBLISHED")
+    survey_queryset = Survey.objects.filter(
+        shortname=survey_short_name,
+        status="PUBLISHED"
+    )
+
+    if survey_queryset.count() == 0:
+        return Http404
+
+    survey_queryset = survey_queryset.prefetch_related(
+        'question_set',
+        'question_set__option_set',
+        'question_set__option_set__virtual_type',
+        'question_set__column_set',
+        'question_set__row_set',
+        'question_set__subject_of_rules',
+        'question_set__subject_of_rules__subject_options',
+        'question_set__subject_of_rules__object_options',
+        'question_set__subject_of_rules__object_question',
+        'question_set__subject_of_rules__rule_type',
+        'question_set__data_type',
+    )
+
+    survey = survey_queryset.first()
 
     translation = TranslationSurvey.objects.get(survey=survey, language=language, status="PUBLISHED")
     survey.set_translation_survey(translation)
