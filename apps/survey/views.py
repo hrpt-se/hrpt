@@ -77,7 +77,6 @@ def thanks(request):
     try:
         survey_user = get_active_survey_user(request)
         if not survey_user:
-            specialPrint('No gid in url go to select page!')
             url = '%s?next=%s' % (reverse(select_survey_user), reverse(thanks))
             return HttpResponseRedirect(url)
     except ValueError:
@@ -372,7 +371,7 @@ def _save_survey_response_draft(request):
     global_id = request.GET.get('gid')
 
     SurveyResposeDraft.objects.update_or_create(
-        global_id=survey_user.global_id,
+        global_id=global_id,
         survey_id=survey_id,
         defaults={
             'timestamp': int(time.time()),

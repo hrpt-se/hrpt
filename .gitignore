@@ -23,3 +23,4 @@ epidb/client/epidb_results.sql*
 .settings/
 local/
 vagrant/certs/*.crt
+.idea/*
