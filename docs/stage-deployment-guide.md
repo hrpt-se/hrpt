@@ -29,6 +29,10 @@ $ curl https://raw.githubusercontent.com/hrpt-se/hrpt/feature/el-deployment-prep
 Once the installer finishes, the system should be accessible on port 80 on the 
 server.
 
+## Mail sending daemon
+The system contains a daemon that sends mail which are queued in the database. 
+More info on how the daemon is deployed and controlled can be found in the readme file.
+
 ## Migrating data (Optional)
 
 Migrating data from an existing system needs to be performed in two steps. 

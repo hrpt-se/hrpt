@@ -6,8 +6,8 @@ The documentation is not here!
 So far it's on the network share.
 
 
-## Running the site
-The site is prepared to be developed in VirtualBox, provisioned by Vagrant. To run it locally, you need to install VirtualBox and Vagrant on your local computer. Download and install from https://www.virtualbox.org/wiki/Downloads and https://www.vagrantup.com/downloads.html or through your favorite package manager.
+## Running the system
+The easiest way to deploy the system on your local machine for development is to use Vagrant. To run it locally, you need to install VirtualBox and Vagrant on your local computer. Download and install from https://www.virtualbox.org/wiki/Downloads and https://www.vagrantup.com/downloads.html or through your favorite package manager. If you want to deploy the system in a server settings, that is documented in the docs-folder.
 
 When VirtualBox and Vagrant is installed, running the site is as easy as bringing up a terminal window and issuing:
 ```bash
@@ -18,18 +18,22 @@ $ vagrant up
 After the setup is completed you can start the Django server by logging in to the machine using ssh:
 ```bash
 $ vagrant ssh
-Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-117-generic x86_64)
+Welcome to Ubuntu 16.04.2 LTS (GNU/Linux 4.4.0-87-generic x86_64)
 [...]
 
-vagrant@vagrant-ubuntu-trusty-64:~$ cd /vagrant/
-vagrant@vagrant-ubuntu-trusty-64:/vagrant$ python manage.py runserver 0.0.0.0:8000
+ubuntu@ubuntu-xenial:~$ cd /var/www/hrpt/
+ubuntu@ubuntu-xenial:/var/www/hrpt$ python manage.py runserver 0.0.0.0:8000
 Validating models...
 
 0 errors found
-Django version 1.3.3, using settings 'vagrant.settings'
-Development server is running at http://0.0.0.0:8000/
+Django version 1.10.7, using settings 'settings.local'
+Starting development server at http://0.0.0.0:8000/
 Quit the server with CONTROL-C.
 ```
+
+### Mail sending daemon
+The system contains a daemon responsible for sending mails which are queued in the database. The daemon is installed and started by the installation script which is executed by Vagrant. The daemon is controlled by Systemd and can be controlled 
+by running `systemctl <command> hrpt-mail` where `<command>` is either of `start` `stop`or `restart`.
 
 ### SSL certificate workaround
 If you are trying to run `vagrant up` in a network that intercepts SSL traffic, you will likely face an error message:
