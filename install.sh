@@ -110,6 +110,11 @@ function install_fixtures {
     python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
 }
 
+function start_mail_service {
+    cp vagrant/hrpt-mail.service /etc/systemd/system/
+    systemctl enable hrpt-mail
+}
+
 install_certificates
 install_apt_dependencies
 
@@ -134,3 +139,5 @@ if [ $ENVIRONMENT == "local" ];
 then
     install_fixtures
 fi
+
+start_mail_service
