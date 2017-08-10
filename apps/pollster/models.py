@@ -424,20 +424,18 @@ class Question(models.Model):
             return self.translation.error_message
         return self.error_message
 
-
     @property
     def errors(self):
         if not self.form:
             return {}
-        errors = [(data_name, self.form.errors[data_name]) for data_name in self.data_names if data_name in self.form.errors]
+
+        errors = [(data_name, self.form.errors[data_name])
+                  for data_name in self.data_names
+                  if data_name in self.form.errors]
+
         if self.is_multiple_choice and self.data_name in self.form.errors:
             errors.append((self.data_name, self.form.errors[self.data_name]))
         return dict(errors)
-
-
-    #So, somebody learned the keyword yield.. alright, cool..
-
-    #TODO: refactor all these with list comprehensions... save a few lines, this file is horribly large
 
     @property
     def rows(self):

@@ -133,7 +133,11 @@ def survey_unpublish(request, id):
 
 @staff_member_required
 def survey_test(request, id, language=None):
-    survey = get_object_or_404(models.Survey, pk=id)
+    survey_queryset = models.Survey.objects.all().prefetch_related(
+        'question_set'
+    )
+
+    survey = get_object_or_404(survey_queryset, pk=id)
 
     #Notice that the language parameter passed to this as a url paramter _is ignored!_
     #TODO hardcode language, update urls, remove language paramter on this method
@@ -164,13 +168,17 @@ def survey_test(request, id, language=None):
         else:
             survey.set_form(form)
 
-    return render_with_context(request, 'pollster/survey_test.html', {
+            # Add the form to the question in order for the question to
+            # retrieve validation errors in the template
+            for question in survey.question_set.all():
+                question.set_form(form)
+
+    return render(request, 'pollster/survey_test.html', {
         "language": language,
         "locale_code": "sv-SE", #TODO: oh well... remove internationalization
         "survey": survey,
         "default_postal_code_format": fields.PostalCodeField.get_default_postal_code_format(),
         "last_participation_data_json": json.dumps(prefilled_data),
-        "language": language,
         "form": form
     })
 

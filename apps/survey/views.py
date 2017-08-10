@@ -268,8 +268,6 @@ def idcode_open(request):
 #     return None
 
 
-
-# Some sane code...
 @login_required
 def show_survey(request, survey_short_name):
 
@@ -347,6 +345,11 @@ def show_survey(request, survey_short_name):
             return HttpResponseRedirect('/sv/valkommen/?gid=%s' % survey_user.global_id)
         else:
             survey.set_form(form)
+
+            # Add the form to the question in order for the question to
+            # retrieve validation errors in the template
+            for question in survey.question_set.all():
+                question.set_form(form)
 
     return render(
         request,
