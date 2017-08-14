@@ -160,7 +160,7 @@ CMS_TEMPLATES = (
 )
 
 GEOMETRY_TABLES = (
- ('pollster_zip_codes','zip level'),
+    ('pollster_zip_codes', 'zip level'),
 )
 
 ROOT_URLCONF = 'urls'
