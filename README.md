@@ -1,11 +1,5 @@
 # hrpt
 
-
-The documentation is not here!
-
-So far it's on the network share.
-
-
 ## Running the system
 The easiest way to deploy the system on your local machine for development is to use Vagrant. To run it locally, you need to install VirtualBox and Vagrant on your local computer. Download and install from https://www.virtualbox.org/wiki/Downloads and https://www.vagrantup.com/downloads.html or through your favorite package manager. If you want to deploy the system in a server settings, that is documented in the docs-folder.
 
@@ -61,13 +55,17 @@ Bringing machine 'default' up with 'virtualbox' provider...
 [...]
 ```
 
+## Settings
+The site uses different settings depending on the environment and all setting files are stored in the settings folder.
+The file `base.py` file contains common settings for all environments and should never be used directly. The `local.py` 
+file is intended for development.
 
-## TODO
+### Environment variables.
+There are a number of environment variables that configures the site. The install script will assign values to the variables 
+and store them in `/etc/profile.d/hrpt.sh`, making sure that they are populated in supported shells.
 
- * define pip dependencies
- * save migration state on a database table
- * Add link to my first commit, so old code can be easily reached, no need to
- * remove internacionalization. It is adding a huge usability buron on the system.
- * Re-implment the whole survey thing using reactive.js. OR other,  althought I strongly suggest reactive.js if we want to avoid bloat
- * make the apache script accept a host
- * try the bootstrap script with a PASSWORD environment variable (experiment)
+  - `DJANGO_SETTINGS_MODULE`: Which settings module that should be loaded. Should be `settings.local`for development.
+  - `DB_HOST`: The hostname of the database server. `localhost` for development.
+  - `DB_USER`: Which username to use when connecting to the database 
+  - `DB_PASSWORD`: The password to use when authentication against the database server
+  - `DB_NAME`: The name of the database to use
