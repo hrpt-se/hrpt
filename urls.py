@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView, TemplateView
 from django.views.defaults import page_not_found
 from django.conf import settings
@@ -22,7 +23,6 @@ urlpatterns = [
     url(r'^admin/cms/page/18/edit-plugin/[0-9]+/.*escapeHtml.*icon_src.*/$', page_not_found),
     url(r'^admin/manual-newsletters/', include('apps.reminder.nladminurls')),
     url(r'^admin/surveys-editor/', include('apps.pollster.urls')),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^surveys/(?P<survey_shortname>.+)/charts/(?P<chart_shortname>.+)/tile/(?P<z>\d+)/(?P<x>\d+)/(?P<y>\d+)$', map_tile, name='pollster_map_tile'),
     url(r'^surveys/(?P<survey_shortname>.+)/charts/(?P<chart_shortname>.+)/click/(?P<lat>[\d.-]+)/(?P<lng>[\d.-]+)$', map_click, name='pollster_map_click'),
     url(r'^surveys/(?P<survey_shortname>.+)/charts/(?P<chart_shortname>.+)\.json$', chart_data, name='pollster_chart_data'),
@@ -42,10 +42,13 @@ urlpatterns = [
     url(r'^contact/$', ContactFormView.as_view(
         form_class=CaptchaContactForm
     ), name='contact_form'),
-    url(r'^contact/sent/$', TemplateView.as_view(template_name='contact_form/contact_form_sent.html'), name='contact_form_sent'),
-
+    url(
+        r'^contact/sent/$',
+        TemplateView.as_view(
+            template_name='contact_form/contact_form_sent.html'),
+        name='contact_form_sent'
+    ),
     url(r'^colors.css$', colors_css),
-
     url(r'^register/$',
         RegistrationView.as_view(
             template_name='registration/registration_explanation.html'
@@ -54,15 +57,22 @@ urlpatterns = [
 
 ]
 
+# Catchall
+urlpatterns += i18n_patterns(
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('cms.urls'))
+)
+
 if settings.DEBUG:
     urlpatterns = [
         url(r'^404/$', page_not_found),
         url(r'^500/$', server_error),
-        url(r'upload/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
-    ] + urlpatterns
+        url(
+            r'^upload/(?P<path>.*)$',
+            serve,
+            {'document_root': settings.MEDIA_ROOT}
+        )
+    ] + staticfiles_urlpatterns() + urlpatterns
 
-
-# Catchall
-urlpatterns += i18n_patterns(url(r'^', include('cms.urls')))
 
 handler500 = 'views.server_error'

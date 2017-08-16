@@ -136,6 +136,7 @@ TEMPLATES = [{
             "django.template.context_processors.i18n",
             "django.template.context_processors.request",
             "django.template.context_processors.media",
+            'django.template.context_processors.csrf',
             "django.template.context_processors.debug",
             "sekizai.context_processors.sekizai",
             "django.contrib.messages.context_processors.messages",
@@ -164,6 +165,9 @@ GEOMETRY_TABLES = (
 )
 
 ROOT_URLCONF = 'urls'
+
+
+WSGI_APPLICATION = 'wsgi.application'
 
 
 INSTALLED_APPS = (
