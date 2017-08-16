@@ -1,12 +1,14 @@
-{% extends "registration/boxbase.html" %}
+{% extends "base/blankbase.html" %}
 {% load i18n %}
 
-{% block title %}{{ block.super }}: {% trans "Account Activation" %}{% endblock %}
+{% block title %}
+    {{ block.super }}: {% trans "Account Activation" %}
+{% endblock %}
 
-{% block content %}<h1>{% trans "Account Activation" %}</h1>
-                <p>{% trans "User activation failed." %}</p>
-<br>
-
-
-                <p>&nbsp;</p>
-                <p><a href="/">{% trans "Back to the home page" %}</a>.</p>{% endblock content %}
+{% block content %}
+    <h1>{% trans "Account Activation" %}</h1>
+    <p>{% trans "User activation failed." %}</p>
+    <br>
+    <p>&nbsp;</p>
+    <p><a href="/">{% trans "Back to the home page" %}</a>.</p>
+{% endblock content %}
