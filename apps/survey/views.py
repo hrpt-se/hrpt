@@ -289,7 +289,7 @@ def show_survey(request, survey_short_name):
     )
 
     if survey_queryset.count() == 0:
-        return Http404
+        raise Http404
 
     survey_queryset = survey_queryset.prefetch_related(
         'question_set',
