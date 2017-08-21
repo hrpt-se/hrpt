@@ -39,6 +39,8 @@ LANGUAGE_CODE = 'sv'
 # LANGUAGE_CODE = 'en'
 FORMAT_MODULE_PATH = 'formats'
 
+CACHE_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 # For checking postcodes etc.
 # Use ISO3166 two-letter country code
 # See http://www.iso.org/iso/country_codes/iso_3166_code_lists/english_country_names_and_code_elements.htm
