@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+import logging
 import time
 
 from django import forms
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db import connection, transaction, DatabaseError
+from django.db.utils import OperationalError
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
@@ -40,6 +42,9 @@ import sys
 import datetime
 from django.conf import settings
 import json
+
+
+logger = logging.getLogger(__name__)
 
 
 survey_form_helper = None
@@ -373,14 +378,24 @@ def _save_survey_response_draft(request):
 
     global_id = request.GET.get('gid')
 
-    SurveyResposeDraft.objects.update_or_create(
-        global_id=global_id,
-        survey_id=survey_id,
-        defaults={
-            'timestamp': int(time.time()),
-            'form_data': json.dumps(questions_data)
-        }
-    )
+    try:
+        SurveyResposeDraft.objects.update_or_create(
+            global_id=global_id,
+            survey_id=survey_id,
+            defaults={
+                'timestamp': int(time.time()),
+                'form_data': json.dumps(questions_data)
+            }
+        )
+    except OperationalError as oe:
+        # In case we face a MySQL deadlock (error code 1213), log a notice and
+        # skip saving this draft.
+        error_code, _ = oe.args
+
+        if error_code == 1213:
+            logger.warning('Deadlock while saving draft. Skipping draft save.')
+        else:
+            raise
 
 
 # end of [relatively] sane code.
