@@ -47,7 +47,7 @@ def create(name, fields=None, app_label='', module='', options=None, admin_opts=
     model = type(name, (models.Model,), attrs)
 
     # Ensure that the dynamic class is not cached
-    del cache.all_models[app_label][model._meta.object_name]
+    cache.all_models[app_label].pop(model._meta.object_name, None)
 
     # Create an Admin class if admin options were provided
     if admin_opts is not None:
