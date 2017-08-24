@@ -258,4 +258,3 @@ SESSION_COOKIE_AGE = 60 * 60 * 2
 LOGIN_REDIRECT_URL = '/survey/thanks/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
-
