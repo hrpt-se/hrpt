@@ -14,11 +14,18 @@ while getopts e: opt; do
     esac
 done
 
-if [ -z "$ENVIRONMENT" ];
+if [ -z "$ENVIRONMENT" ] || [ $ENVIRONMENT == "local" ];
 then
     DB_HOST="localhost"
+    WEB_HOST="localhost"
     ENVIRONMENT="local"
+else
+    if [ -z "$WEB_HOST" ];
+    then
+        echo "When ENVIRONMENT is not local, WEB_HOST must be set"
+    fi
 fi
+
 
 function install_certificates {
     cp /var/www/hrpt/vagrant/certs/*.crt /usr/local/share/ca-certificates/
@@ -76,6 +83,7 @@ function setup_environment_variables {
     echo "export DB_USERNAME=$DB_USERNAME" >> /etc/profile.d/hrpt.sh
     echo "export DB_PASSWORD=$DB_PASSWORD" >> /etc/profile.d/hrpt.sh
     echo "export DB_HOST=$DB_HOST" >> /etc/profile.d/hrpt.sh
+    echo "export WEB_HOST=$WEB_HOST" >> /etc/profile.d/hrpt.sh
 
     source /etc/profile.d/hrpt.sh
 }
@@ -88,7 +96,8 @@ function setup_apache {
     cd /var/www/hrpt/
     cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
     echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
-    a2ensite 000-hrpt.conf
+    a2dissite 000-default
+    a2ensite 000-hrpt
     service apache2 restart
 }
 

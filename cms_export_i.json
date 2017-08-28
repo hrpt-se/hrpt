@@ -1,0 +1,398 @@
+[
+  {
+    "model": "cms.usersettings",
+    "pk": 1,
+    "fields": {
+      "user": [
+        "root"
+      ],
+      "language": "sv",
+      "clipboard": 1
+    }
+  },
+  {
+    "model": "cms.page",
+    "pk": 1,
+    "fields": {
+      "path": "0001",
+      "depth": 1,
+      "numchild": 0,
+      "created_by": "script",
+      "changed_by": "script",
+      "parent": null,
+      "creation_date": "2017-08-24T16:14:24.231",
+      "changed_date": "2017-08-24T16:14:25.642",
+      "publication_date": "2017-08-24T16:14:24.565",
+      "publication_end_date": null,
+      "in_navigation": true,
+      "soft_root": false,
+      "reverse_id": null,
+      "navigation_extenders": null,
+      "template": "INHERIT",
+      "site": [
+        "example.com"
+      ],
+      "login_required": false,
+      "limit_visibility_in_menu": null,
+      "is_home": true,
+      "application_urls": null,
+      "application_namespace": null,
+      "publisher_is_draft": true,
+      "publisher_public": 2,
+      "languages": "sv",
+      "revision_id": 0,
+      "xframe_options": 0,
+      "placeholders": [
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  {
+    "model": "cms.page",
+    "pk": 2,
+    "fields": {
+      "path": "0002",
+      "depth": 1,
+      "numchild": 0,
+      "created_by": "script",
+      "changed_by": "script",
+      "parent": null,
+      "creation_date": "2017-08-24T16:14:24.577",
+      "changed_date": "2017-08-24T16:14:25.523",
+      "publication_date": "2017-08-24T16:14:24.565",
+      "publication_end_date": null,
+      "in_navigation": true,
+      "soft_root": false,
+      "reverse_id": null,
+      "navigation_extenders": null,
+      "template": "INHERIT",
+      "site": [
+        "example.com"
+      ],
+      "login_required": false,
+      "limit_visibility_in_menu": null,
+      "is_home": true,
+      "application_urls": null,
+      "application_namespace": null,
+      "publisher_is_draft": false,
+      "publisher_public": 1,
+      "languages": "sv",
+      "revision_id": 0,
+      "xframe_options": 0,
+      "placeholders": [
+        5,
+        6,
+        7
+      ]
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 1,
+    "fields": {
+      "slot": "clipboard",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 2,
+    "fields": {
+      "slot": "Left bar",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 3,
+    "fields": {
+      "slot": "Right bar",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 4,
+    "fields": {
+      "slot": "Main content",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 5,
+    "fields": {
+      "slot": "Left bar",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 6,
+    "fields": {
+      "slot": "Right bar",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.placeholder",
+    "pk": 7,
+    "fields": {
+      "slot": "Main content",
+      "default_width": null
+    }
+  },
+  {
+    "model": "cms.cmsplugin",
+    "pk": 1,
+    "fields": {
+      "path": "0001",
+      "depth": 1,
+      "numchild": 0,
+      "placeholder": 2,
+      "parent": null,
+      "position": 0,
+      "language": "sv",
+      "plugin_type": "TextPlugin",
+      "creation_date": "2017-08-24T16:14:24.502",
+      "changed_date": "2017-08-24T16:14:24.520"
+    }
+  },
+  {
+    "model": "cms.cmsplugin",
+    "pk": 2,
+    "fields": {
+      "path": "0002",
+      "depth": 1,
+      "numchild": 0,
+      "placeholder": 5,
+      "parent": null,
+      "position": 0,
+      "language": "sv",
+      "plugin_type": "TextPlugin",
+      "creation_date": "2017-08-24T16:14:24.502",
+      "changed_date": "2017-08-24T16:14:25.374"
+    }
+  },
+  {
+    "model": "cms.cmsplugin",
+    "pk": 3,
+    "fields": {
+      "path": "0003",
+      "depth": 1,
+      "numchild": 0,
+      "placeholder": 2,
+      "parent": null,
+      "position": 1,
+      "language": "sv",
+      "plugin_type": "PicturePlugin",
+      "creation_date": "2017-08-24T16:19:41.475",
+      "changed_date": "2017-08-24T16:19:41.493"
+    }
+  },
+  {
+    "model": "cms.title",
+    "pk": 1,
+    "fields": {
+      "language": "sv",
+      "title": "Index",
+      "page_title": null,
+      "menu_title": null,
+      "meta_description": null,
+      "slug": "index",
+      "path": "",
+      "has_url_overwrite": false,
+      "redirect": null,
+      "page": 1,
+      "creation_date": "2017-08-24T16:14:24.458",
+      "published": true,
+      "publisher_is_draft": true,
+      "publisher_public": 2,
+      "publisher_state": 1
+    }
+  },
+  {
+    "model": "cms.title",
+    "pk": 2,
+    "fields": {
+      "language": "sv",
+      "title": "Index",
+      "page_title": null,
+      "menu_title": null,
+      "meta_description": null,
+      "slug": "index",
+      "path": "",
+      "has_url_overwrite": false,
+      "redirect": null,
+      "page": 2,
+      "creation_date": "2017-08-24T16:14:24.458",
+      "published": true,
+      "publisher_is_draft": false,
+      "publisher_public": 1,
+      "publisher_state": 1
+    }
+  },
+  {
+    "model": "cms.urlconfrevision",
+    "pk": 1,
+    "fields": {
+      "revision": "d10eb5c6-4735-421e-875b-4e3fee182b87"
+    }
+  },
+  {
+    "model": "djangocms_text_ckeditor.text",
+    "pk": 1,
+    "fields": {
+      "body": "<p>Hej och v\u00e4lkommen!</p>"
+    }
+  },
+  {
+    "model": "djangocms_text_ckeditor.text",
+    "pk": 2,
+    "fields": {
+      "body": "<p>Hej och v\u00e4lkommen!</p>"
+    }
+  },
+  {
+    "model": "djangocms_picture.picture",
+    "pk": 3,
+    "fields": {
+      "template": "default",
+      "picture": 1,
+      "external_picture": "",
+      "width": null,
+      "height": null,
+      "alignment": "",
+      "caption_text": "",
+      "attributes": {},
+      "link_url": "",
+      "link_page": null,
+      "link_target": "",
+      "link_attributes": {},
+      "use_automatic_scaling": true,
+      "use_no_cropping": false,
+      "use_crop": false,
+      "use_upscale": false,
+      "thumbnail_options": null
+    }
+  },
+  {
+    "model": "easy_thumbnails.source",
+    "pk": 1,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png",
+      "modified": "2017-08-24T16:19:42.145"
+    }
+  },
+  {
+    "model": "easy_thumbnails.thumbnail",
+    "pk": 1,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public_thumbnails/filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png__32x32_q85_crop_subsampling-2_upscale.png",
+      "modified": "2017-08-24T16:19:27.973",
+      "source": 1
+    }
+  },
+  {
+    "model": "easy_thumbnails.thumbnail",
+    "pk": 2,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public_thumbnails/filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png__64x64_q85_crop_subsampling-2_upscale.png",
+      "modified": "2017-08-24T16:19:28.029",
+      "source": 1
+    }
+  },
+  {
+    "model": "easy_thumbnails.thumbnail",
+    "pk": 3,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public_thumbnails/filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png__48x48_q85_crop_subsampling-2_upscale.png",
+      "modified": "2017-08-24T16:19:28.096",
+      "source": 1
+    }
+  },
+  {
+    "model": "easy_thumbnails.thumbnail",
+    "pk": 4,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public_thumbnails/filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png__16x16_q85_crop_subsampling-2_upscale.png",
+      "modified": "2017-08-24T16:19:28.144",
+      "source": 1
+    }
+  },
+  {
+    "model": "easy_thumbnails.thumbnail",
+    "pk": 5,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public_thumbnails/filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png__180x180_q85_crop_subsampling-2_upscale.png",
+      "modified": "2017-08-24T16:19:28.202",
+      "source": 1
+    }
+  },
+  {
+    "model": "easy_thumbnails.thumbnail",
+    "pk": 6,
+    "fields": {
+      "storage_hash": "f9bde26a1556cd667f742bd34ec7c55e",
+      "name": "filer_public_thumbnails/filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png__901x561_q85_subsampling-2.png",
+      "modified": "2017-08-24T16:19:42.191",
+      "source": 1
+    }
+  },
+  {
+    "model": "filer.file",
+    "pk": 1,
+    "fields": {
+      "polymorphic_ctype": [
+        "filer",
+        "image"
+      ],
+      "folder": null,
+      "file": "filer_public/01/d0/01d0d3bc-8762-482e-878c-06573000254b/fxc_models_v1.png",
+      "_file_size": 26770,
+      "sha1": "c1821b1e03c6e14c094d85f728dee956ed5c73df",
+      "has_all_mandatory_data": false,
+      "original_filename": "fxc_models_v1.png",
+      "name": "",
+      "description": null,
+      "owner": [
+        "root"
+      ],
+      "uploaded_at": "2017-08-24T16:19:27.862",
+      "modified_at": "2017-08-24T16:19:27.862",
+      "is_public": true
+    }
+  },
+  {
+    "model": "filer.clipboard",
+    "pk": 1,
+    "fields": {
+      "user": [
+        "root"
+      ]
+    }
+  },
+  {
+    "model": "filer.image",
+    "pk": 1,
+    "fields": {
+      "_height": 561,
+      "_width": 901,
+      "default_alt_text": null,
+      "default_caption": null,
+      "subject_location": "",
+      "date_taken": "2017-08-24T16:19:27.850",
+      "author": null,
+      "must_always_publish_author_credit": false,
+      "must_always_publish_copyright": false
+    }
+  }
+]

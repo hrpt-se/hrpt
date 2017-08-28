@@ -23,6 +23,7 @@ $ export DB_NAME=<db-name>
 $ export DB_USERNAME=<username> 
 $ export DB_PASSWORD=<password>
 $ export DB_HOST=<db-hostname>
+$ export WEB_HOST=<webserver-hostname>
 $ curl https://raw.githubusercontent.com/hrpt-se/hrpt/feature/el-deployment-preparation/install.sh | sudo -E bash -s -- -e stage
 ```
 
