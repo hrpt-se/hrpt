@@ -97,6 +97,8 @@ function create_data_directories {
     mkdir -p /var/lib/hrpt/static
 
     chown -R www-data:www-data /var/lib/hrpt
+    chmod 775 /var/lib/hrpt/*
+    usermod -a -G www-data ubuntu
 }
 
 function setup_django_scaffolding {
