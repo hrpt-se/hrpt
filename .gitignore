@@ -22,3 +22,6 @@ _pollster_tile_cache/
 epidb/client/epidb_results.sql*
 .settings/
 local/
+vagrant/certs/*.crt
+.idea/*
+/settings/secrets.py

@@ -85,7 +85,8 @@ textarea.user-field {
     margin: 0;
 }
 
-.help-text {
+.help-text, .helptext {
+	display: block;
 	color: #AAAAAA;
 	font-size: 0.7em;
     line-height: 1.6em;
@@ -147,4 +148,10 @@ form.contact_form .helptext {
 
 .matrix th{
     font-size:12px;
+}
+
+.banner-warning {
+	background-color: #ffc900;
+	clear: both;
+	padding: 3px;
 }

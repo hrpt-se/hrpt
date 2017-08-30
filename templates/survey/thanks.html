@@ -1,13 +1,13 @@
 {# extends "base/twocol.html" #}
 {% extends base_template %}
 
-{% load i18n sekizai_tags %}
+{% load i18n sekizai_tags static %}
 
 {% block add_js %}
 <script type="text/javascript" src="//www.google.com/jsapi"></script>
 <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}pollster/wok/js/wok.pollster.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}pollster/wok/js/wok.pollster.charts.js"></script>
+<script type="text/javascript" src="{% static "pollster/wok/js/wok.pollster.js" %}"></script>
+<script type="text/javascript" src="{% static "pollster/wok/js/wok.pollster.charts.js" %}"></script>
 
 <script type="text/javascript">
     wok.pollster.charts.init(function() {
@@ -60,7 +60,7 @@ som varit kan du klicka på Rapportera i tabellen för att ändra dina svar.
     <td>{{ item.person.name }}</td>
     {% endif %}
     <td>{{ item.diag }}</td>
-    <td><img class="diag-icon" src="{{ MEDIA_URL }}/survey/img/diag-{{ item.status|default:'UNKNOWN' }}-small.png"/></td>
+    <td><img class="diag-icon" src="{% static "/survey/img/diag" %}-{{ item.status|default:'UNKNOWN' }}-small.png"/></td>
 </tr>
 {% endfor %}
 </tbody>

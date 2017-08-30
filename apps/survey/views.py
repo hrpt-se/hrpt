@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+import logging
 import time
 
 from django import forms
 from django.template import Context, loader, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db import connection, transaction, DatabaseError
+from django.db.utils import OperationalError
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils.safestring import mark_safe
@@ -22,9 +24,9 @@ from apps.survey import utils, models, forms
 
 #Next lines for linking survey_user to idcode
 from apps.accounts.models import user_profile
-from apps.survey.models import SurveyIdCode
+from apps.survey.models import SurveyIdCode, SurveyResposeDraft
 
-from apps.pollster.models import TranslationSurvey
+from apps.pollster.models import Survey, TranslationSurvey
 from apps.pollster import views as pollster_views
 from apps.pollster import utils as pollster_utils
 from apps.pollster import fields as pollser_field_types
@@ -40,6 +42,9 @@ import sys
 import datetime
 from django.conf import settings
 import json
+
+
+logger = logging.getLogger(__name__)
 
 
 survey_form_helper = None
@@ -77,7 +82,6 @@ def thanks(request):
     try:
         survey_user = get_active_survey_user(request)
         if not survey_user:
-            specialPrint('No gid in url go to select page!')
             url = '%s?next=%s' % (reverse(select_survey_user), reverse(thanks))
             return HttpResponseRedirect(url)
     except ValueError:
@@ -95,7 +99,7 @@ def thanks(request):
             raise SurveyIdCodeNotValid
         elif (not SurveyIdcode_obj.surveyuser_global_id):
             #if global_id not set then assign the one from the survey_user
-            SurveyIdcode_obj.surveyuser_global_id=survey_user.global_id
+            SurveyIdcode_obj.surveyuser_global_id=survey_user
             #And assign the birthyear from the user_profile
             SurveyIdcode_obj.fodelsedatum=str(userprofile.yearofbirth)
             #save
@@ -241,8 +245,6 @@ def select_survey_user(request, template='survey/select_user.html'):
         'next': next,
     }, context_instance=RequestContext(request))
 
-def specialPrint(msg):
-    print >> sys.stderr,msg
 
 @login_required
 def idcode_open(request):
@@ -271,8 +273,6 @@ def idcode_open(request):
 #     return None
 
 
-
-# Some sane code...
 @login_required
 def show_survey(request, survey_short_name):
 
@@ -288,7 +288,29 @@ def show_survey(request, survey_short_name):
 
     #locale_code = locale.locale_alias.get(language)
 
-    survey = get_object_or_404(pollster.models.Survey, shortname=survey_short_name, status="PUBLISHED")
+    survey_queryset = Survey.objects.filter(
+        shortname=survey_short_name,
+        status="PUBLISHED"
+    )
+
+    if survey_queryset.count() == 0:
+        raise Http404
+
+    survey_queryset = survey_queryset.prefetch_related(
+        'question_set',
+        'question_set__option_set',
+        'question_set__option_set__virtual_type',
+        'question_set__column_set',
+        'question_set__row_set',
+        'question_set__subject_of_rules',
+        'question_set__subject_of_rules__subject_options',
+        'question_set__subject_of_rules__object_options',
+        'question_set__subject_of_rules__object_question',
+        'question_set__subject_of_rules__rule_type',
+        'question_set__data_type',
+    )
+
+    survey = survey_queryset.first()
 
     translation = TranslationSurvey.objects.get(survey=survey, language=language, status="PUBLISHED")
     survey.set_translation_survey(translation)
@@ -300,7 +322,6 @@ def show_survey(request, survey_short_name):
         return HttpResponseRedirect('/already-answered')
 
     IdCodeObject = get_object_or_404(models.SurveyIdCode, surveyuser_global_id=global_id)
-
 
     try:
         survey_response_draft = models.SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey.id)
@@ -324,16 +345,19 @@ def show_survey(request, survey_short_name):
 
         form = survey.as_form()(data)
 
-        # import pdb; pdb.Pdb(skip=['django.*']).set_trace() # Start tracing here. Skip django framework library calls
-        # import pdb; pdb.set_trace()
-
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/sv/valkommen/?gid=%s' % survey_user.global_id)
         else:
             survey.set_form(form)
 
-    return render_to_response(
+            # Add the form to the question in order for the question to
+            # retrieve validation errors in the template
+            for question in survey.question_set.all():
+                question.set_form(form)
+
+    return render(
+        request,
         'pollster/survey_run.html',
         {
             "language": language,
@@ -344,40 +368,34 @@ def show_survey(request, survey_short_name):
             "form": form,
             "person": survey_user
         },
-        context_instance=RequestContext(request)  #don't know why this is necessairy, nobody does apparently. See https://github.com/django-compressor/django-compressor/issues/483#issuecomment-52243164
     )
 
 
 def _save_survey_response_draft(request):
-    raw_data = json.loads(request.raw_post_data) # on django 1.4 and latter, this changes to request.body instead
+    raw_data = json.loads(request.body)
     survey_id = raw_data['survey_id']
     questions_data = raw_data['form_data']
 
     global_id = request.GET.get('gid')
 
-    #this is to make sure the guid belongs to this user
-    # it will blow up otherwise as it should.
-    models.SurveyUser.objects.get(global_id=global_id, user=request.user)
-
     try:
-        survey_draft = models.SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey_id)
-    except:
-        survey_draft = models.SurveyResposeDraft(
-            global_id = global_id,
-            survey_id = survey_id
+        SurveyResposeDraft.objects.update_or_create(
+            global_id=global_id,
+            survey_id=survey_id,
+            defaults={
+                'timestamp': int(time.time()),
+                'form_data': json.dumps(questions_data)
+            }
         )
+    except OperationalError as oe:
+        # In case we face a MySQL deadlock (error code 1213), log a notice and
+        # skip saving this draft.
+        error_code, _ = oe.args
 
-    survey_draft.timestamp = int(time.time())
-    survey_draft.form_data = json.dumps(raw_data['form_data'])
-    survey_draft.save()
-
-
-def no_thanks(request):
-    """
-    redirects to link in survey generator.
-    This is the main
-    """
-    return HttpResponseRedirect('https://reply.surveygenerator.com/go.aspx?U=22277ih5v4DGFEKv7gWjt')
+        if error_code == 1213:
+            logger.warning('Deadlock while saving draft. Skipping draft save.')
+        else:
+            raise
 
 
 # end of [relatively] sane code.

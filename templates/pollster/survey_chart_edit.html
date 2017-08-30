@@ -1,13 +1,14 @@
 {% extends "pollster/base_admin.html" %}
+{% load static %}
 
 {% block title %}{{ survey }} Chart - EPIWork Survey Designer{% endblock %}
 
 {% block extrahead %}
-    <link rel="stylesheet" type="text/css" href="/media/pollster/wok/css/wok.pollster.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/wok/css/wok.pollster.css" %}" media="all" />
     <script type="text/javascript" src="//www.google.com/jsapi"></script>
-    <script type="text/javascript" src="/media/pollster/wok/js/wok.pollster.js"></script>
-    <script type="text/javascript" src="/media/pollster/wok/js/wok.pollster.charts.js"></script>
-    <script type="text/javascript" src="/media/pollster/wok/js/wok.pollster.virtualoptions.js"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.charts.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.virtualoptions.js" %}"></script>
     <script type="text/javascript">
         wok.pollster.charts.init(function() {
             $(function() {

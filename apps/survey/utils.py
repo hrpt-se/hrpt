@@ -1,7 +1,6 @@
 import urllib2
 import errno
 from django import forms
-from django.forms.util import ErrorList
 from django.contrib.auth.models import User
 
 from apps.survey import definitions as d
@@ -9,7 +8,6 @@ from apps.survey import models
 from apps.survey import signals
 
 from django.conf import settings
-from epidb_client import EpiDBClient, ResponseError, InvalidResponseError
 
 from datetime import datetime, date
 

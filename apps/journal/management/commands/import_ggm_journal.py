@@ -1,15 +1,16 @@
 import MySQLdb
 
-from django.core.management.base import NoArgsCommand, BaseCommand 
+from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.template.defaultfilters import slugify
 
 from apps.journal.models import Entry
 
-class Command(NoArgsCommand):
 
-    @transaction.commit_on_success
-    def handle_noargs(self, **options):
+class Command(BaseCommand):
+
+    @transaction.atomic
+    def handle(self, **options):
         c = MySQLdb.connect(host="localhost", user="root", passwd="", db="tmp_ggm_news", charset='utf8')
         cursor = c.cursor ()
         cursor.execute ("SELECT * FROM `articles_filed`")

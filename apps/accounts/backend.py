@@ -1,4 +1,4 @@
-from registration.backends.default import DefaultBackend
+from registration.views import ActivationView
 
 from registration import signals
 from registration.models import RegistrationProfile
@@ -8,7 +8,10 @@ from django.utils.translation import ugettext_lazy as _
 import sys
 
 
-class TweakedDefaultBackend(DefaultBackend):
+from .models import UsedActivationKeys
+
+
+class TweakedDefaultActivationView(ActivationView):
     """
     This is a tweaked version of the default registration backend. It leaves almost
     everything untouched, except that it saves the activation keys that have been used "used_act_key"
@@ -36,13 +39,6 @@ class TweakedDefaultBackend(DefaultBackend):
             new_used_key.save()
         return activated_user
 
+    def get_success_url(self, user):
+        return 'registration_activation_complete', (), {}
 
-
-
-class UsedActivationKeys(models.Model):
-    """
-    Not the most orthodox solution, but I do not want to impact the registration_profile
-    model, since it is defined and used inside django registration module.
-    """
-    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
-    activation_key = models.CharField(_('activation key'), max_length=40,db_index=True)

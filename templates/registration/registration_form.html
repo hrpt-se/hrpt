@@ -1,30 +1,27 @@
-{% extends "registration/boxbase.html" %}
-{% load i18n %}
+{% extends "base/blankbase.html" %}
+{% load i18n static %}
 
-{% block title %}{{ block.super }}: {% trans "Register" %}{% endblock %}
-
-{% comment %}
-{% block add_js %} <script type="text/javascript" src="{{ MEDIA_URL }}base/js/influenzanet.js"></script>{% endblock add_js %}
-{% block add_body %} onload="document.getElementsByTagName('input') [1].focus(); forcefancy();"{% endblock add_body %}
-{% endcomment %}
+{% block title %}
+    {{ block.super }}: {% trans "Register" %}
+{% endblock %}
 
 {% block add_js %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}custom/js/captcha-refresh.js"></script>
+    <script type="text/javascript" src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "custom/js/captcha-refresh.js" %}"></script>
 {% endblock add_js %}
 
 
-{% block content %}<h1>{% trans "Registration Form" %}</h1>
-<p class="registration-footnote">{% trans "Registration requires ID-code." %}</p>
-{% trans "register" %}
-                {% spaceless %}<form method="post" id="registration">{% csrf_token %}
-                {% for field in form %}
-        		<div class="fieldWrapper">
-            	{{ field.label_tag }}{{ field }}
-            	<p class="help-text">{{ field.help_text }}</p>
-            	{{ field.errors }}
-        		</div>
-    {% endfor %}
-                <p><input type="submit" id="boxsubmit" value="{% trans "Register" %}"/></p> 
-                </form>{% endspaceless %}{% endblock content %}
+{% block content %}
+    <h1>{% trans "Registration Form" %}</h1>
+    <p class="registration-footnote">{% trans "Registration requires ID-code." %}</p>
+    {% trans "register" %}
+    {% spaceless %}
+        <form method="post" id="registration">{% csrf_token %}
+            {{ form.as_p }}
+            <p>
+                <input type="submit" id="boxsubmit" value="{% trans "Register" %}"/>
+            </p>
+        </form>
+    {% endspaceless %}
+{% endblock content %}
 

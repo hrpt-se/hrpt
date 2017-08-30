@@ -1,9 +1,9 @@
 {% extends "contact_form/base.html" %}
-{% load cms_tags i18n %}
+{% load cms_tags i18n static %}
 
 {% block add_js %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}custom/js/captcha-refresh.js"></script>
+<script type="text/javascript" src="{% static "js/jquery" %}-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static "custom/js/captcha" %}-refresh.js"></script>
 {% endblock add_js %}
 
 {% block col1 %}

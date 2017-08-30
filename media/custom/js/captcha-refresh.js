@@ -2,8 +2,8 @@
 
 $(function() {
 	$('img.captcha').after(
-			$('<a href="#void" class="captcha-refresh" title="Ladda nytt kontrollord"><img src="/media/custom/img/refresh-captcha-small.png"/></a>')
-			);
+			$('<a href="#void" class="captcha-refresh" title="Ladda nytt kontrollord"><img src="/static/custom/img/refresh-captcha-small.png"/></a>')
+	);
 	
 	$('.captcha-refresh').click(function(){
 	    var $form = $(this).parents('form');

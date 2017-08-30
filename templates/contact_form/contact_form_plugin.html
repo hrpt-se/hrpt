@@ -1,0 +1,6 @@
+{% load cms_tags i18n static %}
+
+<form method="post" action="/contact/" class="contact_form">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" id="commentsubmit" value="{% trans "Send" %}" />
+</form>

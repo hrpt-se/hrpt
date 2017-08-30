@@ -6,5 +6,4 @@ from .models import SiteSettings
 def colors_css(request):
     site = Site.objects.get_current()
     settings = SiteSettings.get(site=site)
-    return render_to_response('colors.css', locals(), mimetype='text/css')
-    
+    return render_to_response('colors.css', locals(), content_type='text/css')

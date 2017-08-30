@@ -13,7 +13,7 @@
 <h1>{% trans "Email" %}</h1>
 
 <table>
-<form action="{% url apps.accounts.views.my_settings %}email/" method="post">{% csrf_token %}
+<form action="{% url 'settings' %}email/" method="post">{% csrf_token %}
 {{ email_form.as_table }}
 <tr><td>
 <input type="submit" value="{% trans "Save" %}">
@@ -24,7 +24,7 @@
 
 <h1>{% trans "Password" %}</h1>
 <table>
-<form action="{% url apps.accounts.views.my_settings %}password/" method="post">{% csrf_token %}
+<form action="{% url 'settings' %}password/" method="post">{% csrf_token %}
 {{ password_form.as_table }}
 <tr><td>
 <input type="submit" value="{% trans "Save" %}">
@@ -35,7 +35,7 @@
 
 <h1>{% trans "Username" %}</h1>
 <table>
-<form action="{% url apps.accounts.views.my_settings %}username/" method="post">{% csrf_token %}
+<form action="{% url 'settings' %}username/" method="post">{% csrf_token %}
 {{ username_form.as_table }}
 <tr><td>
 <input type="submit" value="{% trans "Save" %}">
@@ -46,7 +46,7 @@
 
 <h1>{% trans "Deactivation" %}</h1>
 <table>
-<form action="{% url apps.accounts.views.my_settings %}deactivate/" method="post">{% csrf_token %}
+<form action="{% url 'settings' %}deactivate/" method="post">{% csrf_token %}
 {{ deactivate_form.as_table }}
 <tr><td>
 <input type="submit" value="{% trans "Deactivate" %}">

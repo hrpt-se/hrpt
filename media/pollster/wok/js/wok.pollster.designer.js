@@ -31,7 +31,7 @@
                 window.location = designer.getSurveyUrl($(responseText).find(".survey").attr("id").replace("survey-", ""));
             else
                 window.location.reload();
-        }).error(function(jqXHR, textStatus, errorThrown) { wok.error("error on save: "+errorThrown); });
+        }).fail(function(jqXHR, textStatus, errorThrown) { wok.error("error on save: "+errorThrown); });
     }
 
     // DESIGNER WINDOW
@@ -195,7 +195,7 @@
 
         $(".sortable > *").hoverIntent(
             function() {
-                var $tmpl = $(".wok-templates .sort-buttons").clone();
+                var $tmpl = $(".wok-templates .sort-buttons").clone(true);
                 $(this).append($tmpl);
             },
             function() {
@@ -203,7 +203,7 @@
             }
         );
 
-        $(".sortable .sort-buttons .up").live("click", function(){
+        $(".sort-buttons .up").on("click", function() {
             var $item = $(this).closest('.sortable > *');
             var $prev = $item.prev();
             if ($prev.length) {
@@ -213,7 +213,7 @@
             return false;
         });
 
-        $(".sortable .sort-buttons .down").live("click", function(){
+        $(".sort-buttons .down").on("click", function() {
             var $item = $(this).closest('.sortable > *');
             var $next = $item.next();
             if ($next.length) {

@@ -22,7 +22,7 @@
         Kontakta<br> <a href="mailto:halsorapport@folkhalsomyndigheten.se">halsorapport@folkhalsomyndigheten.se</a><br> om du behöver hjälp.
       </div>
     </noscript>
-    {% for question in survey.questions %}
+    {% for question in survey.question_set.all %}
     {% if question.is_builtin %}
     <div class="question-wrapper clearfix" style="display:none">
         <div id="question-{{ question.id }}" class="{{ question.css_classes|join:' ' }}"
@@ -30,7 +30,7 @@
              data-regex="{{ question.regex|default:'' }}">
             <input type="hidden" name="{{ question.data_name }}" id="question-{{ question.id }}-field" disabled="disabled" />
             <ul class="derived-values">
-                {% for option in question.options %}
+                {% for option in question.option_set.all %}
                 <li id="option-{{ option.id }}"
                     data-type="{{ option.virtual_type.id }}"
                     data-inf="{{ option.virtual_inf }}" data-sup="{{ option.virtual_sup }}" data-regex="{{ option.virtual_regex }}">
@@ -51,14 +51,14 @@
                 {{ question.translated_description|safe }}
             </p>
             {% if question.is_text %}
-            	{% if not question.option_set.all %}
-            		<textarea rows="3" name="{{ question.data_name }}" id="question-{{ question.id }}-field" class="user-field">{{ question.form_value }}</textarea>
-            	{% else %}
+            	{% if question.option_set.all or question.data_type.css_class == 'date-type' %}
             		<input type="text" name="{{ question.data_name }}" id="question-{{ question.id }}-field" value="{{ question.form_value }}" class="user-field" />
+            	{% else %}
+                    <textarea rows="3" name="{{ question.data_name }}" id="question-{{ question.id }}-field" class="user-field">{{ question.form_value }}</textarea>
             	{% endif %}
             <p class="error-message">{{ question.translated_error_message }}</p>
             <ul class="derived-values">
-                {% for option in question.options %}
+                {% for option in question.option_set.all %}
                 <li id="option-{{ option.id }}"
                     data-type="{{ option.virtual_type.id }}"
                     data-inf="{{ option.virtual_inf }}" data-sup="{{ option.virtual_sup }}" data-regex="{{ option.virtual_regex }}">
@@ -70,7 +70,7 @@
             {% if question.is_single_choice %}
                 {% if question.is_visual_dropdown %}
                 <select class="choices user-field" name="{{ question.data_name }}">
-                    {% for option in question.options %}
+                    {% for option in question.option_set.all %}
                     <option id="option-{{ option.id }}" class="{% if option.starts_hidden %} starts-hidden {% endif %}"
                          value="{{ option.value }}" {% if option.form_is_checked %}selected="selected"{% endif %}
                          title="{{ option.translated_description }}">
@@ -80,7 +80,7 @@
                 </select>
                 {% else %}
                 <ul class="choices">
-                    {% for option in question.options %}
+                    {% for option in question.option_set.all %}
                     {% if option.is_open %}
                     <li id="option-{{ option.id }}" class="{% if option.starts_hidden %} starts-hidden {% endif %} open"
                         title="{{ option.translated_description }}">
@@ -106,7 +106,7 @@
             {% endif %}
             {% if question.is_multiple_choice %}
             <ul class="choices">
-                {% for option in question.options %}
+                {% for option in question.option_set.all %}
                 {% if option.is_open %}
                 <li id="option-{{ option.id }}" class="{% if option.starts_hidden %} starts-hidden {% endif %} open"
                     title="{{ option.translated_description }}">
@@ -134,7 +134,7 @@
             <thead>
                 <tr>
                     <th class="empty"/>
-                    {% for column in question.columns %}
+                    {% for column in question.column_set.all %}
                     {% if column.translated_title %}
                     <th>{{ column.translated_title }}</th>
                     {% else %}
@@ -154,7 +154,7 @@
                     {% for column in columns %}
                     <td>
                         <select name="{{ column.data_name }}" class="user-field">
-                            {% for option in column.options %}
+                            {% for option in column.option_set.all %}
                             <option value="{{ option.value }}" title="{{ option.translated_description }}">{{ option.translated_text }}</option>
                             {% endfor %}
                         </select>
@@ -170,7 +170,7 @@
             <thead>
                 <tr>
                     <th class="empty"/>
-                    {% for column in question.columns %}
+                    {% for column in question.column_set.all %}
                     {% if column.translated_title %}
                     <th>{{ column.translated_title }}</th>
                     {% else %}
@@ -224,8 +224,8 @@
 
         function save_response_draft(){
           var survey_id = {{ survey.id }};
-          var form_data_array = $('form.survey').serializeArray()
-          var form_data_obj = {}
+          var form_data_array = $('form.survey').serializeArray();
+          var form_data_obj = {};
           form_data_array.forEach(
             function(f){
               form_data_obj[f.name] = f.value;
@@ -234,7 +234,10 @@
 
           delete form_data_obj['csrfmiddlewaretoken']; //this is included on the form by default but it is not used
           var request_body = JSON.stringify({ "survey_id": survey_id, "form_data":form_data_obj });
-          $.post( window.location + '&draft=save', request_body );
+          var separator = window.location.search ? "&" : "?";
+          var parameter = "draft=save";
+
+          $.post( window.location + separator + parameter, request_body );
 
         }
 
@@ -250,7 +253,10 @@
           function(){
             var attr_name = $(this).attr('name');
             var saved_val = data_from_draft[attr_name];
-            $(this).val(saved_val);
+
+            if (saved_val) {
+                $(this).val(saved_val);
+            }
           }
         );
 
@@ -283,15 +289,15 @@
 
 
         function pollster_fill_data_types(d) {
-            {% for question in survey.questions %}
+            {% for question in survey.question_set.all %}
             d[{{question.id}}] = new {{question.data_type.js_class}}();
             {% endfor %}
         }
         function pollster_fill_open_option_data_types(d) {
             var t;
-            {% for question in survey.questions %}
+            {% for question in survey.question_set.all %}
                 t = d[{{question.id}}] = {};
-                {% for option in question.options %}
+                {% for option in question.option_set.all %}
                     {% if option.is_open and question.open_option_data_type %}
                         t[{{option.id}}] = new {{question.open_option_data_type.js_class}}();
                     {% endif %}
@@ -300,10 +306,10 @@
         }
         function pollster_fill_derived_values(d) {
             var t;
-            {% for question in survey.questions %}
+            {% for question in survey.question_set.all %}
             {% if question.is_text %}
             t = d[{{question.id}}] = [];
-            {% for option in question.options %}
+            {% for option in question.option_set.all %}
             {% if option.virtual_type.js_class %}
             t.push(new {{option.virtual_type.js_class}}({{ option.id }},
                                                         '{{ option.virtual_inf|default:''|addslashes }}',
@@ -316,9 +322,9 @@
         }
         function pollster_fill_rules(d) {
             var t;
-            {% for question in survey.questions %}
+            {% for question in survey.question_set.all %}
             t = d[{{question.id}}] = [];
-            {% for rule in question.subject_of_rules.all %}
+            {% for rule in question.subject_of_rules.all|dictsortreversed:"id" %}
             t.push(new {{rule.js_class}}(
                                          {{ rule.subject_question.id }},
                                          [ {% for option in rule.subject_options.all %}

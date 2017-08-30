@@ -1,17 +1,22 @@
 from datetime import datetime
-from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 
 from ...models import get_prev_reminder, get_settings
 
+
 class Command(BaseCommand):
-    help = "Ensure that it's possible to send a reminder, and remind specific people if this is not the case"
-    option_list = BaseCommand.option_list + (
-        make_option('--editor-email', action='append', dest='editor_emails',
-            help='The email addresses of the receipients, supply multiple times for multiple email addresses'),
-    )
+    help = "Ensure that it's possible to send a reminder, and remind " \
+           "specific people if this is not the case"
+
+    def add_arguments(self, parser):
+        parser.add_argument('--editor-email',
+                            action='append',
+                            dest='editor_emails',
+                            help='The email addresses of the receipients, '
+                                 'supply multiple times for multiple '
+                                 'email addresses')
 
     def handle(self, *args, **options):
         editor_emails = options.get('editor_emails', [])

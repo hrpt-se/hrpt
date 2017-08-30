@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from nani.admin import TranslatableAdmin
+from hvad.admin import TranslatableAdmin
 
 from .models import UserReminderInfo, ReminderSettings, NewsLetterTemplate, NewsLetter, ReminderError
 from .forms import ReminderSettingsForm, NewsLetterTemplateForm, NewsLetterForm
@@ -48,11 +48,14 @@ class SiteSettingsInline(admin.StackedInline):
     form = ReminderSettingsForm
 
 current_site_admin = type(admin.site._registry[Site])
+
+
 class ReminderSiteAdmin(current_site_admin):
     inlines = current_site_admin.inlines + [SiteSettingsInline]
 
 admin.site.unregister(Site)
 admin.site.register(Site, ReminderSiteAdmin)
+
 
 class NewsLetterTemplateAdmin(TranslatableAdmin):
     form = NewsLetterTemplateForm
@@ -60,11 +63,10 @@ class NewsLetterTemplateAdmin(TranslatableAdmin):
     class Media:
         js = [join(settings.CMS_MEDIA_URL, path) for path in (
             'js/lib/jquery.js',
-            'js/lib/jquery.query.js',
-
         )]
 
 admin.site.register(NewsLetterTemplate, NewsLetterTemplateAdmin)
+
 
 class NewsLetterAdmin(TranslatableAdmin):
     form = NewsLetterForm
@@ -73,11 +75,10 @@ class NewsLetterAdmin(TranslatableAdmin):
     class Media:
         js = [join(settings.CMS_MEDIA_URL, path) for path in (
             'js/lib/jquery.js',
-            'js/lib/jquery.query.js',
-
         )]
 
 admin.site.register(NewsLetter, NewsLetterAdmin)
+
 
 class ReminderErrorAdmin(admin.ModelAdmin):
     list_display = ("timestamp", "message", "user", "email")

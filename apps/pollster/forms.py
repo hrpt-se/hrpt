@@ -1,14 +1,15 @@
 from django import forms
-from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
-from settings import LANGUAGES
+
+from django.conf import settings
 from .models import Chart
+
 
 class SurveyXmlForm(forms.Form):
     surveyxml = forms.CharField(required=True)
 
 class SurveyTranslationAddForm(forms.Form):
-    language = forms.ChoiceField(label="Language", required=True, choices=LANGUAGES)
+    language = forms.ChoiceField(label="Language", required=True, choices=settings.LANGUAGES)
 
 class SurveyChartAddForm(forms.Form):
     shortname = forms.RegexField(label="Short Name", max_length=30, regex=r'^[a-zA-Z0-9_]+$', required=True)

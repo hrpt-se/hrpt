@@ -1,7 +1,7 @@
 from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 
-from cms.utils.html import clean_html
+from djangocms_text_ckeditor.html import clean_html
 
 from .models import SiteSettings
 

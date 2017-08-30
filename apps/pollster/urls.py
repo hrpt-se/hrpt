@@ -1,8 +1,8 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import url
 
 from . import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^urls.js$', views.urls, kwargs={'prefix': 'pollster_'}, name='pollster_urls'),
     url(r'^pollster/$', views.survey_add, name='pollster_survey_add'),
     url(r'^pollster/import/$', views.survey_import, name='pollster_survey_import'),
@@ -28,4 +28,4 @@ urlpatterns = patterns('',
     url(r'^surveys/(?P<id>\d+)/$', views.survey_test, name='pollster_survey_test'),
     url(r'^surveys/(?P<id>\d+)/(?P<language>.+)/$', views.survey_test, name='pollster_survey_test'),
     url(r'^$', views.survey_list, name='pollster_survey_list'),
-)
+]

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.utils import simplejson
-from django.core.urlresolvers import get_resolver, reverse
+import json
+
+from django.core.urlresolvers import get_resolver, reverse, RegexURLResolver
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, render_to_response, redirect, get_object_or_404
@@ -13,10 +14,9 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth import authenticate, login
 from django.conf import settings
 
-from cms import settings as cms_settings
 from apps.survey.models import SurveyUser, SurveyIdCode
 from .utils import get_user_profile
-from . import models, forms, fields, parser, json, importexport
+from . import models, forms, fields, parser, importexport
 import re, datetime, locale, csv, urlparse, urllib
 import sys
 
@@ -36,8 +36,8 @@ def render_with_context(req, *args, **kwargs):
 
     https://github.com/django-compressor/django-compressor/issues/483#issuecomment-52243164
     """
-    kwargs['context_instance'] = RequestContext(req)
-    return render_to_response(*args, **kwargs)
+    # kwargs['context_instance'] = RequestContext(req)
+    return render(req, *args, **kwargs)
 
 
 #This stuff is ... intense
@@ -86,7 +86,7 @@ def survey_add(request):
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
         "rule_types": rule_types,
-        "CMS_MEDIA_URL": cms_settings.CMS_MEDIA_URL,
+        "CMS_MEDIA_URL": settings.CMS_MEDIA_URL,
     })
 
 @staff_member_required
@@ -107,7 +107,7 @@ def survey_edit(request, id):
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
         "rule_types": rule_types,
-        "CMS_MEDIA_URL": cms_settings.CMS_MEDIA_URL,
+        "CMS_MEDIA_URL": settings.CMS_MEDIA_URL,
     })
 
 @staff_member_required
@@ -133,7 +133,11 @@ def survey_unpublish(request, id):
 
 @staff_member_required
 def survey_test(request, id, language=None):
-    survey = get_object_or_404(models.Survey, pk=id)
+    survey_queryset = models.Survey.objects.all().prefetch_related(
+        'question_set'
+    )
+
+    survey = get_object_or_404(survey_queryset, pk=id)
 
     #Notice that the language parameter passed to this as a url paramter _is ignored!_
     #TODO hardcode language, update urls, remove language paramter on this method
@@ -164,13 +168,17 @@ def survey_test(request, id, language=None):
         else:
             survey.set_form(form)
 
-    return render_with_context(request, 'pollster/survey_test.html', {
+            # Add the form to the question in order for the question to
+            # retrieve validation errors in the template
+            for question in survey.question_set.all():
+                question.set_form(form)
+
+    return render(request, 'pollster/survey_test.html', {
         "language": language,
         "locale_code": "sv-SE", #TODO: oh well... remove internationalization
         "survey": survey,
         "default_postal_code_format": fields.PostalCodeField.get_default_postal_code_format(),
         "last_participation_data_json": json.dumps(prefilled_data),
-        "language": language,
         "form": form
     })
 
@@ -307,7 +315,7 @@ def survey_chart_map_click(request, id, shortname, lat, lng):
 def survey_results_csv(request, id):
     survey = get_object_or_404(models.Survey, pk=id)
     now = datetime.datetime.now()
-    response = HttpResponse(mimetype='text/csv')
+    response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=survey-results-%d-%s.csv' % (survey.id, format(now, '%Y%m%d%H%M'))
     response.write(u'\ufeff'.encode('utf8'))
     writer = csv.writer(response)
@@ -411,7 +419,7 @@ def urls(request, prefix=''):
         javascript variable names by converting all letters to the upper
         case and replacing '-' with '_'.
         """
-    resolver = get_resolver(None)
+    resolver = RegexURLResolver(r'^/', settings.ROOT_URLCONF, app_name='pollster', namespace='pollster')
 
     urls = {}
 
@@ -428,7 +436,7 @@ def urls(request, prefix=''):
 
             urls[name] = "/" + url_regex[:-1]
 
-    return render_with_context(request, "pollster/urls.js", {'urls':urls}, mimetype="application/javascript")
+    return render_with_context(request, "pollster/urls.js", {'urls':urls}, content_type="application/javascript")
 
 def _get_active_survey_user(request):
     gid = request.GET.get('gid', None)

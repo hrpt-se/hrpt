@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.db import connection, transaction
-from cms.models import CMSPlugin
+from cms.models.pluginmodel import CMSPlugin
 
 from times import epoch
 
@@ -19,9 +19,13 @@ class SurveyListPlugin(CMSPlugin):
 
 
 class SurveyIdCode(models.Model):
-
-    surveyuser_global_id = models.CharField(max_length=36,unique=True,blank=True,null=True)
-    #surveyuser_global_id = models.ForeignKey('SurveyUser',null=True)
+    surveyuser_global_id = models.ForeignKey(
+        'SurveyUser',
+        on_delete=models.CASCADE,
+        to_field='global_id',
+        null=True,
+        blank=True
+    )
 
     idcode = models.CharField(max_length=10,unique=True)
     fodelsedatum = models.CharField(max_length=10,blank=True,null=True)
@@ -190,7 +194,6 @@ def add_empty_last_response(sender, instance, created, **kwargs):
     if created:
         response = LastResponse()
         response.user = instance
-        response.participation = Participation(date=epoch())
         response.save()
 
 post_save.connect(add_empty_profile, sender=SurveyUser)
@@ -221,8 +224,12 @@ class LocalFluSurvey(models.Model):
     data = models.TextField() # pickled
     survey_id = models.CharField(max_length=50)
 
+
 class SurveyResposeDraft(models.Model):
     global_id = models.CharField(max_length=36,unique=False,blank=False,null=False)
     survey_id = models.IntegerField(blank=False, null=False)
     timestamp = models.IntegerField()
     form_data = models.TextField()
+
+    class Meta:
+        index_together = ('global_id', 'survey_id')

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import warnings
 
+from django.contrib.gis.db.models import MultiPolygonField
 from django.db import models, connection, transaction, IntegrityError, DatabaseError
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -9,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from cms.models import CMSPlugin
 from xml.etree import ElementTree
 from math import pi,cos,sin,log,exp,atan
-from . import dynamicmodels, json
+from . import dynamicmodels
 import os, re, shutil, warnings, datetime, csv
 from django.conf import settings
 from apps.survey.models import SurveyIdCode, SurveyUser
@@ -105,15 +106,21 @@ class Survey(models.Model):
     form = None
     translation_survey = None
 
-    _standard_result_fields =[
-        ('user', models.IntegerField(null=True, blank=True, verbose_name="User")),
-        ('global_id', models.CharField(max_length=36, null=True, blank=True, verbose_name="Person")),
-        ('channel', models.CharField(max_length=36, null=True, blank=True, verbose_name="Channel"))
+    _standard_result_field_types = [
+        ('user', models.IntegerField, {'null': True, 'blank': True, 'verbose_name': "User"}),
+        ('global_id', models.CharField, {'max_length': 36, 'null': True, 'blank': True, 'verbose_name': "Person"}),
+        ('channel', models.CharField, {'max_length': 36, 'null': True, 'blank': True, 'verbose_name': "Channel"})
     ]
 
-    _id_existing_field =[
-        ('id', models.BigIntegerField(primary_key=True))
-    ]
+    @property
+    def _standard_result_fields(self):
+        return [
+            (name, field_type(**kwargs)) for name, field_type, kwargs in Survey._standard_result_field_types
+        ]
+
+    @property
+    def _id_existing_field(self):
+        return [('id', models.BigIntegerField(primary_key=True))]
 
     update = False
 
@@ -230,9 +237,9 @@ class Survey(models.Model):
     def as_model(self):
         fields = []
         if self.update:
-            fields.extend(Survey._id_existing_field)
+            fields.extend(self._id_existing_field)
 
-        fields.extend(Survey._standard_result_fields)
+        fields.extend(self._standard_result_fields)
 
         for question in self.questions:
             fields += question.as_fields()
@@ -264,21 +271,20 @@ class Survey(models.Model):
     def set_translation_survey(self, translation_survey):
         self.translation_survey = translation_survey
 
-    #should be called get_errors() or semething
-    def check(self):
+    def get_errors(self):
         errors = []
         if not self.shortname:
             errors.append('Missing survey shortname')
         elif not re.match(IDENTIFIER_REGEX, self.shortname):
             errors.append('Invalid survey shortname "%s"' % (self.shortname,))
         for question in self.questions:
-            errors.extend(question.check())
+            errors.extend(question.get_errors())
         return errors
 
     def publish(self):
         if self.is_published:
             return None
-        errors = self.check()
+        errors = self.get_errors()
         if errors:
             return errors
         # Unpublish other surveys with the same shortname.
@@ -418,20 +424,18 @@ class Question(models.Model):
             return self.translation.error_message
         return self.error_message
 
-
     @property
     def errors(self):
         if not self.form:
             return {}
-        errors = [(data_name, self.form.errors[data_name]) for data_name in self.data_names if data_name in self.form.errors]
+
+        errors = [(data_name, self.form.errors[data_name])
+                  for data_name in self.data_names
+                  if data_name in self.form.errors]
+
         if self.is_multiple_choice and self.data_name in self.form.errors:
             errors.append((self.data_name, self.form.errors[self.data_name]))
         return dict(errors)
-
-
-    #So, somebody learned the keyword yield.. alright, cool..
-
-    #TODO: refactor all these with list comprehensions... save a few lines, this file is horribly large
 
     @property
     def rows(self):
@@ -577,7 +581,7 @@ class Question(models.Model):
             default = TranslationQuestion(translation = translation_survey, question=self)
             self.translation_question = _get_or_default(r, default)
 
-    def check(self):
+    def get_errors(self):
         errors = []
         if not self.data_name:
             errors.append('Missing data name for question "%s"' % (self.title, ))
@@ -585,7 +589,7 @@ class Question(models.Model):
             errors.append('Invalid data name "%s" for question "%s"' % (self.data_name, self.title))
         values = {}
         for option in self.options:
-            errors.extend(option.check())
+            errors.extend(option.get_errors())
             values[option.value] = values.get(option.value, 0) + 1
         if self.type == 'multiple-choice':
             dups = [val for val, count in values.items() if count > 1]
@@ -782,7 +786,7 @@ class Option(models.Model):
     def set_row_column(self, row, column):
         self.current_row_column = (row, column)
 
-    def check(self):
+    def get_errors(self):
         errors = []
         if self.is_virtual:
             if not self.virtual_inf and not self.virtual_sup and not self.virtual_regex:
@@ -1279,3 +1283,9 @@ class GoogleProjection:
 
 class SurveyChartPlugin(CMSPlugin):
     chart = models.ForeignKey(Chart)
+
+
+class ZipCodes(models.Model):
+    country = models.TextField()
+    zip_code_key = models.TextField()
+    geometry = MultiPolygonField()
