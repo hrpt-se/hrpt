@@ -69,3 +69,7 @@ and store them in `/etc/profile.d/hrpt.sh`, making sure that they are populated 
   - `DB_USER`: Which username to use when connecting to the database 
   - `DB_PASSWORD`: The password to use when authentication against the database server
   - `DB_NAME`: The name of the database to use
+
+### Secrets
+Any settings that should be kept out of git (for example the secet key or API keys) can be stored in a file named `secrets.py` 
+in the settings directory. There is a `secrets.py.template` file that can be used as a template, containing more info.

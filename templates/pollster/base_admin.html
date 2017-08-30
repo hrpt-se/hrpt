@@ -17,14 +17,6 @@
     <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.cookie.js" %}"></script>
     <script type="text/javascript" src="{% static "/pollster/jquery/js/portamento-min.js" %}"></script>
 
-    {% if locale_code %}
-    <script type="text/javascript" src="{% static "/media/pollster/jquery/js/i18n/jquery.ui.datepicker-{{ language }}.js" %}"></script>
-    <script type="text/javascript" src="{% static "/media/pollster/datejs/js/date-{{ locale_code }}.js" %}"></script>
-    {% else %}
-    <script type="text/javascript" src="{% static "/pollster/datejs/js/date.js" %}"></script>
-    {% endif %}
-
-    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="{% static "/cms/js/csrf.js" %}"></script>
     <script type="text/javascript">jQuery().cmsPatchCSRF()</script>
 

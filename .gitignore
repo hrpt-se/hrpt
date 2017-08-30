@@ -24,3 +24,4 @@ epidb/client/epidb_results.sql*
 local/
 vagrant/certs/*.crt
 .idea/*
+/settings/secrets.py

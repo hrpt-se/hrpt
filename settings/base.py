@@ -263,3 +263,9 @@ SESSION_COOKIE_AGE = 60 * 60 * 2
 LOGIN_REDIRECT_URL = '/survey/thanks/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
+
+# Import secret values, proceed if no secrets file exists.
+try:
+    from secrets import *
+except ImportError:
+    pass
