@@ -447,8 +447,9 @@
             isFuture: false,
 
             init: function($survey, last_participation_data) {
-                var selectors = self.subjectOptions.map(function(o){return '#option-'+o+' :input'}).join(',');
-                $(selectors).addClass("exclusive");
+                self.subjectOptions.forEach(function(optionId) {
+                    $("#option-" + optionId + " :input").addClass("exclusive");
+                });
             },
 
             activate: function($survey, $question, evt) {
