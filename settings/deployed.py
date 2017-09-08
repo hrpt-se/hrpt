@@ -3,6 +3,8 @@
 
 from base import *
 
+ALLOWED_HOSTS = '*'
+
 DEBUG = False
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
