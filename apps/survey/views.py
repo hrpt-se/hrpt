@@ -24,7 +24,7 @@ from apps.survey import utils, models, forms
 
 #Next lines for linking survey_user to idcode
 from apps.accounts.models import user_profile
-from apps.survey.models import SurveyIdCode, SurveyResposeDraft
+from apps.survey.models import SurveyIdCode, SurveyResponseDraft, SurveyUser
 
 from apps.pollster.models import Survey, TranslationSurvey
 from apps.pollster import views as pollster_views
@@ -312,30 +312,43 @@ def show_survey(request, survey_short_name):
 
     survey = survey_queryset.first()
 
-    translation = TranslationSurvey.objects.get(survey=survey, language=language, status="PUBLISHED")
+    translation = TranslationSurvey.objects.get(
+        survey=survey, 
+        language=language, 
+        status="PUBLISHED"
+    )
+    
     survey.set_translation_survey(translation)
 
     global_id = request.GET.get('gid', None)
-    survey_user = models.SurveyUser.objects.get(global_id=global_id, user=request.user)
+    survey_user = models.SurveyUser.objects.get(
+        global_id=global_id, 
+        user=request.user
+    )
 
     if survey.get_last_participation_data(request.user.id, global_id):
         return HttpResponseRedirect('/already-answered')
 
-    IdCodeObject = get_object_or_404(models.SurveyIdCode, surveyuser_global_id=global_id)
+    id_code = get_object_or_404(
+        models.SurveyIdCode, 
+        surveyuser_global_id=global_id
+    )
 
     try:
-        survey_response_draft = models.SurveyResposeDraft.objects.get( global_id = global_id, survey_id=survey.id)
+        survey_response_draft = models.SurveyResponseDraft.objects.get(
+            survey_user=survey_user,
+            survey=survey
+        )
         prefilled_data = json.loads(survey_response_draft.form_data)
-    except:
+    except models.SurveyResponseDraft.DoesNotExist:
         prefilled_data = {}
 
     # we inject the birthyear that was provided with the idcode so we know how old
     # the user is. There must be a question with this name in the survey for this to be usable
     # tipically it would be set to hidden.
-    prefilled_data['PREFIL_BIRTHYEAR'] = IdCodeObject.fodelsedatum
+    prefilled_data['PREFIL_BIRTHYEAR'] = id_code.fodelsedatum
 
     form = survey.as_form()(prefilled_data)
-    #survey.set_form(form)
 
     if request.method == 'POST':
         data = request.POST.copy()
@@ -376,14 +389,13 @@ def _save_survey_response_draft(request):
     survey_id = raw_data['survey_id']
     questions_data = raw_data['form_data']
 
-    global_id = request.GET.get('gid')
+    survey_user = SurveyUser.objects.get(global_id=request.GET.get('gid'))
 
     try:
-        SurveyResposeDraft.objects.update_or_create(
-            global_id=global_id,
+        SurveyResponseDraft.objects.update_or_create(
+            survey_user=survey_user,
             survey_id=survey_id,
             defaults={
-                'timestamp': int(time.time()),
                 'form_data': json.dumps(questions_data)
             }
         )

@@ -225,11 +225,12 @@ class LocalFluSurvey(models.Model):
     survey_id = models.CharField(max_length=50)
 
 
-class SurveyResposeDraft(models.Model):
-    global_id = models.CharField(max_length=36,unique=False,blank=False,null=False)
-    survey_id = models.IntegerField(blank=False, null=False)
-    timestamp = models.IntegerField()
+class SurveyResponseDraft(models.Model):
+    survey_user = models.ForeignKey(SurveyUser)
+    survey = models.ForeignKey('pollster.Survey')
+    timestamp = models.DateTimeField(auto_now=True)
     form_data = models.TextField()
 
     class Meta:
-        index_together = ('global_id', 'survey_id')
+        index_together = ('survey_user', 'survey')
+        unique_together = ('survey_user', 'survey')
