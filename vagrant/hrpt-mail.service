@@ -4,7 +4,7 @@ Description=HRPT Mail sending deamon
 [Service]
 WorkingDirectory=/var/www/hrpt/
 ExecStart=/var/www/hrpt/scripts/start_mail_sending_daemon.sh
-KillMode=process
+KillMode=control-group
 Restart=on-failure
 
 [Install]

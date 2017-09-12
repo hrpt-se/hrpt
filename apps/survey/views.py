@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-import logging
 import json
-import time
+import logging
 
 from django import forms
 from django.db import OperationalError
@@ -18,7 +17,7 @@ from django.utils.translation import get_language
 from apps.pollster.models import TranslationSurvey, Survey
 from apps.pollster import fields as pollser_field_types
 from apps.survey.forms import AddPeople
-from apps.survey.models import SurveyResposeDraft, SurveyIdCode, SurveyUser
+from apps.survey.models import SurveyResponseDraft, SurveyIdCode, SurveyUser
 
 
 logger = logging.getLogger(__name__)
@@ -94,7 +93,12 @@ def show_survey(request, survey_short_name):
 
     survey = survey_queryset.first()
 
-    translation = TranslationSurvey.objects.get(survey=survey, language=language, status="PUBLISHED")
+    translation = TranslationSurvey.objects.get(
+        survey=survey,
+        language=language,
+        status="PUBLISHED"
+    )
+
     survey.set_translation_survey(translation)
 
     survey_user = _get_active_survey_user(request)
@@ -103,22 +107,24 @@ def show_survey(request, survey_short_name):
     if survey.get_last_participation_data(request.user.id, global_id):
         return HttpResponseRedirect('/already-answered')
 
-    IdCodeObject = get_object_or_404(SurveyIdCode, surveyuser_global_id=global_id)
+    id_code = get_object_or_404(
+        SurveyIdCode,
+        surveyuser_global_id=global_id
+    )
 
     try:
-        survey_response_draft = SurveyResposeDraft.objects.get(
-            global_id = global_id,
-            survey_id=survey.id
+        survey_response_draft = SurveyResponseDraft.objects.get(
+            survey_user=survey_user,
+            survey=survey
         )
-
         prefilled_data = json.loads(survey_response_draft.form_data)
-    except:
+    except SurveyResponseDraft.DoesNotExist:
         prefilled_data = {}
 
     # we inject the birthyear that was provided with the idcode so we know how old
     # the user is. There must be a question with this name in the survey for this to be usable
     # tipically it would be set to hidden.
-    prefilled_data['PREFIL_BIRTHYEAR'] = IdCodeObject.fodelsedatum
+    prefilled_data['PREFIL_BIRTHYEAR'] = id_code.fodelsedatum
 
     form = survey.as_form()(prefilled_data)
 
@@ -164,11 +170,10 @@ def _save_survey_response_draft(request):
     survey_user = _get_active_survey_user(request)
 
     try:
-        SurveyResposeDraft.objects.update_or_create(
-            global_id=survey_user.global_id,
+        SurveyResponseDraft.objects.update_or_create(
+            survey_user=survey_user,
             survey_id=survey_id,
             defaults={
-                'timestamp': int(time.time()),
                 'form_data': json.dumps(questions_data)
             }
         )
