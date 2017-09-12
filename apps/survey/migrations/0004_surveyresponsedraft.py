@@ -21,19 +21,22 @@ def migrate_drafts(apps, schema_editor):
     logger.info('Migrating existing survey drafts')
 
     for draft in OldDraftModel.objects.all():
-        if draft.id not in existing_surveys:
+        if draft.survey_id not in existing_surveys:
             logger.info('Draft is referencing missing survey. Skipping.')
             continue
 
-        try:
-            logger.info('Draft is referencing missing survey. Skipping.')
-            survey_user = SurveyUser.objects.get(global_id=draft.global_id)
-        except SurveyUser.DoesNotExist:
+        # During migrations the SurveyUser.DoesNotExist does not work, so we
+        # check for existence by getting a queryset and use .exists()
+        survey_user_queryset = SurveyUser.objects.filter(
+            global_id=draft.global_id)
+
+        if not survey_user_queryset.exists():
+            logger.info('Draft is referencing missing user. Skipping.')
             continue
 
         NewDraftModel.objects.create(
             survey_id=draft.survey_id,
-            survey_user=survey_user,
+            survey_user=survey_user_queryset.first(),
             timestamp=datetime.fromtimestamp(draft.timestamp),
             form_data=draft.form_data
         )
