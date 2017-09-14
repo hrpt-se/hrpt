@@ -1,23 +1,25 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 
-from django.contrib.auth.models import User
+from models import (
+    UserReminderInfo, get_upcoming_dates, get_prev_reminder,
+    NewsLetterTemplate, QueuedEmail, ManualNewsLetter
+)
 
-from .models import UserReminderInfo, get_upcoming_dates, get_prev_reminder, get_settings, get_default_for_reminder, NewsLetterTemplate, QueuedEmail, ManualNewsLetter
-
-from .send import create_message, send_message_and_update_reminder_info
-import sys
+from send import create_message, send_message_and_update_reminder_info
 
 
 import apps.pollster.models as pollster_models
+
 
 @login_required
 def unsubscribe(request):
@@ -28,11 +30,13 @@ def unsubscribe(request):
         return render_to_response('reminder/unsubscribe_successful.html', locals(), context_instance=RequestContext(request))
     return render_to_response('reminder/unsubscribe.html', locals(), context_instance=RequestContext(request))
 
+
 @staff_member_required
 def overview(request):
     dates_and_descriptions = get_upcoming_dates(datetime.now())
     upcoming = [{'date': d, 'description': description} for d, description in dates_and_descriptions]
     return render(request, 'reminder/overview.html', locals())
+
 
 @staff_member_required
 def manage(request, year, month, day, hour, minute):
@@ -48,6 +52,7 @@ def manage(request, year, month, day, hour, minute):
 
     return render(request, 'reminder/manage.html', locals())
 
+
 @staff_member_required
 def preview(request, year, month, day, hour, minute):
 
@@ -59,7 +64,6 @@ def preview(request, year, month, day, hour, minute):
 
     text_base, html_content = create_message(request.user, reminder, settings.LANGUAGE_CODE)
     return HttpResponse(html_content)
-
 
 
 def _user_reminder_translated(reminder_dict, user):
@@ -77,9 +81,6 @@ def _user_reminder_translated(reminder_dict, user):
 
     return reminder
 
-def specialPrint(msg):
-    print >> sys.stderr,msg
-
 
 ################################################################################
 ### New Newsletter System
@@ -91,15 +92,24 @@ def list_newsletter_templates(request):
     newsletterTemplates = NewsLetterTemplate.objects.all()
     return render(request, 'reminder/list_templates.html', locals())
 
+
 @staff_member_required
-def show_newsletter_template(request,id):
+def show_newsletter_template(request, id):
     #All this really does is passing the id to the url of an iframe...
     #then the iframe is rendered by show_newsletter_template_in_iframe
 
     #TODO: show only published maybe
     surveys = pollster_models.Survey.objects.filter(status="PUBLISHED")
 
-    return render(request, 'reminder/show_template.html', {'id':id, 'surveys':surveys})
+    template = NewsLetterTemplate.objects.language("sv").get(id=id)
+    text_base, _ = create_message(request.user, template, 'sv')
+
+    return render(request, 'reminder/show_template.html', {
+        'id': id,
+        'surveys': surveys,
+        'plain_text_message': strip_tags(text_base)
+    })
+
 
 @staff_member_required
 def show_newsletter_template_in_iframe(request,id):
