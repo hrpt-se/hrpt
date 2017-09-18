@@ -143,7 +143,8 @@ HTML Preview:
 <br />
 
 Plain Text preview:
-
-<iframe src="/admin/manual-newsletters/templates/iframed/{{id}}/?plaintext=true" width="100%" id="textiframe" onload="iframeLoaded('textiframe')" ></iframe>
+    <div>
+        {{ plain_text_message|linebreaks }}
+    </div>
 
 {% endblock col1 %}
