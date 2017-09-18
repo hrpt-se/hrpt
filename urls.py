@@ -1,26 +1,23 @@
+from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
+from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView, TemplateView
-from django.views.defaults import page_not_found
-from django.conf import settings
 from django.views.static import serve
 
-from apps.ew_contact_form.forms import CaptchaContactForm
-
-from django.contrib import admin
-
-from registration.views import RegistrationView
 from contact_form.views import ContactFormView
-from apps.pollster.views import map_tile, map_click, chart_data
-from apps.partnersites.views import colors_css
 
-from views import server_error
+from apps.partnersites.views import colors_css
+from apps.pollster.views import map_tile, map_click, chart_data
+from apps.ew_contact_form.forms import CaptchaContactForm
+from registration.views import RegistrationView
+
 
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/cms/page/18/edit-plugin/[0-9]+/.*escapeHtml.*icon_src.*/$', page_not_found),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/manual-newsletters/', include('apps.reminder.nladminurls')),
     url(r'^admin/surveys-editor/', include('apps.pollster.urls')),
     url(r'^surveys/(?P<survey_shortname>.+)/charts/(?P<chart_shortname>.+)/tile/(?P<z>\d+)/(?P<x>\d+)/(?P<y>\d+)$', map_tile, name='pollster_map_tile'),
@@ -28,17 +25,11 @@ urlpatterns = [
     url(r'^surveys/(?P<survey_shortname>.+)/charts/(?P<chart_shortname>.+)\.json$', chart_data, name='pollster_chart_data'),
     url(r'^survey/', include('apps.survey.urls')),
     url(r'^reminder/', include('apps.reminder.urls')),
-    url(r'^googlec96088c11ef7e5c4.html$', TemplateView.as_view(template_name='googlec96088c11ef7e5c4.html')),
-    url(r'^nejtack', RedirectView.as_view(url='https://reply.surveygenerator.com/go.aspx?U=22277ih5v4DGFEKv7gWjt')),
-    url(r'^registrera/$', RedirectView.as_view(url='/sv/accounts/register')),
-
+    url(r'^registrera/$', RedirectView.as_view(url='/accounts/register')),
     url(r'^captcha/', include('captcha.urls')),
-
     url(r'^accounts/', include('apps.accounts.urls')),
-    url(r'^login/$', RedirectView.as_view(url=settings.LOGIN_URL), name='loginurl-index'),
     url(r'^login/', include('loginurl.urls')),
     url(r'^count/', include('apps.count.urls')),
-
     url(r'^contact/$', ContactFormView.as_view(
         form_class=CaptchaContactForm
     ), name='contact_form'),
@@ -53,20 +44,16 @@ urlpatterns = [
         RegistrationView.as_view(
             template_name='registration/registration_explanation.html'
         ),
-        name='registration_register_explanation'),
-
+        name='registration_register_explanation')
 ]
 
 # Catchall
 urlpatterns += i18n_patterns(
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('cms.urls'))
 )
 
 if settings.DEBUG:
     urlpatterns = [
-        url(r'^404/$', page_not_found),
-        url(r'^500/$', server_error),
         url(
             r'^upload/(?P<path>.*)$',
             serve,
@@ -74,5 +61,3 @@ if settings.DEBUG:
         )
     ] + staticfiles_urlpatterns() + urlpatterns
 
-
-handler500 = 'views.server_error'
