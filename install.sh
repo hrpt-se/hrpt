@@ -95,9 +95,10 @@ function setup_apache {
     git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
     cd /var/www/hrpt/
     cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
+    cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
     echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
     a2dissite 000-default
-    a2ensite 000-hrpt
+    a2ensite 000-hrpt 001-hrpt-prod-redirect
     service apache2 restart
 }
 
