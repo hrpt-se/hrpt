@@ -11,7 +11,6 @@ from contact_form.views import ContactFormView
 from apps.partnersites.views import colors_css
 from apps.pollster.views import map_tile, map_click, chart_data
 from apps.ew_contact_form.forms import CaptchaContactForm
-from registration.views import RegistrationView
 
 
 admin.autodiscover()
@@ -39,12 +38,7 @@ urlpatterns = [
             template_name='contact_form/contact_form_sent.html'),
         name='contact_form_sent'
     ),
-    url(r'^colors.css$', colors_css),
-    url(r'^register/$',
-        RegistrationView.as_view(
-            template_name='registration/registration_explanation.html'
-        ),
-        name='registration_register_explanation')
+    url(r'^colors.css$', colors_css)
 ]
 
 # Catchall
