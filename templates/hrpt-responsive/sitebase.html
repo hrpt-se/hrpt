@@ -1,0 +1,60 @@
+{% load cms_tags menu_tags sekizai_tags i18n %}
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_name }}: {% page_attribute page_title %}{% endblock title %}</title>
+    {% render_block "css" %}
+    {% block add_css %}{% endblock add_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation-float.css">
+
+    {% render_block "js" %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
+    {% block add_js %}{% endblock add_js %}
+</head>
+<body>
+    {% cms_toolbar %}
+    <div class="top-bar">
+        <div class="top-bar-right">
+            {% if user.is_authenticated %}
+                <div>
+                    <p class="nav-supp logged-in-as">
+                        {% trans "Logged in as" %} <a href="/accounts/settings/">{{ user.username }}</a>
+                    </p>
+                </div>
+
+                <a href="/survey/thanks/" class="button menu-button">{% trans "My account" %}</a>
+                <a href="/accounts/logout/" class="button menu-button">{% trans "Log out" %}</a>
+            {% else %}
+                <a href="/accounts/register/" class="button menu-button">{% trans "Register" %}</a>
+                <a href="/accounts/login/" class="button menu-button">{% trans "Log in" %}</a>
+            {% endif %}
+            <a id="menu-toggler" class="burger hide-for-medium">Menu</a>
+        </div>
+    </div>
+    <div class="nav-main show-for-medium">
+        <div class="nav-main-inner">
+            <div class="" id="example-menu">
+                {% show_menu 0 2 100 100 "hrpt-responsive/main_menu.html" %}
+            </div>
+        </div>
+    </div>
+
+    {% block content %}{% endblock content %}
+
+    <footer>
+        <div class="row">
+            <div class="medium-12">
+                <p>Hälsorapport är en del av Influenzanet, en ett europeiskt system för webbaserad syndromövervakning</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        $(document).foundation();
+    </script>
+</body>
+</html>

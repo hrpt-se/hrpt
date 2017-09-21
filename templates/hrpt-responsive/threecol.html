@@ -1,0 +1,13 @@
+{% extends "hrpt-responsive/sitebase.html" %}
+{% load cms_tags %}
+
+{% block content %}
+    <div id="main-content" class="row">
+        <div class="medium-8 medium-push-4 columns">
+            {% block col1 %}{% placeholder "Main content" %}{% endblock col1 %}
+        </div>
+        <div class="medium-4 medium-pull-8 columns">
+            {% block col2 %}{% placeholder "Left bar" %}{% endblock col2 %}
+        </div>
+    </div>
+{% endblock %}

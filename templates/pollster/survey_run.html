@@ -25,14 +25,14 @@
 {% block col1 %}
 <div id="wok-main-panel-content">
 
-{% if messages %}
-<ul class="messagelist">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if messages %}
+        <ul class="messagelist">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-{% include "pollster/questions_run.html" %}
-</div>
+    {% include "pollster/questions_run.html" %}
+    </div>
 {% endblock %}

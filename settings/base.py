@@ -159,12 +159,9 @@ TEMPLATES = [{
     }
 }]
 
-
 CMS_TEMPLATES = (
-    ('base/threecol.html', "3 Columns"),
-    ('base/twocol.html', "2 Columns"),
-    ('base/influhome.html', "European Map"),
-    ('base/sitebase.html', "Base")
+    ('hrpt-responsive/threecol.html', '3 Columns'),
+    ('hrpt-responsive/singlecol.html', 'Single Column')
 )
 
 GEOMETRY_TABLES = (
