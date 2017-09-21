@@ -1,15 +1,11 @@
-from django.template import Context, loader, RequestContext
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-from .forms import EmailSettingsForm, UsernameForm, DeactivationForm
+from forms import EmailSettingsForm, UsernameForm, DeactivationForm
 
-def index(request):
-    return render_to_response('registration/index.html',
-                              context=RequestContext(request))
 
 @login_required
 def my_settings(request, form=None):
