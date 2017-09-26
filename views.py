@@ -10,7 +10,6 @@ from django.db import connection
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse, NoReverseMatch
 
-from apps.journal.models import Entry
 from apps.survey.models import SurveyUser
 from loginurl.utils import create as create_login_key
 

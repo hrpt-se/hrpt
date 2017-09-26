@@ -1,0 +1,47 @@
+@font-face {
+    font-family: "KlavikaWebBasicLight";
+    src: url("/static/hrpt-responsive/fonts/KlavikaWebBasicLight.woff") format('woff');
+}
+
+@font-face {
+    font-family: "KlavikaWebBasicRegular";
+    src: url("/static/hrpt-responsive/fonts/KlavikaWebBasicRegular.woff") format('woff');
+}
+
+@font-face {
+    font-family: "KlavikaWebBasicRegular";
+    src: url("/static/hrpt-responsive/fonts/KlavikaWebBasicRegular.woff") format('woff');
+}
+
+header .columns {
+    padding-bottom: 10px;
+}
+
+#footer {
+    background: #2d5492;
+}
+
+#menu-toggler {
+    padding: 10px 20px;
+    background: #2d5492 url(/static/hrpt-responsive/img/burger.png) no-repeat 50% 50%;
+}
+
+.top-bar {
+    background-color: #fff;
+}
+
+.override-hidden {
+    display: block!important;
+}
+
+@media only screen and (max-width: 640px) {
+    input.button, a.button {
+        padding: 10px 20px;
+    }
+}
+
+@media only screen and (min-width: 640px) {
+    .header-buttons {
+        text-align: right;
+    }
+}

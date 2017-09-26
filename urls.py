@@ -6,7 +6,7 @@ from django.views.defaults import page_not_found
 from django.conf import settings
 from django.views.static import serve
 
-from apps.ew_contact_form.forms import CaptchaContactForm
+from apps.hrptinfo.forms import CaptchaContactForm
 
 from django.contrib import admin
 

@@ -1,8 +1,9 @@
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from .models import SurveyChartPlugin
-from .utils import get_user_profile
+from models import SurveyChartPlugin
+from utils import get_user_profile
 from django.utils.translation import ugettext as _
+
 
 class CMSSurveyChartPlugin(CMSPluginBase):
     model = SurveyChartPlugin
