@@ -43,8 +43,6 @@
                             {% if not survey.is_published %}
                                 <a class="ui-button" href="{% url 'pollster_survey_edit' survey.id %}">Edit</a>
                             {% endif %}
-                            <a class="ui-button" href="{% url 'pollster_survey_translation_list' survey.id %}">Translate</a>
-                            <a class="ui-button" href="{% url 'pollster_survey_chart_list' survey.id %}">Charts</a>
                             <a class="ui-button" href="{% url 'pollster_survey_export' survey.id %}">Export</a>
                         {% if survey.is_draft %}
                             <form action="{% url 'pollster_survey_publish' survey.id %}" method="POST">{% csrf_token %}<button class="ui-button link">Publish</button></form>
