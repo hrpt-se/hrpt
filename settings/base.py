@@ -160,7 +160,7 @@ TEMPLATES = [{
 }]
 
 CMS_TEMPLATES = (
-    ('hrpt-responsive/threecol.html', '3 Columns'),
+    ('hrpt-responsive/twocol.html', '2 Columns'),
     ('hrpt-responsive/singlecol.html', 'Single Column')
 )
 

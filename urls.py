@@ -15,8 +15,6 @@ from contact_form.views import ContactFormView
 from apps.pollster.views import map_tile, map_click, chart_data
 from apps.partnersites.views import colors_css
 
-from views import server_error
-
 admin.autodiscover()
 
 urlpatterns = [
@@ -65,14 +63,9 @@ urlpatterns += i18n_patterns(
 
 if settings.DEBUG:
     urlpatterns = [
-        url(r'^404/$', page_not_found),
-        url(r'^500/$', server_error),
         url(
             r'^upload/(?P<path>.*)$',
             serve,
             {'document_root': settings.MEDIA_ROOT}
         )
     ] + staticfiles_urlpatterns() + urlpatterns
-
-
-handler500 = 'views.server_error'
