@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block add_css %}
-    <link rel="stylesheet" type="text/css" href="{% static "/pollster/jquery/css/jquery-ui-1.12.1.css" %}" media="all" />
-    <link rel="stylesheet" type="text/css" href="{% static "/pollster/css/survey.css" %}" media="all" />
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/jquery/css/jquery-ui-1.12.1.css" %}" media="all">
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/css/survey.css" %}" media="all">
 {% endblock %}
 
 {% block add_js %}
@@ -18,7 +18,7 @@
         <script type="text/javascript" src="{% static "/pollster/datejs/js/date.js" %}"></script>
     {% endif %}
 
-    <script type="text/javascript" src="{% static "/cms/js/csrf.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/csrf.js" %}"></script>
     <script type="text/javascript">jQuery().cmsPatchCSRF()</script>
 
     <script type="text/javascript" src="{% static "/pollster/wok/js/wok.jquery.js" %}"></script>

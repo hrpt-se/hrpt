@@ -5,11 +5,6 @@
     {{ block.super }}: {% trans "Register" %}
 {% endblock %}
 
-{% block add_js %}
-    <script type="text/javascript" src="{% static "custom/js/captcha-refresh.js" %}"></script>
-{% endblock add_js %}
-
-
 {% block col1 %}
     <h1>{% trans "Registration Form" %}</h1>
     <p class="registration-footnote">{% trans "Registration requires ID-code." %}</p>

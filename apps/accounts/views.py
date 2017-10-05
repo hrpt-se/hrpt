@@ -7,9 +7,13 @@ from django.http import HttpResponseRedirect
 
 from .forms import EmailSettingsForm, UsernameForm, DeactivationForm
 
+
 def index(request):
-    return render_to_response('registration/index.html',
-                              context=RequestContext(request))
+    return render_to_response(
+        'registration/index.html',
+        context=RequestContext(request)
+    )
+
 
 @login_required
 def my_settings(request, form=None):
@@ -35,4 +39,4 @@ def my_settings(request, form=None):
         username_form = UsernameForm(instance=request.user)
         deactivate_form = DeactivationForm(instance=request.user)
 
-    return render(request, 'accounts/my_settings.html', locals())
+    return render(request, 'my_settings.html', locals())
