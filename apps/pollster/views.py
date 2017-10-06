@@ -63,7 +63,7 @@ def retry(f, *args, **kwargs):
 def survey_list(request):
     surveys = models.Survey.objects.all()
     form_import = forms.SurveyImportForm()
-    return render_with_context(request, 'pollster/survey_list.html', {
+    return render_with_context(request, 'survey_list.html', {
         "surveys": surveys,
         "form_import": form_import
     })
@@ -81,7 +81,7 @@ def survey_add(request):
     virtual_option_types = models.VirtualOptionType.objects.all()
     question_data_types = models.QuestionDataType.objects.all()
     rule_types = models.RuleType.objects.all()
-    return render_with_context(request, 'pollster/survey_edit.html', {
+    return render_with_context(request, 'survey_edit.html', {
         "survey": survey,
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
@@ -102,7 +102,7 @@ def survey_edit(request, id):
     virtual_option_types = models.VirtualOptionType.objects.all()
     question_data_types = models.QuestionDataType.objects.all()
     rule_types = models.RuleType.objects.all()
-    return render_with_context(request, 'pollster/survey_edit.html', {
+    return render_with_context(request, 'survey_edit.html', {
         "survey": survey,
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
@@ -173,7 +173,7 @@ def survey_test(request, id, language=None):
             for question in survey.question_set.all():
                 question.set_form(form)
 
-    return render(request, 'pollster/survey_test.html', {
+    return render(request, 'survey_test.html', {
         "language": language,
         "locale_code": "sv-SE", #TODO: oh well... remove internationalization
         "survey": survey,
@@ -209,7 +209,7 @@ def survey_translation_list_or_add(request, id):
                         column.translation_column.save()
 
             return redirect(translation)
-    return render_with_context(request, 'pollster/survey_translation_list.html', {
+    return render_with_context(request, 'survey_translation_list.html', {
         "survey": survey,
         "form_add": form_add
     })
@@ -236,7 +236,7 @@ def survey_translation_edit(request, id, language):
                 form.save()
             messages.success(request, 'Translation saved successfully.')
             return redirect(translation)
-    return render_with_context(request, 'pollster/survey_translation_edit.html', {
+    return render_with_context(request, 'survey_translation_edit.html', {
         "survey": survey,
         "translation": translation
     })
@@ -257,7 +257,7 @@ def survey_chart_list_or_add(request, id):
                 chart.type = models.ChartType.objects.all().order_by('id')[0]
                 chart.save()
             return redirect(chart)
-    return render_with_context(request, 'pollster/survey_chart_list.html', {
+    return render_with_context(request, 'survey_chart_list.html', {
         "survey": survey,
         "form_add": form_add
     })
@@ -279,7 +279,7 @@ def survey_chart_edit(request, id, shortname):
                 else:
                     messages.warning(request, msg)
             return redirect(chart)
-    return render_with_context(request, 'pollster/survey_chart_edit.html', {
+    return render_with_context(request, 'survey_chart_edit.html', {
         "survey": survey,
         "chart": chart,
         "form_chart": form_chart,
@@ -343,7 +343,7 @@ def survey_results_csv_extended(request, id):
         #http://stackoverflow.com/questions/5263722/in-django-how-do-i-late-bind-an-unbound-form
         form = forms.SurveyExtendedResultsForm() # An unbound form
 
-    return render_to_response('pollster/extended_results.html', {
+    return render_to_response('extended_results.html', {
         'form': form,
         'survey': survey,
     }, context_instance=RequestContext(request))
@@ -436,7 +436,12 @@ def urls(request, prefix=''):
 
             urls[name] = "/" + url_regex[:-1]
 
-    return render_with_context(request, "pollster/urls.js", {'urls':urls}, content_type="application/javascript")
+    return render_with_context(
+        request,
+        "urls.js",
+        {'urls': urls},
+        content_type="application/javascript"
+    )
 
 def _get_active_survey_user(request):
     gid = request.GET.get('gid', None)

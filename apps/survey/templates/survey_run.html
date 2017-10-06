@@ -1,0 +1,38 @@
+{% extends "base_run.html" %}
+{% load static %}
+
+{% block title %}{{ survey.translated_title }}{% endblock %}
+
+{% block extrahead %}
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.datatypes.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.rules.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.virtualoptions.js" %}"></script>
+    <script type="text/javascript">
+        // Disable the submit button once the survey is submitted (to avoid double responses)
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var $submit = $(this).find('input[type=submit]');
+
+                $submit.prop('disabled', true);
+            });
+        });
+
+        $(function() { wok.pollster.createPollsterRuntime(null, {}); })
+    </script>
+{% endblock %}
+
+{% block col1 %}
+<div id="wok-main-panel-content">
+
+    {% if messages %}
+        <ul class="messagelist">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% include "questions_run.html" %}
+    </div>
+{% endblock %}
