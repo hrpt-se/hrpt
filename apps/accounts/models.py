@@ -7,7 +7,7 @@ class UserProfile(models.Model):
     This model keeps values from the user registration form that will be
     added to the SurveyUser model when the user account is activated.
     """
-    user = models.ForeignKey(User, unique=True)
+    user = models.OneToOneField(User)
     year_of_birth = models.IntegerField()
     idcode = models.CharField(max_length=10)
 
