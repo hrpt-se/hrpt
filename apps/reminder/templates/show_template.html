@@ -92,43 +92,42 @@
 
 {% block content %}
 
-<div id="queued_mails_info">
-  Wait a moment while the emails are being queued. Do not close this page!
-</div>
-
-<div id="queued_mails_complete">
-  All emails have been queued! We may now close this page!
-</div>
-
-<div id="queued_mails_fail">
-  An error have ocurred while queueing the emails.
-  Inspect the database table reminder_manualnewsletter.
-</div>
-
-
-<p style="display: inline;">Send only to users that did not reply to:</p>
-<select id="survey_drop_down">
-    <option value="">(send to all active users)</option>
-{% for s in surveys %}
-    <option value="{{s.shortname}}">{{s.shortname}}</option>
-{% endfor %}
-</select>
-
-<button type="button" style="float:right; padding:3px; margin:3px;" id="btn_send_email">Send</button>
-<button type="button" style="float:right; padding:3px; margin:3px;" id="btn_send_email_to_me">Send only to myself</button>
-
-<br />
-<br />
-
-HTML Preview:
-<iframe src="/admin/manual-newsletters/templates/iframed/{{id}}/" width="100%" id="htmliframe" onload="iframeLoaded('htmliframe')"></iframe>
-
-<br />
-<br />
-
-Plain Text preview:
-    <div>
-        {{ plain_text_message|linebreaks }}
+    <div id="queued_mails_info">
+        Wait a moment while the emails are being queued. Do not close this page!
     </div>
+
+    <div id="queued_mails_complete">
+        All emails have been queued! We may now close this page!
+    </div>
+
+    <div id="queued_mails_fail">
+        An error have ocurred while queueing the emails.
+        Inspect the database table reminder_manualnewsletter.
+    </div>
+
+
+    <div>
+        <span>Send only to users that did not reply to:
+            <select id="survey_drop_down">
+                <option value="">(send to all active users)</option>
+                {% for s in surveys %}
+                    <option value="{{s.shortname}}">{{s.shortname}}</option>
+                {% endfor %}
+            </select>
+        </span>
+
+        <span style="float: right;">
+            <button type="button" id="btn_send_email">Send</button>
+            <button type="button" id="btn_send_email_to_me">Send only to myself</button>
+        </span>
+    </div>
+
+    <h2>HTML Preview:</h2>
+    <iframe src="/admin/manual-newsletters/templates/iframed/{{id}}/" width="100%" id="htmliframe" onload="iframeLoaded('htmliframe')"></iframe>
+
+    <h2>Plain Text preview:</h2>
+    <p>
+        {{ plain_text_message|linebreaks }}
+    </p>
 
 {% endblock content %}
