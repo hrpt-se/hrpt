@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.sites.models import Site
+from django.http import HttpResponseRedirect
 
 from hvad.admin import TranslatableAdmin
 
@@ -19,6 +20,20 @@ make_active.short_description = 'Make selected reminders active'
 def make_inactive(modeladmin, request, queryset):
     queryset.update(active=False)
 make_inactive.short_description = 'Make selected reminders inactive'
+
+
+def manual_send_newsletter(modeladmin, request, queryset):
+    if queryset.count() > 1:
+        modeladmin.message_user(
+            request,
+            "Can only manually send one template at a time",
+            level=messages.ERROR
+        )
+
+    template = queryset.first()
+
+    return HttpResponseRedirect(
+        '/admin/manual-newsletters/templates/%s' % template.id)
 
 
 @admin.register(UserReminderInfo)
@@ -67,6 +82,7 @@ admin.site.register(Site, ReminderSiteAdmin)
 @admin.register(NewsLetterTemplate)
 class NewsLetterTemplateAdmin(TranslatableAdmin):
     form = NewsLetterTemplateForm
+    actions = (manual_send_newsletter, )
 
 
 @admin.register(NewsLetter)

@@ -1,6 +1,6 @@
-{% extends "base/twocol.html" %}
+{% extends "admin/base_site.html" %}
 
-{% block col1 %}
+{% block content %}
 {% if sent %}
 A test message was sent to {{ request.user.email }}.
 {% endif %}
@@ -22,4 +22,4 @@ You may send a testreminder to your self ({{ request.user.email }}) by pressing 
 <input type="submit" value="Send!">
 </form>
 
-{% endblock col1 %}
+{% endblock content %}
