@@ -90,7 +90,7 @@
             });
 
             $('#accept-cookies-button').click(function() {
-                document.cookie = 'accept-cookies=true';
+                document.cookie = 'accept-cookies=true; Path=/';
                 $('.cookie-info').remove();
             });
         })
