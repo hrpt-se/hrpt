@@ -104,6 +104,18 @@ class DeactivationForm(forms.ModelForm):
 
 
 class CaptchaUnicodeRegistrationForm(RegistrationForm):
+    class Meta(RegistrationForm.Meta):
+        fields = [
+            'username',
+            'email',
+            'email_confirm',
+            'password1',
+            'password2',
+            'idcode',
+            'year_of_birth',
+            'captcha'
+        ]
+
     username = forms.RegexField(
         regex=r'(?u)^[\w.@+-]+$',
         max_length=30,
@@ -120,6 +132,11 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
     # Override the email-field from the super-class to add a field label
     email = forms.EmailField(
         label=_(u'Email address'),
+        required=True
+    )
+
+    email_confirm = forms.EmailField(
+        label=_("Confirm email address"),
         required=True
     )
 
@@ -160,6 +177,13 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
         label=_("Captcha"),
         help_text=_("Please enter the characters shown in the image.")
     )
+
+    def clean_email_confirm(self):
+        email = self.cleaned_data.get("email")
+        email_confirm = self.cleaned_data.get("email_confirm")
+
+        if email != email_confirm:
+            raise ValidationError(_("Email addresses not matching"))
 
     def clean_idcode(self):
         idcode = self.cleaned_data['idcode']
