@@ -20,29 +20,39 @@
 <body>
     {% cms_toolbar %}
     <header id="header" class="cf">
-        <div class="row top-bar header-inner">
-            <div class="medium-7 columns">
-                <a href="/">
-                    <img class="menu-text" src="{% static '/hrpt-responsive/img/hrpt_logo.png' %}">
-                </a>
-            </div>
-            <div class="medium-5 columns header-buttons">
-                {% if user.is_authenticated %}
-                    <div>
-                        <p class="nav-supp logged-in-as">
-                            {% trans "Logged in as" %} <a href="/accounts/settings/">{{ user.username }}</a>
-                        </p>
-                    </div>
+        <div class="header-inner">
+            {% if 'accept-cookies' not in request.COOKIES %}
+                <div class="cookie-info">
+                    <p>Vi använder <a title="Om cookies på webbplatsen" href="#">cookies</a>
+                        för att ge dig access till funktioner som gör det enklare att använda webbplatsen.
+                        Genom att fortsätta godkänner du att vi använder cookies.</p>
+                    <p><button id="accept-cookies-button">Jag förstår</button></p>
+                </div>
+            {% endif %}
+            <div class="row top-bar">
+                <div class="medium-7 columns">
+                    <a href="/">
+                        <img class="menu-text" src="{% static '/hrpt-responsive/img/hrpt_logo.png' %}">
+                    </a>
+                </div>
+                <div class="medium-5 columns header-buttons">
+                    {% if user.is_authenticated %}
+                        <div>
+                            <p class="nav-supp logged-in-as">
+                                {% trans "Logged in as" %} <a href="/accounts/settings/">{{ user.username }}</a>
+                            </p>
+                        </div>
 
-                    <a href="/survey/thanks/" class="button menu-button">{% trans "My account" %}</a>
-                    <a href="/accounts/logout/" class="button menu-button">{% trans "Log out" %}</a>
+                        <a href="/survey/thanks/" class="button menu-button">{% trans "My account" %}</a>
+                        <a href="/accounts/logout/" class="button menu-button">{% trans "Log out" %}</a>
 
-                {% else %}
-                    <a href="/accounts/register/" class="button menu-button">{% trans "Register" %}</a>
-                    <a href="/accounts/login/" class="button menu-button">{% trans "Log in" %}</a>
-                {% endif %}
-                 <a id="menu-toggler" class="button hide-for-medium float-right">&nbsp;</a>
+                    {% else %}
+                        <a href="/accounts/register/" class="button menu-button">{% trans "Register" %}</a>
+                        <a href="/accounts/login/" class="button menu-button">{% trans "Log in" %}</a>
+                    {% endif %}
+                     <a id="menu-toggler" class="button hide-for-medium float-right">&nbsp;</a>
 
+                </div>
             </div>
         </div>
         <div class="nav-main show-for-medium">
@@ -77,7 +87,12 @@
         $(document).ready(function() {
             $('#menu-toggler').click(function () {
                 $('.nav-main').toggleClass('override-hidden');
-            })
+            });
+
+            $('#accept-cookies-button').click(function() {
+                document.cookie = 'accept-cookies=true';
+                $('.cookie-info').remove();
+            });
         })
     </script>
 </body>
