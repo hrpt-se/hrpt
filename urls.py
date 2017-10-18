@@ -31,9 +31,6 @@ urlpatterns = [
     url(r'^googlec96088c11ef7e5c4.html$', TemplateView.as_view(template_name='googlec96088c11ef7e5c4.html')),
     url(r'^nejtack', RedirectView.as_view(url='https://reply.surveygenerator.com/go.aspx?U=22277ih5v4DGFEKv7gWjt')),
     url(r'^registrera/$', RedirectView.as_view(url='/sv/accounts/register')),
-
-    url(r'^captcha/', include('captcha.urls')),
-
     url(r'^accounts/', include('apps.accounts.urls')),
     url(r'^login/$', RedirectView.as_view(url=settings.LOGIN_URL), name='loginurl-index'),
     url(r'^login/', include('loginurl.urls')),

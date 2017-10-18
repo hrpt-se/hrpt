@@ -201,7 +201,7 @@ INSTALLED_APPS = (
     'treebeard',
     'menus',
     'apps.pollster',
-    'captcha',
+    'nocaptcha_recaptcha',
     'pytils',
     'sorl.thumbnail',
     'pure_pagination',
@@ -269,3 +269,4 @@ try:
     from secrets import *
 except ImportError:
     pass
+

@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from captcha.fields import CaptchaField
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -9,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 from registration.forms import RegistrationForm
+from nocaptcha_recaptcha.fields import NoReCaptchaField
 
 from apps.reminder.models import UserReminderInfo
 from apps.survey.models import SurveyIdCode
@@ -173,9 +173,8 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
         }
     )
 
-    captcha = CaptchaField(
-        label=_("Captcha"),
-        help_text=_("Please enter the characters shown in the image.")
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
     )
 
     def clean_email_confirm(self):
@@ -204,5 +203,6 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
 
 
 class CaptchaPasswordResetForm(PasswordResetForm):
-    captcha = CaptchaField(label=_("Captcha"),
-                           help_text=_("Please enter the characters shown in the image."))
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
+    )

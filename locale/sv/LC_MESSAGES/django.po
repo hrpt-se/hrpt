@@ -112,7 +112,7 @@ msgstr "Skriv år med fyra siffror. Till exempel: 1989"
 #: apps/accounts/forms.py:177 apps/accounts/forms.py:207
 #: apps/ew_contact_form/forms.py:21
 msgid "Captcha"
-msgstr "Kontrollord"
+msgstr "Robotkontroll"
 
 #: apps/accounts/forms.py:178 apps/accounts/forms.py:208
 #: apps/ew_contact_form/forms.py:22
