@@ -58,7 +58,7 @@ msgstr ""
 #: apps/accounts/forms.py:124
 msgid "Choose a name you want to use for login. For example: anders2009"
 msgstr ""
-"Välj ett valfritt använarnamn som du använder för att logga in. Till "
+"Välj ett valfritt användarnamn som du använder för att logga in. Till "
 "exempel: anders2009"
 
 #: apps/accounts/forms.py:134 apps/pollster/forms.py:28
