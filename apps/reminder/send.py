@@ -27,7 +27,8 @@ def create_message(user, message, language):
 
     inner_template = Template(message.message)
 
-    survey_list_url = 'http://%s%s' % (Site.objects.get_current(), "/survey/thanks/")
+    survey_list_url = 'http://%s%s'\
+                      % (Site.objects.get_current(), "/sv/valkommen/")
 
     context_dict = {
         'url': get_self_authenticating_url(user, survey_list_url),
