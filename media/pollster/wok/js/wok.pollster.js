@@ -236,13 +236,12 @@
                 if (rule.active) {
                     var apply = true;
                     if (!rule.isSufficient) {
-                        for (var j=0 ; j < hrs.length ; j++) {
-                            if (!hrs[j].isSufficient && !hrs[j].active)
-                                apply = false;
-                        }
+                        apply = hrs.every(function (rule) {
+                            return rule.isSufficient || rule.active
+                        });
                     }
                     if (apply)
-                        rule.apply($survey, target);
+                        rule.apply($survey, target, true);
                 }
 
                 // If the current rule was switched to inactive we do as above
@@ -251,13 +250,12 @@
                 else {
                     var apply = true;
                     if (rule.isSufficient) {
-                        for (var j=0 ; j < hrs.length ; j++) {
-                            if (hrs[j].isSufficient && hrs[j].active)
-                                apply = false;
-                        }
+                        apply = hrs.every(function (rule) {
+                            return !rule.isSufficient || !rule.active
+                        });
                     }
                     if (apply)
-                        rule.apply($survey, target);
+                        rule.apply($survey, target, false);
                 }
             }
 

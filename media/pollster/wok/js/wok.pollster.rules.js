@@ -97,23 +97,6 @@
         return s;
     }
 
-    function get_target_visibility(rule, target, v) {
-        var visibility = target.state.visibility;
-        var old = visibility[0] + visibility[1];
-        var index = this.isSufficient ? 1 : 0;
-
-        if (rule.active) {
-            if (visibility[index] === 0)
-                visibility[index] = v;
-        }
-        else {
-            if (visibility[index] === v)
-                visibility[index] = 0;
-        }
-
-        return { value: visibility[0]+visibility[1], previous: old };
-    }
-
     function is_active($survey, $question, rule) {
         var $options = $question.find(":checked");
         for (var i=0 ; i < $options.length ; i++) {
@@ -155,21 +138,17 @@
                 return old !== this.active;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 var $t = $survey.find("#question-"+this.objectQuestion);
 
                 if (!$t.hasClass("starts-hidden"))
                     return;
 
-                var visibility = get_target_visibility(this, target, 1);
-
-                if (visibility.value > 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.slideDown(function() {
                         enable_options($t.find('.choices > li'));
                     });
-                }
-
-                if (visibility.value === 0 && visibility.previous > 0) {
+                } else {
                     $t.slideUp();
                 }
             }
@@ -204,19 +183,15 @@
                 return old !== this.active;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 var $t = $survey.find("#question-"+this.objectQuestion);
 
                 if ($t.hasClass("starts-hidden"))
                     return;
 
-                var visibility = get_target_visibility(this, target, -1);
-
-                if (visibility.value < 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.slideUp();
-                }
-
-                if (visibility.value === 0 && visibility.previous < 0) {
+                } else {
                     $t.slideDown(function() {
                         enable_options($t.find('.choices > li'));
                     });
@@ -253,34 +228,20 @@
                 return old !== this.active;
             },
 
-            apply: function($survey, target) {
-                var visibility = get_target_visibility(this, target, 1);
-
+            apply: function($survey, target, forward) {
                 var selectors = self.objectOptions.map(function(o){return '#option-'+o}).join(',');
                 var $t = $survey.find(selectors);
 
-                if (visibility.value > 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.each(function() {
                         var $o = $(this);
-                        var v = ($o.data("visibility") || 0) + 1;
-                        if (v === 1) {
-                            $o.slideDown(function() {
-                                enable_options($o.find('.choices > li'));
-                            });
-                            $o.data("visibility", v);
-                        }
+                        $o.slideDown(function () {
+                            enable_options($o.find('.choices > li'));
+                        });
                     });
-                }
-
-                if (visibility.value === 0 && visibility.previous > 0) {
+                } else {
                     $t.each(function() {
-                        var $o = $(this);
-                        var v = ($o.data("visibility") || 0) - 1;
-
-                        if (v === 0 && $o.hasClass("starts-hidden")) {
-                            $o.slideUp();
-                            $o.data("visibility", v);
-                        }
+                        $(this).slideUp();
                     });
                 }
             }
@@ -315,36 +276,28 @@
                 return old !== this.active;
             },
 
-            apply: function($survey, target) {
-                var visibility = get_target_visibility(this, target, -1);
-
+            apply: function($survey, target, forward) {
                 var selectors = self.objectOptions.map(function(o){return '#option-'+o}).join(',');
                 var $t = $survey.find(selectors);
 
-                if (visibility.value < 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.each(function() {
                         var $o = $(this);
-                        var v = ($o.data("visibility") || 0) + 1;
-                        if (v === 1) {
+                        if ($o.is(':visible')) {
                             $o.slideUp();
-                            $o.data("visibility", v);
                         }
                     });
-                }
-
-                if (visibility.value === 0 && visibility.previous < 0) {
+                } else {
                     $t.each(function() {
                         var $o = $(this);
-                        var v = ($o.data("visibility") || 0) - 1;
-
-                        if (v === 0 && !$o.hasClass("starts-hidden")) {
-                            $o.slideDown(function() {
+                        if (!$o.is(':visible')) {
+                            $o.slideDown(function () {
                                 enable_options($o.find('.choices > li'));
                             });
-                            $o.data("visibility", v);
                         }
                     });
                 }
+
             }
         });
     }
@@ -377,7 +330,7 @@
                 return this.active === true && old === false;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 if (!this.active)
                     return;
 
@@ -416,7 +369,7 @@
                 return this.active === true && old === false;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 if (!this.active)
                     return;
 
@@ -458,14 +411,14 @@
                 return this.active === true &&  old === false;
             },
 
-            apply: function($survey) {
+            apply: function($survey, target, forward) {
                 if (!this.active)
                     return;
 
                 var so = this.subjectOptions;
                 var extra = { synthetic: true };
                 $survey.find("#question-"+this.subjectQuestion+" :checked").each(function() {
-                    var oid = parseInt(($(this).closest("li").attr("id") || '').replace("option-",""))
+                    var oid = parseInt(($(this).closest("li").attr("id") || '').replace("option-",""));
                     if (so.indexOf(oid) < 0)
                         $(this).prop('checked', false).trigger('change', extra);
                 });
@@ -503,7 +456,7 @@
                 return this.active;
             },
 
-            apply: function($survey, checked) {
+            apply: function($survey, checked, forward) {
                 if (!this.active)
                     return;
 
@@ -546,15 +499,13 @@
                 return this.active;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 var $t = $survey.find("#question-"+this.objectQuestion);
 
                 if (!$t.hasClass("starts-hidden") || !this.active)
                     return;
 
-                var visibility = get_target_visibility(this, target, 1);
-
-                if (visibility.value > 0 && visibility.previous === 0) {
+                if (forward) {
                     enable_options($t.show().find('.choices > li'));
                 }
             }
@@ -591,15 +542,13 @@
                 return this.active;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 var $t = $survey.find("#question-"+this.objectQuestion);
 
                 if ($t.hasClass("starts-hidden") || !this.active)
                     return;
 
-                var visibility = get_target_visibility(this, target, -1);
-
-                if (visibility.value < 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.hide();
                 }
             }
@@ -636,18 +585,16 @@
                 return this.active;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 var selectors = self.objectOptions.map(function(o){return '#option-'+o}).join(',');
                 var $t = $survey.find(selectors);
-                var visibility = get_target_visibility(this, target, 1);
 
-                if (visibility.value > 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.each(function() {
                         var $o = $(this);
 
                         if ($o.hasClass("starts-hidden")) {
                             enable_options($o.show().find('.choices > li'));
-                            $o.data("visibility", 1);
                         }
                     });
                 }
@@ -685,18 +632,16 @@
                 return this.active;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 var selectors = self.objectOptions.map(function(o){return '#option-'+o}).join(',');
                 var $t = $survey.find(selectors);
-                var visibility = get_target_visibility(this, target, -1);
 
-                if (visibility.value < 0 && visibility.previous === 0) {
+                if (forward) {
                     $t.each(function() {
                         var $o = $(this);
 
                         if (!$o.hasClass("starts-hidden")) {
                             $o.hide();
-                            $o.data("visibility", -1);
                         }
                     });
                 }
@@ -732,7 +677,7 @@
                 return this.active === true && old === false;
             },
 
-            apply: function($survey, target) {
+            apply: function($survey, target, forward) {
                 if (!this.active || $survey.is('.error'))
                     return;
                 var object_names = get_question_data_names($survey, this.objectQuestion, this.objectOptions);
