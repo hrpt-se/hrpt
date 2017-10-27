@@ -82,8 +82,5 @@ urlpatterns = [
     url(r'^settings/password/$', views.my_settings, {'form': 'password'}),
     url(r'^settings/username/$', views.my_settings, {'form': 'username'}),
     url(r'^settings/deactivate/$', views.my_settings, {'form': 'deactivate'}),
-    url(r'^settings/$', views.my_settings, name='settings'),
-
-    # Additional URLs
-    url(r'^$', views.index),
+    url(r'^settings/$', views.my_settings, name='settings')
 ]
