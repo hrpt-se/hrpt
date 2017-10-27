@@ -1,10 +1,9 @@
-from django import forms
 from django.utils.translation import ugettext_lazy as _
-
 from contact_form.forms import ContactForm as DefaultContactForm
+from nocaptcha_recaptcha.fields import NoReCaptchaField
 
 from apps.partnersites.models import SiteSettings
-from captcha.fields import CaptchaField
+
 
 class ContactForm(DefaultContactForm):
 
@@ -17,6 +16,8 @@ class ContactForm(DefaultContactForm):
         settings = SiteSettings.objects.get()
         self.recipient_list = [settings.contact_form_recipient]
 
+
 class CaptchaContactForm(ContactForm):
-    captcha = CaptchaField(label=_("Captcha"),
-                           help_text=_("Please enter the characters shown in the image."))
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
+    )

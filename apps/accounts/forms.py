@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from captcha.fields import CaptchaField
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -9,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 from registration.forms import RegistrationForm
+from nocaptcha_recaptcha.fields import NoReCaptchaField
 
 from apps.reminder.models import UserReminderInfo
 from apps.survey.models import SurveyIdCode
@@ -104,6 +104,18 @@ class DeactivationForm(forms.ModelForm):
 
 
 class CaptchaUnicodeRegistrationForm(RegistrationForm):
+    class Meta(RegistrationForm.Meta):
+        fields = [
+            'username',
+            'email',
+            'email_confirm',
+            'password1',
+            'password2',
+            'idcode',
+            'year_of_birth',
+            'captcha'
+        ]
+
     username = forms.RegexField(
         regex=r'(?u)^[\w.@+-]+$',
         max_length=30,
@@ -120,6 +132,11 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
     # Override the email-field from the super-class to add a field label
     email = forms.EmailField(
         label=_(u'Email address'),
+        required=True
+    )
+
+    email_confirm = forms.EmailField(
+        label=_("Confirm email address"),
         required=True
     )
 
@@ -156,10 +173,16 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
         }
     )
 
-    captcha = CaptchaField(
-        label=_("Captcha"),
-        help_text=_("Please enter the characters shown in the image.")
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
     )
+
+    def clean_email_confirm(self):
+        email = self.cleaned_data.get("email")
+        email_confirm = self.cleaned_data.get("email_confirm")
+
+        if email != email_confirm:
+            raise ValidationError(_("Email addresses not matching"))
 
     def clean_idcode(self):
         idcode = self.cleaned_data['idcode']
@@ -180,5 +203,6 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
 
 
 class CaptchaPasswordResetForm(PasswordResetForm):
-    captcha = CaptchaField(label=_("Captcha"),
-                           help_text=_("Please enter the characters shown in the image."))
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
+    )
