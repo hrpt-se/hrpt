@@ -5,6 +5,10 @@
     {{ block.super }}: {% trans "Register" %}
 {% endblock %}
 
+{% block add_js %}
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+
 {% block col1 %}
     <h1>{% trans "Registration Form" %}</h1>
     <p class="registration-footnote">{% trans "Registration requires ID-code." %}</p>
