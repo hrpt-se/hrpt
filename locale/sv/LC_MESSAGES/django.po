@@ -1246,8 +1246,5 @@ msgstr "Mitt konto"
 msgid "Invalid CAPTCHA"
 msgstr "Felaktigt kontrollord"
 
-#~ msgid "Questionnaire for participant"
-#~ msgstr "Enkäten gäller profilen"
-
 #~ msgid "Date of user's last report"
 #~ msgstr "Datum för senaste rapport"
