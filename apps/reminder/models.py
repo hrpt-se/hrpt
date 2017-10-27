@@ -27,7 +27,7 @@ NO_INTERVAL = -1
 WEEKLY_WITH_BATCHES = -2
 
 class UserReminderInfo(models.Model):
-    user = models.ForeignKey(User, unique=True)
+    user = models.OneToOneField(User)
     last_reminder = models.DateTimeField(null=True, blank=True)
     active = models.BooleanField()
     language = models.CharField(max_length=5, blank=True, null=True)
