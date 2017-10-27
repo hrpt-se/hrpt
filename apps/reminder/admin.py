@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.sites.models import Site
+from django.http import HttpResponseRedirect
 
 from hvad.admin import TranslatableAdmin
 
@@ -11,21 +12,11 @@ from models import (
 from forms import ReminderSettingsForm, NewsLetterTemplateForm, NewsLetterForm
 
 
-def make_active(modeladmin, request, queryset):
-    queryset.update(active=True)
-make_active.short_description = 'Make selected reminders active'
-
-
-def make_inactive(modeladmin, request, queryset):
-    queryset.update(active=False)
-make_inactive.short_description = 'Make selected reminders inactive'
-
-
 @admin.register(UserReminderInfo)
 class UserReminderInfoAdmin(admin.ModelAdmin):
-    list_display = ('user', 'active', 'last_reminder',)
+    list_display = ('user', 'active', 'last_reminder')
     ordering = ('user__username',)
-    actions = (make_active, make_inactive,)
+    actions = ('make_active', 'make_inactive')
     list_editable = ('active',)
     list_filter = ('active',)
     search_fields = ('user__username',)
@@ -35,6 +26,15 @@ class UserReminderInfoAdmin(admin.ModelAdmin):
         del actions['delete_selected']
         return actions
 
+    def make_active(self, request, queryset):
+        queryset.update(active=True)
+
+    make_active.short_description = 'Make selected reminders active'
+
+    def make_inactive(self, request, queryset):
+        queryset.update(active=False)
+
+    make_inactive.short_description = 'Make selected reminders inactive'
 
 class UserReminderInfoInline(admin.StackedInline):
     model = UserReminderInfo
@@ -67,6 +67,22 @@ admin.site.register(Site, ReminderSiteAdmin)
 @admin.register(NewsLetterTemplate)
 class NewsLetterTemplateAdmin(TranslatableAdmin):
     form = NewsLetterTemplateForm
+    actions = ('manual_send_newsletter', )
+
+    def manual_send_newsletter(self, request, queryset):
+        if queryset.count() > 1:
+            self.message_user(
+                request,
+                "Can only manually send one template at a time",
+                level=messages.ERROR
+            )
+
+            return
+
+        template = queryset.first()
+
+        return HttpResponseRedirect(
+            '/admin/manual-newsletters/templates/%s' % template.id)
 
 
 @admin.register(NewsLetter)

@@ -113,6 +113,7 @@ ADMIN_MEDIA_PREFIX = '/admin/media/'
 
 CMS_FILE_ICON_PATH = os.path.join(MEDIA_ROOT, 'file_icons/')
 CMS_FILE_ICON_URL = os.path.join(MEDIA_URL, 'file_icons/')
+FILER_IMAGE_USE_ICON = True
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'swgm*3%po62mg76m4iq!k8h3j+_)x=8b--7skjc_0wiak^wksr'
@@ -159,12 +160,9 @@ TEMPLATES = [{
     }
 }]
 
-
 CMS_TEMPLATES = (
-    ('base/threecol.html', "3 Columns"),
-    ('base/twocol.html', "2 Columns"),
-    ('base/influhome.html', "European Map"),
-    ('base/sitebase.html', "Base")
+    ('hrpt-responsive/twocol.html', '2 Columns'),
+    ('hrpt-responsive/singlecol.html', 'Single Column')
 )
 
 GEOMETRY_TABLES = (
@@ -193,9 +191,8 @@ INSTALLED_APPS = (
     'apps.accounts',
     'apps.survey',
     'apps.reminder',
-    'apps.journal',
     'contact_form',
-    'apps.ew_contact_form',
+    'apps.hrptinfo',
     'apps.partnersites',
     'apps.count',
     'cms',

@@ -149,7 +149,7 @@ def show_survey(request, survey_short_name):
 
     return render(
         request,
-        'pollster/survey_run.html',
+        'survey_run.html',
         {
             "language": language,
             "locale_code": "sv-SE", # let's just hardcode this for now
@@ -220,7 +220,7 @@ def people_edit(request):
     else:
         form = forms.AddPeople(initial={'name': survey_user.name})
 
-    return render_to_response('survey/people_edit.html', {'base_template': "survey/base.html",'form': form},
+    return render_to_response('people_edit.html', {'base_template': "base.html",'form': form},
                               context_instance=RequestContext(request))
 
 
@@ -252,7 +252,7 @@ def people_remove(request):
         return HttpResponseRedirect(url)
 
     else:
-        return render_to_response('survey/people_remove.html', {'person': survey_user},
+        return render_to_response('people_remove.html', {'person': survey_user},
                               context_instance=RequestContext(request))
 
 @login_required
@@ -278,7 +278,7 @@ def people_add(request):
     else:
         form = forms.AddPeople()
 
-    return render_to_response('survey/people_add.html', {'form': form},
+    return render_to_response('people_add.html', {'form': form},
                               context_instance=RequestContext(request))
 
 @login_required

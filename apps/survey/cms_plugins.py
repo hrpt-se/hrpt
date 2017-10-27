@@ -11,7 +11,7 @@ from apps.pollster.models import Survey as pollster_survey_model
 
 class ListUserSurveysPlugin(CMSPluginBase):
     model = SurveyListPlugin
-    render_template = "survey/cms_plugin_survey_list.html"
+    render_template = "cms_plugin_survey_list.html"
     name = "User Survey List"
     cache = False
 

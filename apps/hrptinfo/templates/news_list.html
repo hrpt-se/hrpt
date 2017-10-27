@@ -1,0 +1,11 @@
+{% load cms_tags %}
+
+<div class="m m-news">
+    <h2>Nyheter</h2>
+
+    <ul>
+        {% for child in instance.child_plugin_instances %}
+            {% render_plugin child %}
+        {% endfor %}
+    </ul>
+</div>

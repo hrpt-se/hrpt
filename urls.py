@@ -10,7 +10,7 @@ from contact_form.views import ContactFormView
 
 from apps.partnersites.views import colors_css
 from apps.pollster.views import map_tile, map_click, chart_data
-from apps.ew_contact_form.forms import CaptchaContactForm
+from apps.hrptinfo.forms import CaptchaContactForm
 
 
 admin.autodiscover()
@@ -53,4 +53,3 @@ if settings.DEBUG:
             {'document_root': settings.MEDIA_ROOT}
         )
     ] + staticfiles_urlpatterns() + urlpatterns
-

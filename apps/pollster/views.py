@@ -41,7 +41,7 @@ def survey_list(request):
     surveys = models.Survey.objects.all().order_by('-updated')
     form_import = forms.SurveyImportForm()
 
-    return render(request, 'pollster/survey_list.html', {
+    return render(request, 'survey_list.html', {
         "surveys": surveys,
         "form_import": form_import
     })
@@ -60,7 +60,7 @@ def survey_add(request):
     question_data_types = models.QuestionDataType.objects.all()
     rule_types = models.RuleType.objects.all()
 
-    return render(request, 'pollster/survey_edit.html', {
+    return render(request, 'survey_edit.html', {
         "survey": survey,
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
@@ -81,7 +81,7 @@ def survey_edit(request, id):
     question_data_types = models.QuestionDataType.objects.all()
     rule_types = models.RuleType.objects.all()
 
-    return render(request, 'pollster/survey_edit.html', {
+    return render(request, 'survey_edit.html', {
         "survey": survey,
         "virtual_option_types": virtual_option_types,
         "question_data_types": question_data_types,
@@ -151,7 +151,7 @@ def survey_test(request, id, language=None):
             for question in survey.question_set.all():
                 question.set_form(form)
 
-    return render(request, 'pollster/survey_test.html', {
+    return render(request, 'survey_test.html', {
         "language": language,
         "locale_code": "sv-SE", #TODO: oh well... remove internationalization
         "survey": survey,
@@ -187,7 +187,7 @@ def survey_translation_list_or_add(request, id):
                         column.translation_column.save()
 
             return redirect(translation)
-    return render(request, 'pollster/survey_translation_list.html', {
+    return render(request, 'survey_translation_list.html', {
         "survey": survey,
         "form_add": form_add
     })
@@ -215,7 +215,7 @@ def survey_translation_edit(request, id, language):
             messages.success(request, 'Translation saved successfully.')
             return redirect(translation)
 
-    return render(request, 'pollster/survey_translation_edit.html', {
+    return render(request, 'survey_translation_edit.html', {
         "survey": survey,
         "translation": translation
     })
@@ -237,7 +237,7 @@ def survey_chart_list_or_add(request, id):
                 chart.save()
             return redirect(chart)
 
-    return render(request, 'pollster/survey_chart_list.html', {
+    return render(request, 'survey_chart_list.html', {
         "survey": survey,
         "form_add": form_add
     })
@@ -260,7 +260,7 @@ def survey_chart_edit(request, id, shortname):
                     messages.warning(request, msg)
             return redirect(chart)
 
-    return render(request, 'pollster/survey_chart_edit.html', {
+    return render(request, 'survey_chart_edit.html', {
         "survey": survey,
         "chart": chart,
         "form_chart": form_chart,
@@ -325,7 +325,7 @@ def survey_results_csv_extended(request, id):
         form = forms.SurveyExtendedResultsForm() # An unbound form
 
 
-    return render(request, 'pollster/extended_results.html', {
+    return render(request, 'extended_results.html', {
         'form': form,
         'survey': survey,
     })
@@ -418,7 +418,12 @@ def urls(request, prefix=''):
 
             urls[name] = "/" + url_regex[:-1]
 
-    return render(request, "pollster/urls.js", {'urls': urls}, content_type="application/javascript")
+    return render(
+        request,
+        "urls.js",
+        {'urls': urls},
+        content_type="application/javascript"
+    )
 
 def _get_active_survey_user(request):
     gid = request.GET.get('gid', None)

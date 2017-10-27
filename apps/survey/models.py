@@ -57,14 +57,6 @@ class SurveyUser(models.Model):
         from . import views
         return '%s?gid=%s' % (reverse(views.people_edit), self.global_id)
 
-    def get_profile_url(self):
-        from . import views
-        return '%s?gid=%s' % (reverse(views.profile_index), self.global_id)
-
-    def get_survey_url(self):
-        from . import views
-        return '%s?gid=%s' % (reverse(views.index), self.global_id)
-
     def get_remove_url(self):
         from . import views
         return '%s?gid=%s' % (reverse(views.people_remove), self.global_id)

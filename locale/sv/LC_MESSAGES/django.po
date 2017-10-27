@@ -51,7 +51,7 @@ msgstr "E-post"
 msgid "This email is already in use"
 msgstr ""
 
-#: apps/accounts/forms.py:90
+#: apps/accounts/forms.py:91
 msgid "A user with this username already exists"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgstr ""
 "Skriv in födelseår med fyra siffror för den som är inbjuden. Till exempel: "
 "1989"
 
-#: apps/accounts/forms.py:172
+#: apps/accounts/forms.py:111
 msgid "This value must contain 4 digits."
 msgstr "Skriv år med fyra siffror. Till exempel: 1989"
 
@@ -730,7 +730,7 @@ msgstr "Glömt ditt lösenord?"
 msgid "Logged out"
 msgstr "Du är utloggad"
 
-#: templates/registration/logout.html:8
+#: templates/registration/logout.html:10
 msgid "You have been logged out. Go to "
 msgstr "Du är utloggad. Gå till "
 
@@ -761,11 +761,11 @@ msgid "Change my password"
 msgstr "Ändra mitt lösenord"
 
 #: templates/registration/password_reset_complete.html:4
-#: templates/registration/password_reset_complete.html:8
+#: templates/registration/password_reset_complete.html:7
 msgid "Password reset complete"
 msgstr "Återställningen fungerade"
 
-#: templates/registration/password_reset_complete.html:10
+#: templates/registration/password_reset_complete.html:9
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr ""
 "Ditt lösenord har ändrats. Du kan gå vidare till www.halsorapport.se och "
@@ -1245,6 +1245,9 @@ msgstr "Mitt konto"
 
 msgid "Invalid CAPTCHA"
 msgstr "Felaktigt kontrollord"
+
+#~ msgid "Questionnaire for participant"
+#~ msgstr "Enkäten gäller profilen"
 
 #~ msgid "Date of user's last report"
 #~ msgstr "Datum för senaste rapport"

@@ -47,9 +47,10 @@ def create_message(user, message, language):
     context_dict['message'] = message
 
     context = Context(context_dict)
-    templ = loader.get_template('reminder/message.html')
+    templ = loader.get_template('message.html')
 
     return inner, templ.render(context)
+
 
 def send_reminders(fake=False):
     active_users = User.objects.filter(is_active=True)
@@ -74,7 +75,6 @@ def get_self_authenticating_url(user, target_url):
     path = reverse('loginurl-index').strip('/')
     loginurl_base = 'http://%s/%s' % (domain, path)
     return '%s/%s' % (loginurl_base, key.key)
-
 
 
 def send_message_and_update_reminder_info(user, message, language, is_test_message=False):
