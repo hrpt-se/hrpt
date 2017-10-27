@@ -29,8 +29,7 @@
 
 #survey-list form { display: inline; text-transform: lowercase; }
 #survey-list form p { display: inline; margin: 0; }
-#survey-list .link { margin: 0; border: none; background: none; padding: 0; cursor: pointer; font-size: 12px; }
-#survey-list a, #survey-list .link { color: black; text-decoration: none; }
+#survey-list a, #survey-list .link { color: black; text-decoration: none; font-size: 100%;}
 #survey-list a:hover, #survey-list .link:hover { text-decoration: underline; }
 #survey-list li { list-style-type: none; }
 #survey-list .status-DRAFT, #survey-list .status-UNPUBLISHED { list-style-type: circle; }
