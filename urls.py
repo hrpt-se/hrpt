@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^survey/', include('apps.survey.urls')),
     url(r'^reminder/', include('apps.reminder.urls')),
     url(r'^registrera/$', RedirectView.as_view(url='/accounts/register')),
-    url(r'^captcha/', include('captcha.urls')),
     url(r'^accounts/', include('apps.accounts.urls')),
     url(r'^login/', include('loginurl.urls')),
     url(r'^count/', include('apps.count.urls')),
