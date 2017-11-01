@@ -31,7 +31,9 @@
                 window.location = designer.getSurveyUrl($(responseText).find(".survey").attr("id").replace("survey-", ""));
             else
                 window.location.reload();
-        }).fail(function(jqXHR, textStatus, errorThrown) { wok.error("error on save: "+errorThrown); });
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            wok.error("Error on save: " + jqXHR.responseJSON.error);
+        });
     }
 
     // DESIGNER WINDOW
@@ -185,7 +187,7 @@
             $(this).attr('disabled', true);
             (options.onSave || onSave)(evt, self);
             return false;
-        })
+        });
 
         $(".action-create-question").click(function(evt) {
             var type = $(this).siblings("select").val();
