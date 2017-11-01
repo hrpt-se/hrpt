@@ -5,7 +5,10 @@ import json
 import re
 
 from django.core.urlresolvers import reverse, RegexURLResolver
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.db import DatabaseError
+from django.http import (
+    HttpResponse, HttpResponseRedirect, Http404, JsonResponse
+)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import get_language
 from django.contrib import messages
@@ -75,7 +78,14 @@ def survey_edit(request, id):
     if request.method == 'POST':
         form = forms.SurveyXmlForm(request.POST)
         if form.is_valid():
-            parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
+            try:
+                parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
+            except DatabaseError as dbe:
+                _, error_text = dbe.args
+                return JsonResponse({
+                    'error': error_text
+                }, status=400)
+
             return redirect(survey)
     virtual_option_types = models.VirtualOptionType.objects.all()
     question_data_types = models.QuestionDataType.objects.all()

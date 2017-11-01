@@ -345,7 +345,7 @@
             var txt = $li.attr("title");
             if (txt) {
                 var $tip = $('<div class="tip">'+txt+'</div>');
-                var $img = $('<img src="/media/pollster/css/im/information.png"/>').hover(
+                var $img = $('<img src="/static/pollster/css/im/information.png"/>').hover(
                     function(evt) { $tip.fadeIn(); },
                     function(evt) { $tip.fadeOut(); }
                 );
