@@ -162,7 +162,8 @@ TEMPLATES = [{
 
 CMS_TEMPLATES = (
     ('hrpt-responsive/twocol.html', '2 Columns'),
-    ('hrpt-responsive/singlecol.html', 'Single Column')
+    ('hrpt-responsive/singlecol.html', 'Single Column'),
+    ('hrpt-responsive/twocol_submenu.html', '2 Columns with submenu')
 )
 
 GEOMETRY_TABLES = (

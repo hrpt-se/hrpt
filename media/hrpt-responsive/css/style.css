@@ -56,3 +56,7 @@ header .columns {
     padding: 2px 7px;
     font: 15px/25px Tahoma, sans-serif;
 }
+
+.m-shortcuts li a:before {
+    background: url(/static/hrpt-responsive/img/chevron-right.svg) no-repeat;
+}
