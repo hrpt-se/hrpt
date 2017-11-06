@@ -485,7 +485,7 @@ msgid ""
 "The page you requested could not be found. We apologize for the "
 "inconvenience. Go to "
 msgstr ""
-"Sidan du ville se kunde inte visas. Vi ber om ursäkt för detta. Klicka "
+"Sidan du ville se kunde inte visas. Vi ber om ursäkt för detta. Gå "
 "vidare till "
 
 #: templates/404.html:8 templates/500.html:8 templates/registration/123.html:11
@@ -502,7 +502,7 @@ msgid ""
 "An unexpected system error has occured. We apologize for the inconvenience. "
 "Go to"
 msgstr ""
-"Ett oväntat systemfel har inträffat. Vi ber om ursäkt för detta. Klicka "
+"Ett oväntat systemfel har inträffat. Vi ber om ursäkt för detta. Gå "
 "vidare till "
 
 #: templates/accounts/my_settings.html:5
