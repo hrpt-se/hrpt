@@ -1,8 +1,0 @@
-{% load i18n %}
-
-<p class="title">{% trans "Archive" %}</p>
-<ul class="archive">
-    {% for month in months %}
-        <li><a href="{% url journal_archive_month month=month.date.month,year=month.date.year %}">{% filter capfirst %}{{ month.date|date:"F Y" }}{% endfilter %} ({{ month.count }})</a></li>
-    {% endfor %}
-</ul>

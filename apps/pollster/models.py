@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
-import warnings
+import datetime
+from math import pi, sin, log, exp, atan
+import os
+import shutil
+import re
 
 from django.contrib.gis.db.models import MultiPolygonField
-from django.db import models, connection, transaction, IntegrityError, DatabaseError
+from django.db import (
+    models, connection, transaction, IntegrityError, DatabaseError
+)
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
-from django.core.exceptions import ObjectDoesNotExist
-from cms.models import CMSPlugin
-from xml.etree import ElementTree
-from math import pi,cos,sin,log,exp,atan
-from . import dynamicmodels
-import os, re, shutil, warnings, datetime, csv
 from django.conf import settings
-from apps.survey.models import SurveyIdCode, SurveyUser
-import sys
 
-def specialPrint(msg):
-    print >> sys.stderr,msg
+from cms.models import CMSPlugin
+import dynamicmodels
+from apps.survey.models import SurveyIdCode, SurveyUser
 
 
 DEG_TO_RAD = pi/180
@@ -1280,6 +1279,7 @@ class GoogleProjection:
          g = (px[1] - e[1])/-self.Cc[zoom]
          h = RAD_TO_DEG * ( 2 * atan(exp(g)) - 0.5 * pi)
          return (f,h)
+
 
 class SurveyChartPlugin(CMSPlugin):
     chart = models.ForeignKey(Chart)

@@ -1,0 +1,10 @@
+{% load menu_tags %}
+{% if children %}
+    <ul class="menu">
+        {% for child in children %}
+            <li {% if child.selected or child.ancestor %} data-selected{% endif %}>
+                <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

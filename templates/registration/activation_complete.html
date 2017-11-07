@@ -1,13 +1,12 @@
-{% extends "base/blankbase.html" %}
+{% extends "hrpt-responsive/singlecol.html" %}
 {% load i18n %}
 
 {% block title %}
     {{ block.super }}: {% trans "Account Activation" %}
 {% endblock %}
 
-{% block content %}
+{% block col1 %}
     <h1>{% trans "Account Activation" %}</h1>
     <p>Du har nu bekräftad din e-postadress. Du kan nu logga in med ditt användarnamn och lösenord som du valt.</p>
-    <p>&nbsp;</p>
     <p><a href="/accounts/login/">Klicka här för att logga in.</a>.</p>
-{% endblock content %}
+{% endblock col1 %}

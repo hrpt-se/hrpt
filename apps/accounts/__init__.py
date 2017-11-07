@@ -1,3 +1,1 @@
-# Load signals that handle user activation.
-# Not ready yet.
-# import signals
+default_app_config = 'apps.accounts.app_config.AccountsConfig'

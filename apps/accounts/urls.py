@@ -1,18 +1,13 @@
-#Register signal handler for saving yearofbirth and idcode in account.user_profile
-import regbackend
-
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 
 from registration.backends.model_activation.views import RegistrationView
 
-from django.contrib.auth.forms import PasswordResetForm
 
-from .backend import TweakedDefaultActivationView
+from backend import TweakedDefaultActivationView
 from . import views
-from .forms import CaptchaUnicodeRegistrationForm
-from .forms import CaptchaPasswordResetForm
+from forms import CaptchaUnicodeRegistrationForm, CaptchaPasswordResetForm
 
 urlpatterns = [
     # From registration.backends.default.urls
@@ -87,8 +82,5 @@ urlpatterns = [
     url(r'^settings/password/$', views.my_settings, {'form': 'password'}),
     url(r'^settings/username/$', views.my_settings, {'form': 'username'}),
     url(r'^settings/deactivate/$', views.my_settings, {'form': 'deactivate'}),
-    url(r'^settings/$', views.my_settings, name='settings'),
-
-    # Additional URLs
-    url(r'^$', views.index),
+    url(r'^settings/$', views.my_settings, name='settings')
 ]

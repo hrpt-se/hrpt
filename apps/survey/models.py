@@ -57,14 +57,6 @@ class SurveyUser(models.Model):
         from . import views
         return '%s?gid=%s' % (reverse(views.people_edit), self.global_id)
 
-    def get_profile_url(self):
-        from . import views
-        return '%s?gid=%s' % (reverse(views.profile_index), self.global_id)
-
-    def get_survey_url(self):
-        from . import views
-        return '%s?gid=%s' % (reverse(views.index), self.global_id)
-
     def get_remove_url(self):
         from . import views
         return '%s?gid=%s' % (reverse(views.people_remove), self.global_id)
@@ -161,7 +153,7 @@ class LocalResponse(models.Model):
     answers = models.TextField()
 
 class Profile(models.Model):
-    user = models.ForeignKey(SurveyUser, unique=True)
+    user = models.OneToOneField(SurveyUser)
     created = models.DateTimeField(null=True, default=None)
     updated = models.DateTimeField(null=True, default=None)
     valid = models.BooleanField(default=False)
@@ -180,7 +172,7 @@ class Profile(models.Model):
         verbose_name_plural = 'User profile'
 
 class LastResponse(models.Model):
-    user = models.ForeignKey(SurveyUser, unique=True)
+    user = models.OneToOneField(SurveyUser)
     participation = models.ForeignKey(Participation, null=True, default=None)
     data = models.TextField(null=True, blank=True, default=None)
 
@@ -201,7 +193,7 @@ post_save.connect(add_empty_last_response, sender=SurveyUser)
 
 
 class LocalProfile(models.Model):
-    surveyuser = models.ForeignKey(SurveyUser, unique=True)
+    surveyuser = models.OneToOneField(SurveyUser)
     sq_num_season = models.SmallIntegerField(null=True)
     sq_num_total = models.SmallIntegerField(null=True)
     sq_date_first = models.DateField(null=True)

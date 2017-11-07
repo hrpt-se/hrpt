@@ -27,15 +27,15 @@ def unsubscribe(request):
         info, _ = UserReminderInfo.objects.get_or_create(user=request.user, defaults={'active': True, 'last_reminder': request.user.date_joined})
         info.active = False
         info.save()
-        return render_to_response('reminder/unsubscribe_successful.html', locals(), context_instance=RequestContext(request))
-    return render_to_response('reminder/unsubscribe.html', locals(), context_instance=RequestContext(request))
+        return render_to_response('unsubscribe_successful.html', locals(), context_instance=RequestContext(request))
+    return render_to_response('unsubscribe.html', locals(), context_instance=RequestContext(request))
 
 
 @staff_member_required
 def overview(request):
     dates_and_descriptions = get_upcoming_dates(datetime.now())
     upcoming = [{'date': d, 'description': description} for d, description in dates_and_descriptions]
-    return render(request, 'reminder/overview.html', locals())
+    return render(request, 'overview.html', locals())
 
 
 @staff_member_required
@@ -50,7 +50,7 @@ def manage(request, year, month, day, hour, minute):
         #eeerrr.... is_test_message is not a kwarg... is this just an error
         send_message_and_update_reminder_info(datetime.now(), request.user, reminder, None, is_test_message=True)
 
-    return render(request, 'reminder/manage.html', locals())
+    return render(request, 'manage.html', locals())
 
 
 @staff_member_required
@@ -90,7 +90,7 @@ def _user_reminder_translated(reminder_dict, user):
 @staff_member_required
 def list_newsletter_templates(request):
     newsletterTemplates = NewsLetterTemplate.objects.all()
-    return render(request, 'reminder/list_templates.html', locals())
+    return render(request, 'list_templates.html', locals())
 
 
 @staff_member_required
@@ -104,7 +104,7 @@ def show_newsletter_template(request, id):
     template = NewsLetterTemplate.objects.language("sv").get(id=id)
     text_base, _ = create_message(request.user, template, 'sv')
 
-    return render(request, 'reminder/show_template.html', {
+    return render(request, 'show_template.html', {
         'id': id,
         'surveys': surveys,
         'plain_text_message': strip_tags(text_base)
@@ -124,7 +124,7 @@ def show_newsletter_template_in_iframe(request,id):
     else:
         data['reminder_contents'] = reminder_contents_html
 
-    return render(request, 'reminder/show_newsletter_template_in_iframe.html', data)
+    return render(request, 'show_newsletter_template_in_iframe.html', data)
 
 
 @staff_member_required

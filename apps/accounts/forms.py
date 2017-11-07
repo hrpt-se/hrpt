@@ -1,24 +1,21 @@
+from datetime import datetime
+
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
-
-# Needed in pre 1.7 Django to create field specific errors durinng cross field
-# checks in clean(). Should be replaced with add_error if upgraded!
-from django.forms.utils import ErrorList
-
 from registration.forms import RegistrationForm
-from apps.reminder.models import UserReminderInfo
-from captcha.fields import CaptchaField
+from nocaptcha_recaptcha.fields import NoReCaptchaField
 
-from apps.accounts.models import user_profile
+from apps.reminder.models import UserReminderInfo
 from apps.survey.models import SurveyIdCode
 
-from datetime import datetime
 
 attrs_dict = {'class': 'required'}
+
 
 class UnicodeRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'(?u)^[\w.@+-]+$',
@@ -27,10 +24,12 @@ class UnicodeRegistrationForm(RegistrationForm):
                                 label=_("Username"),
                                 error_messages={'invalid': _("This value must contain only letters, numbers and underscores.")})
 
+
 class UnicodeUserChangeForm(UserChangeForm):
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'(?u)^[\w.@+-]+$',
         help_text = _("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
         error_messages = {'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")})
+
 
 class UnicodeUserCreationForm(UserCreationForm):
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'(?u)^[\w.@+-]+$',
@@ -105,6 +104,18 @@ class DeactivationForm(forms.ModelForm):
 
 
 class CaptchaUnicodeRegistrationForm(RegistrationForm):
+    class Meta(RegistrationForm.Meta):
+        fields = [
+            'username',
+            'email',
+            'email_confirm',
+            'password1',
+            'password2',
+            'idcode',
+            'year_of_birth',
+            'captcha'
+        ]
+
     username = forms.RegexField(
         regex=r'(?u)^[\w.@+-]+$',
         max_length=30,
@@ -121,6 +132,11 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
     # Override the email-field from the super-class to add a field label
     email = forms.EmailField(
         label=_(u'Email address'),
+        required=True
+    )
+
+    email_confirm = forms.EmailField(
+        label=_("Confirm email address"),
         required=True
     )
 
@@ -146,66 +162,47 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
     max_birthyear = datetime.today().year
     min_birthyear = max_birthyear - 86 # Should be max 85 years old, but if born 31 december it could be 86 years ago
 
-    yearofbirth = forms.IntegerField(
+    year_of_birth = forms.IntegerField(
         max_value=max_birthyear,
         min_value=min_birthyear,
         label=_("Year of birth"),
         help_text=_("Please enter the 4 digits of your year of birth. "
                     "For example: 1989"),
-        error_messages={'invalid': _("This value must contain 4 digits.")
+        error_messages={
+            'invalid': _("This value must contain 4 digits.")
         }
     )
 
-    captcha = CaptchaField(
-        label=_("Captcha"),
-        help_text=_("Please enter the characters shown in the image.")
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
     )
 
-    def clean(self):
-        super(CaptchaUnicodeRegistrationForm, self).clean() #Perform cleaning of the orginal form first!
+    def clean_email_confirm(self):
+        email = self.cleaned_data.get("email")
+        email_confirm = self.cleaned_data.get("email_confirm")
 
-        data = self.cleaned_data.get('idcode')
-        captcha = self.cleaned_data.get('captcha')
+        if email != email_confirm:
+            raise ValidationError(_("Email addresses not matching"))
 
-        #Only check if captcha correct
-        if captcha and data:
-            #Check if idcode actually exist in our table
-            not_exist = False
-            in_use = False
+    def clean_idcode(self):
+        idcode = self.cleaned_data['idcode']
 
-            try:
-                SurveyIdcode_id = SurveyIdCode.objects.get(idcode=data)
-            except:
-                not_exist = True
+        try:
+            idcode_instance = SurveyIdCode.objects.get(idcode=idcode)
+            if idcode_instance.surveyuser_global_id is not None:
+                raise ValidationError(
+                    _("This code has already been used. Is the code correct? "
+                      "Or did you already register?")
+                )
+        except SurveyIdCode.DoesNotExist:
+            raise ValidationError(
+                _("Check the code in you letter. This code is incorrect.")
+            )
 
-            #Check if the code has alreay been used to register a user
-            #This is a bit tricky as the tegistration only is done after using the confirmation link
-            #that the user can only click after this step. So there is a possibility that two persons
-            #register with the same idcode anyhow.
-            try:
-                SurveyIdcode_id = SurveyIdCode.objects.get(idcode=data)
-                if SurveyIdcode_id.surveyuser_global_id:
-                    in_use = True
-            except:
-                not_exist = True
-
-            # Needed in pre 1.7 Django to create field specific errors durinng cross field
-            # checks in clean(). Should be replaced with add_error if upgraded!
-
-            if not_exist:
-                errors = self._errors.setdefault("idcode", ErrorList())
-                errors.append(_("Check the code in you letter. This code is incorrect."))
-            if in_use:
-                errors = self._errors.setdefault("idcode", ErrorList())
-                errors.append(_("This code has already been used. Is the code correct? Or did you already register?"))
-            # if not_exist:
-            #     self.add_error("idcode", "Check the code in you letter. This code is incorrect")
-            # if in_use:
-            #     self.add_error("idcode", "This code has already been used. Is the code correct? Or did you already register?")
-        return self.cleaned_data
-
+        return idcode
 
 
 class CaptchaPasswordResetForm(PasswordResetForm):
-    captcha = CaptchaField(label=_("Captcha"),
-                           help_text=_("Please enter the characters shown in the image."))
+    captcha = NoReCaptchaField(
+        label=_("Captcha")
+    )

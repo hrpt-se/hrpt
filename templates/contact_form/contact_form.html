@@ -1,18 +1,13 @@
-{% extends "contact_form/base.html" %}
+{% extends "hrpt-responsive/singlecol.html" %}
 {% load cms_tags i18n static %}
 
 {% block add_js %}
-<script type="text/javascript" src="{% static "js/jquery" %}-3.2.1.min.js"></script>
-<script type="text/javascript" src="{% static "custom/js/captcha" %}-refresh.js"></script>
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock add_js %}
 
 {% block col1 %}
-
-{% placeholder "Main content" %}
-
-<form method="post" action="" class="contact_form">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" id="commentsubmit" value="{% trans "Send" %}" />
-</form>
-
+    <form method="post" action="" class="contact_form">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" id="commentsubmit" value="{% trans "Send" %}" />
+    </form>
 {% endblock col1 %}

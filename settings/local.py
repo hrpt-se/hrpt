@@ -6,3 +6,11 @@ DEBUG = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INTERNAL_IPS = PrivateIPs()
+
+# This setting is populated with empty values unless it already has a value to
+# get the dev-environment up and running
+try:
+    NORECAPTCHA_SITE_KEY
+except NameError:
+    NORECAPTCHA_SITE_KEY = ''
+    NORECAPTCHA_SECRET_KEY = ''
