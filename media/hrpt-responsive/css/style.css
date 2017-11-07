@@ -26,6 +26,11 @@ header .columns {
     background: #2d5492 url(/static/hrpt-responsive/img/burger.png) no-repeat 50% 50%;
 }
 
+.errorlist {
+    color: red;
+    font-weight: bold;
+}
+
 .top-bar {
     background-color: #fff;
     padding: 0;
