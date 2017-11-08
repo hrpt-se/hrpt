@@ -1,4 +1,4 @@
-{% load cms_tags menu_tags sekizai_tags i18n static %}
+{% load cms_tags menu_tags sekizai_tags i18n static analytics %}
 
 <!DOCTYPE html>
 <html lang="sv">
@@ -16,6 +16,7 @@
     <script type="text/javascript" src="{% static '/hrpt-responsive/js/jquery-3.2.1.min.js' %}"></script>
     <script type="text/javascript" src="{%  static '/hrpt-responsive/js/foundation.min.js' %}"></script>
     {% block add_js %}{% endblock add_js %}
+    {% google_analytics %}
 </head>
 <body>
     {% cms_toolbar %}
@@ -57,7 +58,7 @@
         </div>
         <div class="nav-main show-for-medium">
             <div class="nav-main-inner">
-                <div class="" id="example-menu">
+                <div class="row column">
                     {% show_menu 0 2 100 100 "hrpt-responsive/main_menu.html" %}
                 </div>
             </div>
@@ -72,7 +73,7 @@
                 <p>Hälsorapport är en del av Influenzanet, en ett europeiskt system för webbaserad syndromövervakning</p>
                 <h2>Kontakt</h2>
 
-                <p><a href="/contact">Kontakta arbetsgruppen för Hälsorapport</a></p>
+                <p><a href="/sv/contact">Kontakta arbetsgruppen för Hälsorapport</a></p>
                 <p><a href="https://www.folkhalsomyndigheten.se">
                     www.folkhalsomyndigheten.se
                 </a></p>

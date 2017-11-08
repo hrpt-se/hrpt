@@ -65,3 +65,7 @@ header .columns {
 .m-shortcuts li a:before {
     background: url(/static/hrpt-responsive/img/chevron-right.svg) no-repeat;
 }
+
+.nav-main-inner > div {
+    margin-bottom: 0;
+}
