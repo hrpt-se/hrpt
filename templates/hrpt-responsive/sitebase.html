@@ -91,7 +91,7 @@
             });
 
             $('#accept-cookies-button').click(function() {
-                document.cookie = 'accept-cookies=true; Path=/';
+                document.cookie = 'accept-cookies=true; path=/; max-age=315360000';
                 $('.cookie-info').remove();
             });
         })
