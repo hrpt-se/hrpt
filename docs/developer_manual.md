@@ -206,3 +206,71 @@ is running. This is done similarly to the way that questions loaded from a
 stored survey are rendered but from a different file. All question types share
 a template located in `/apps/survey/templates/questions_run.html`. Add a new if
 statement for the new question type and add the appropriate markup.
+
+Upgrading a deployed system
+---------------------------
+Since the system is built on using the Django framework the upgrade procedure 
+follows the general upgrade producedure. Outlined below are most of the steps
+that could be necessary to run.
+
+The system should be located on `/var/www/hrpt/` on all servers. Begin by 
+logging in to the server and go to that folder.
+
+### Stop Apache
+Before maintenance activities begin, its recommended to stop Apache to make 
+sure that there are no active users on the site.
+```bash
+sudo service apache2 stop 
+```
+
+### Upgrade Ubuntu
+It's recommended to keep Ubuntu upgraded to avoid exploits in the operating 
+system.
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
+### Download the most recent version of the current branch
+Before this command is executed, find out which user owns the files then 
+perform the git pull as that user (replace <owner> with the username of the 
+owner).
+```bash
+sudo -u <owner> git pull
+```
+
+### Update Python Dependencies
+This step is only necessary to perform in case there have been changes to the
+dependencies of the system, i.e. the file `requirements.txt` has changed.
+```bash
+sudo pip install -r requirements.txt
+```
+
+### Update Translations
+This step is only required if there has been changes to the translations file
+(`django.po`).
+```bash
+sudo -u <owner> python manage.py compilemessages
+```
+
+### Update Static Content
+This step is required if static content (javascript, image, css etc.) is 
+updated. It moves the content from the static folders in the system to a 
+dedicated folder where it is hosted by the Apache server. Make sure to identify
+which users that owns the static content (located in /var/lib/hrpt) and run the 
+command as that user.
+```bash
+sudo -E -u <owner> python manage.py collectstatic
+```
+
+### Update Database Schemas
+This step is required if changes has been made to the models which are 
+reflected in unapplied migration files.
+```bash
+python manage.py migrate
+```
+
+### Restart Apache
+```bash
+sudo service apache2 start
+```
