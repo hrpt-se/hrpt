@@ -274,3 +274,17 @@ python manage.py migrate
 ```bash
 sudo service apache2 start
 ```
+
+Environments
+------------
+### Production environment
+  - Server instance: halsorapp-srv2.fohm.local
+  - Repo owner: root
+  - Static content owner: www-data
+  - Database server: mysql.fohm.local
+  
+### Testing environment
+  - URL: halsorapportdev-srv3.fohmdev.local
+  - Repo owner: hrpt
+  - Static content owner: www-data
+  - Database server: mariadb-srv.fohmdev.local
