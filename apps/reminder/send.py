@@ -29,10 +29,12 @@ def create_message(user, message, language):
 
     survey_list_url = 'http://%s%s'\
                       % (Site.objects.get_current(), "/sv/valkommen/")
+    profile_url = 'http://%s%s' % (Site.objects.get_current(), "/accounts/settings/")
 
     context_dict = {
         'url': get_self_authenticating_url(user, survey_list_url),
-        'unsubscribe_url': get_self_authenticating_url(user, reverse('unsubscribe')),
+        'profile_url' : get_self_authenticating_url(user, profile_url),
+        # 'unsubscribe_url': get_self_authenticating_url(user, reverse('unsubscribe')),
         'first_name': user.first_name,
         'last_name': user.last_name,
         'username': user.username,
