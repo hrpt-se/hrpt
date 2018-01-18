@@ -130,12 +130,15 @@ class Survey(models.Model):
         open_surveys = []
         replied_surveys = []
         locked_surveys = []
+        locked_terms_surveys = []
 
         # If there is an intake survey and the user has not replied to it
         # then all other open surveys should not be acessible to the user
         all_locked_by_intake = False
+        all_locked_by_terms = False
 
         intake_survey_temp = None # just a variable to hold the intake survey while the look moves on
+        terms_survey_temp = None # just a variable to hold the terms of reference survey while the look moves on
 
         for survey in published_surveys:
             results_table_name = "pollster_results_" + survey.shortname
@@ -148,18 +151,25 @@ class Survey(models.Model):
                 all_locked_by_intake = True
                 intake_survey_temp = survey
 
+            if num_rows == 0 and survey.shortname == 'terms':
+                all_locked_by_terms = True
+                terms_survey_temp = survey
+
             #user already answered this survey
             if num_rows > 0:
                 replied_surveys.append(survey)
             else:
                 open_surveys.append(survey)
 
+        if all_locked_by_terms:
+            locked_terms_surveys = [ s for s in open_surveys if not s.shortname == 'terms']
+            open_surveys = [terms_survey_temp]
+        else:
+            if all_locked_by_intake:
+                locked_surveys = [ s for s in open_surveys if not s.shortname == 'intake']
+                open_surveys = [intake_survey_temp]
 
-        if all_locked_by_intake:
-            locked_surveys = [ s for s in open_surveys if not s.shortname == 'intake']
-            open_surveys = [intake_survey_temp]
-
-        return (replied_surveys, open_surveys, locked_surveys)
+        return (replied_surveys, open_surveys, locked_surveys, locked_terms_surveys)
 
 
     #TODO: remove this method. just call whatever you want with django api

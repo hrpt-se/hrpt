@@ -36,7 +36,8 @@ class ListUserSurveysPlugin(CMSPluginBase):
         # this is so we make sure that the global_id belongs to the authenticated user
         survey_user = SurveyUser.objects.get(global_id=global_id, user=request.user)
         if survey_user:
-            replied_surveys, open_surveys, locked_surveys = pollster_survey_model.get_user_open_surveys(global_id)
+            replied_surveys, open_surveys, locked_surveys, locked_terms_surveys = pollster_survey_model.\
+                get_user_open_surveys(global_id)
 
         import sys
         #print >> sys.stderr,profile
@@ -49,7 +50,8 @@ class ListUserSurveysPlugin(CMSPluginBase):
             'placeholder': placeholder,
             'open_surveys': open_surveys,
             'replied_surveys': replied_surveys,
-            'locked_surveys' : locked_surveys
+            'locked_surveys' : locked_surveys,
+            'locked_terms_surveys' : locked_terms_surveys
         })
         return context
 
