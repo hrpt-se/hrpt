@@ -850,8 +850,8 @@ msgid ""
 "instructions for setting a new one."
 msgstr ""
 "Glömt ditt lösenord? Fyll i din e-postadress nedan så skickar vi en e-post "
-"med instruktioner för hur du får ett nytt lösenord. Avsluta med att skriva "
-"in kontrollordet."
+"med instruktioner för hur du får ett nytt lösenord. Klicka i Robotkontrollen "
+"och klicka sedan på 'Jag vill återställa mitt lösenord'."
 
 #: templates/registration/password_reset_form.html:21
 msgid "Reset my password"
