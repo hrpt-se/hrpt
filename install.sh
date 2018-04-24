@@ -74,6 +74,7 @@ EOF
 }
 
 function install_python_dependencies {
+    pip install --upgrade pip
     pip install -r /var/www/hrpt/requirements.txt
 }
 
@@ -84,6 +85,7 @@ function setup_environment_variables {
     echo "export DB_PASSWORD=$DB_PASSWORD" >> /etc/profile.d/hrpt.sh
     echo "export DB_HOST=$DB_HOST" >> /etc/profile.d/hrpt.sh
     echo "export WEB_HOST=$WEB_HOST" >> /etc/profile.d/hrpt.sh
+    echo "export PYTHONPATH=/usr/bin" >> /etc/profile.d/hrpt.sh
 
     source /etc/profile.d/hrpt.sh
 }
