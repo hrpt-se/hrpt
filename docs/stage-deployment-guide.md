@@ -1,4 +1,4 @@
-# HRPT Stage Deployment Guide
+l# HRPT Stage Deployment Guide
 
 This guide outlines the process of setting up the HRPT system on a stage server. 
 There are two major parts of the process: Setting up the Django based system 
@@ -47,7 +47,7 @@ First log in to the existing system and use Django's `dumpdata` management
 command to export all relevant data in json format. See example below:
 
 ```bash
-$ python manage.py dumpdata --natural \
+$ python manage.py dumpdata --natural-foreign \
                             --exclude auth.permission \
                             --exclude contenttypes \
                             --exclude survey.profile \
