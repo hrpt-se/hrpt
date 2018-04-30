@@ -18,6 +18,7 @@ class GoogleAnalyticsNode(Node):
         return """<script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', '%s']);
+  _gaq.push(['_gat._anonymizeIp']);
   _gaq.push(['_setDomainName', 'none']);
   _gaq.push(['_setAllowLinker', true]);
   _gaq.push(['_trackPageview']);

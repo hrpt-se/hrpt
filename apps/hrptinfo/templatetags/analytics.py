@@ -14,7 +14,7 @@ def google_analytics():
             '   window.dataLayer = window.dataLayer || [];'
             '   function gtag(){dataLayer.push(arguments)};'
             '   gtag(\'js\', new Date());'
-            '   gtag(\'config\', \'%s\');'
+            '   gtag(\'config\', \'%s\', { \'anonymize_ip\': true });'
             '</script>' % (settings.GA_TRACKING_ID, settings.GA_TRACKING_ID)
         )
     except AttributeError:
