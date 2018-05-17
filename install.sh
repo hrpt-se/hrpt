@@ -74,6 +74,7 @@ EOF
 }
 
 function install_python_dependencies {
+    pip install --upgrade pip
     pip install -r /var/www/hrpt/requirements.txt
 }
 

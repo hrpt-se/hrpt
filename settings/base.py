@@ -200,7 +200,6 @@ INSTALLED_APPS = (
     'treebeard',
     'menus',
     'apps.pollster',
-    'nocaptcha_recaptcha',
     'pytils',
     'sorl.thumbnail',
     'pure_pagination',
