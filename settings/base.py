@@ -200,6 +200,7 @@ INSTALLED_APPS = (
     'treebeard',
     'menus',
     'apps.pollster',
+    'captcha',
     'pytils',
     'sorl.thumbnail',
     'pure_pagination',
@@ -263,6 +264,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 LOGIN_REDIRECT_URL = '/sv/valkommen/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
+
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 # Import secret values, proceed if no secrets file exists.
 try:

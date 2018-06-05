@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 from registration.forms import RegistrationForm
-# from nocaptcha_recaptcha.fields import NoReCaptchaField
+from captcha.fields import CaptchaField
 
 from apps.reminder.models import UserReminderInfo
 from apps.survey.models import SurveyIdCode
@@ -112,8 +112,8 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
             'password1',
             'password2',
             'idcode',
-            'year_of_birth' # ,
-            # 'captcha'
+            'year_of_birth',
+            'captcha'
         ]
 
     username = forms.RegexField(
@@ -173,9 +173,9 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
         }
     )
 
-    # captcha = NoReCaptchaField(
-    #     label=_("Captcha")
-    # )
+    captcha = CaptchaField(
+        label=_("Captcha")
+    )
 
     def clean_email_confirm(self):
         email = self.cleaned_data.get("email")

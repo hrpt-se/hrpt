@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from contact_form.forms import ContactForm as DefaultContactForm
-# from nocaptcha_recaptcha.fields import NoReCaptchaField
+from captcha.fields import CaptchaField
 
 from apps.partnersites.models import SiteSettings
 
@@ -18,7 +18,6 @@ class ContactForm(DefaultContactForm):
 
 
 class CaptchaContactForm(ContactForm):
-    pass
-    # captcha = NoReCaptchaField(
-    #     label=_("Captcha")
-    # )
+    captcha = CaptchaField(
+         label=_("Captcha")
+    )

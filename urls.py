@@ -37,7 +37,8 @@ urlpatterns = [
             template_name='contact_form/contact_form_sent.html'),
         name='contact_form_sent'
     ),
-    url(r'^colors.css$', colors_css)
+    url(r'^colors.css$', colors_css),
+    url(r'^captcha/', include('captcha.urls'))
 ]
 
 # Catchall
