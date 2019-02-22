@@ -41,7 +41,8 @@ class Command(BaseCommand):
 
         while True:
             self.timestamped_print(str(QueuedEmail.objects.count()) + " Emails in queue")
-            a_bunch_of_queued_email = QueuedEmail.objects.order_by("id")[:30] #EvS 2016/01/27 changed limit to 30 per interval
+            a_bunch_of_queued_email = QueuedEmail.objects.order_by("id")[:20]
+            # EvS 2019/02/22 changed limit from 30 to 20 per interval
             for queued_email in a_bunch_of_queued_email:
                 try:
                     nl_instance = queued_email.manual_newsletter
