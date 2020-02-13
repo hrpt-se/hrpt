@@ -27,7 +27,9 @@ Quit the server with CONTROL-C.
 
 ### Mail sending daemon
 The system contains a daemon responsible for sending mails which are queued in the database. The daemon is installed and started by the installation script which is executed by Vagrant. The daemon is controlled by Systemd and can be controlled 
-by running `systemctl <command> hrpt-mail` where `<command>` is either of `start` `stop`or `restart`.
+by running `systemctl <command> hrpt-mail` where `<command>` is either of `status` `start` `stop`or `restart`.
+Check the log files with `sudo journalctl -u hrpt-mail`
+
 
 ### SSL certificate workaround
 If you are trying to run `vagrant up` in a network that intercepts SSL traffic, you will likely face an error message:
@@ -54,6 +56,9 @@ Bringing machine 'default' up with 'virtualbox' provider...
 ==> default: Importing base box 'ubuntu/trusty64'...
 [...]
 ```
+Use the steps in this article to add the root cert to the CA store used by pip
+https://stackoverflow.com/questions/39356413/how-to-add-a-custom-ca-root-certificate-to-the-ca-store-used-by-pip-in-windows
+
 
 ## Settings
 The site uses different settings depending on the environment and all setting files are stored in the settings folder.

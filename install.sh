@@ -43,9 +43,14 @@ function install_apt_dependencies {
                        libjpeg8-dev \
                        libfreetype6 \
                        libfreetype6-dev \
-                       libmysqlclient-dev \
                        gettext \
-                       zlib1g-dev
+                       zlib1g-dev \
+                       libssl-dev \
+                       python-mysqldb \
+                       gdal-bin \
+                       python-gdal
+
+                       # libmysqlclient-dev \
 
     apt-get clean
 }
@@ -74,6 +79,8 @@ EOF
 }
 
 function install_python_dependencies {
+    export LDFLAGS="-L/usr/local/opt/openssl/lib $LDFLAGS"
+    export CPPFLAGS="-I/usr/local/opt/openssl/include $CPPFLAGS"
     pip install -r /var/www/hrpt/requirements.txt
 }
 
