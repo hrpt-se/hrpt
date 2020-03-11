@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
     }
     config.vm.network :forwarded_port, guest: 8000, host: 8000
     config.vm.synced_folder ".", "/var/www/hrpt"
+    config.ssh.guest_port = 2222
 
     # In case the mount has dragged, restart the mail sending daemon to make
     # sure that the daemon can start properly
