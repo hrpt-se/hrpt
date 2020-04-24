@@ -48,10 +48,10 @@ def create_message(user, message, language):
     context_dict['MEDIA_URL'] = '%s%s' % (SITE_URL, settings.MEDIA_URL)
     context_dict['message'] = message
 
-    context = Context(context_dict)
+    # context = Context(context_dict)
     templ = loader.get_template('message.html')
 
-    return inner, templ.render(context)
+    return inner, templ.render(context_dict)
 
 
 def send_reminders(fake=False):

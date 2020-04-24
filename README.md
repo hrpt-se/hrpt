@@ -78,3 +78,13 @@ and store them in `/etc/profile.d/hrpt.sh`, making sure that they are populated 
 ### Secrets
 Any settings that should be kept out of git (for example the secet key or API keys) can be stored in a file named `secrets.py` 
 in the settings directory. There is a `secrets.py.template` file that can be used as a template, containing more info.
+
+### Upgrade to Django 1.11 and Django CMS 3.5
+`cd /var/www/hrpt`
+`pip install -upgrade pip`
+`sudo pip install -r requirements.txt `
+Todo: Check if sudo is necessary
+Perform migrations:
+
+`python manage.py migrate  # to ensure that your database is up-to-date with migrations
+python manage.py cms fix-tree`
