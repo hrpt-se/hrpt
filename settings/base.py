@@ -265,6 +265,10 @@ LOGIN_REDIRECT_URL = '/sv/valkommen/'
 
 MULTI_PROFILE_ALLOWED = 'false' #pekka
 
+# Allow iframes in the ckeditor
+TEXT_ADDITIONAL_TAGS = ('iframe',)
+TEXT_ADDITIONAL_ATTRIBUTES = ('allow', 'allowfullscreen', 'frameborder')
+
 # Import secret values, proceed if no secrets file exists.
 try:
     from secrets import *
