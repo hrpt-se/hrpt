@@ -94,7 +94,7 @@ def _get_fieldval_survery(result_row, field_name):
 
 
 class Survey(models.Model):
-    parent = models.ForeignKey('self', db_index=True, blank=True, null=True)
+    parent = models.ForeignKey('self', db_index=True, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     shortname = models.SlugField(max_length=255, default='')
     version = models.SlugField(max_length=255, blank=True, default='')
@@ -389,22 +389,22 @@ class QuestionDataType(models.Model):
 
 class VirtualOptionType(models.Model):
     title = models.CharField(max_length=255, blank=True, default='')
-    question_data_type = models.ForeignKey(QuestionDataType)
+    question_data_type = models.ForeignKey(QuestionDataType, on_delete=models.CASCADE)
     js_class = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
         return "VirtualOptionType #%d %s for %s" % (self.id, self.title, self.question_data_type.title)
 
 class Question(models.Model):
-    survey = models.ForeignKey(Survey, db_index=True)
+    survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
     starts_hidden = models.BooleanField(default=False)
     is_mandatory = models.BooleanField(default=False)
     ordinal = models.IntegerField()
     title = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
     type = models.CharField(max_length=255, choices=QUESTION_TYPE_CHOICES)
-    data_type = models.ForeignKey(QuestionDataType)
-    open_option_data_type = models.ForeignKey(QuestionDataType, related_name="questions_with_open_option", null=True, blank=True)
+    data_type = models.ForeignKey(QuestionDataType, on_delete=models.CASCADE)
+    open_option_data_type = models.ForeignKey(QuestionDataType, related_name="questions_with_open_option", null=True, blank=True, on_delete=models.CASCADE)
     data_name = models.CharField(max_length=255)
     visual = models.CharField(max_length=255, blank=True, default='')
     tags = models.CharField(max_length=255, blank=True, default='')
@@ -608,7 +608,7 @@ class Question(models.Model):
 
 
 class QuestionRow(models.Model):
-    question = models.ForeignKey(Question, related_name="row_set", db_index=True)
+    question = models.ForeignKey(Question, related_name="row_set", db_index=True, on_delete=models.CASCADE)
     ordinal = models.IntegerField()
     title = models.CharField(max_length=255, blank=True, default='')
 
@@ -639,7 +639,7 @@ class QuestionRow(models.Model):
             self.translation_row = _get_or_default(r, default)
 
 class QuestionColumn(models.Model):
-    question = models.ForeignKey(Question, related_name="column_set", db_index=True)
+    question = models.ForeignKey(Question, related_name="column_set", db_index=True, on_delete=models.CASCADE)
     ordinal = models.IntegerField()
     title = models.CharField(max_length=255, blank=True, default='')
 
@@ -693,10 +693,10 @@ class QuestionColumn(models.Model):
         return self.question.data_name_for_row_column(self.row, self)
 
 class Option(models.Model):
-    question = models.ForeignKey(Question, db_index=True)
-    clone = models.ForeignKey('self', db_index=True, blank=True, null=True)
-    row = models.ForeignKey(QuestionRow, blank=True, null=True)
-    column = models.ForeignKey(QuestionColumn, blank=True, null=True)
+    question = models.ForeignKey(Question, db_index=True, on_delete=models.CASCADE)
+    clone = models.ForeignKey('self', db_index=True, blank=True, null=True, on_delete=models.CASCADE)
+    row = models.ForeignKey(QuestionRow, blank=True, null=True, on_delete=models.CASCADE)
+    column = models.ForeignKey(QuestionColumn, blank=True, null=True, on_delete=models.CASCADE)
     is_virtual = models.BooleanField(default=False)
     is_open = models.BooleanField(default=False)
     starts_hidden = models.BooleanField(default=False)
@@ -706,7 +706,7 @@ class Option(models.Model):
     value = models.CharField(max_length=255, default='')
     description = models.TextField(blank=True, default='')
 
-    virtual_type = models.ForeignKey(VirtualOptionType, blank=True, null=True)
+    virtual_type = models.ForeignKey(VirtualOptionType, blank=True, null=True, on_delete=models.CASCADE)
     virtual_inf = models.CharField(max_length=255, blank=True, default='')
     virtual_sup = models.CharField(max_length=255, blank=True, default='')
     virtual_regex = models.CharField(max_length=255, blank=True, default='')
@@ -810,12 +810,12 @@ class Option(models.Model):
         return errors
 
 class Rule(models.Model):
-    rule_type = models.ForeignKey(RuleType)
+    rule_type = models.ForeignKey(RuleType, on_delete=models.CASCADE)
     is_sufficient = models.BooleanField(default=True)
-    subject_question = models.ForeignKey(Question, related_name='subject_of_rules', db_index=True)
-    subject_options = models.ManyToManyField(Option, related_name='subject_of_rules', limit_choices_to = {'question': subject_question})
-    object_question = models.ForeignKey(Question, related_name='object_of_rules', blank=True, null=True)
-    object_options = models.ManyToManyField(Option, related_name='object_of_rules', limit_choices_to = {'question': object_question})
+    subject_question = models.ForeignKey(Question, related_name='subject_of_rules', db_index=True, on_delete=models.CASCADE)
+    subject_options = models.ManyToManyField(Option, related_name='subject_of_rules', limit_choices_to={'question': subject_question})
+    object_question = models.ForeignKey(Question, related_name='object_of_rules', blank=True, null=True, on_delete=models.CASCADE)
+    object_options = models.ManyToManyField(Option, related_name='object_of_rules', limit_choices_to={'question': object_question})
 
     def js_class(self):
         return self.rule_type.js_class
@@ -826,7 +826,7 @@ class Rule(models.Model):
 # I18n models
 
 class TranslationSurvey(models.Model):
-    survey = models.ForeignKey(Survey, db_index=True)
+    survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
     language = models.CharField(max_length=3, db_index=True)
     title = models.CharField(max_length=255, blank=True, default='')
     status = models.CharField(max_length=255, default='DRAFT', choices=SURVEY_TRANSLATION_STATUS_CHOICES)
@@ -851,8 +851,8 @@ class TranslationSurvey(models.Model):
         return TranslationSurveyForm(data, instance=self, prefix="survey")
 
 class TranslationQuestion(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    question = models.ForeignKey(Question, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
     error_message = models.TextField(blank=True, default='')
@@ -872,8 +872,8 @@ class TranslationQuestion(models.Model):
         return TranslationQuestionForm(data, instance=self, prefix="question_%s"%(self.id,))
 
 class TranslationQuestionRow(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    row = models.ForeignKey(QuestionRow, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    row = models.ForeignKey(QuestionRow, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
 
     class Meta:
@@ -891,8 +891,8 @@ class TranslationQuestionRow(models.Model):
         return TranslationRowForm(data, instance=self, prefix="row_%s"%(self.id,))
 
 class TranslationQuestionColumn(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    column = models.ForeignKey(QuestionColumn, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    column = models.ForeignKey(QuestionColumn, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
 
     class Meta:
@@ -910,8 +910,8 @@ class TranslationQuestionColumn(models.Model):
         return TranslationColumnForm(data, instance=self, prefix="column_%s"%(self.id,))
 
 class TranslationOption(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    option = models.ForeignKey(Option, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    option = models.ForeignKey(Option, db_index=True, on_delete=models.CASCADE)
     text = models.CharField(max_length=4095, blank=True, default='')
     description = models.TextField(blank=True, default='')
 
@@ -937,8 +937,8 @@ class ChartType(models.Model):
         return self.description or self.shortname
 
 class Chart(models.Model):
-    survey = models.ForeignKey(Survey, db_index=True)
-    type = models.ForeignKey(ChartType, db_index=True)
+    survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
+    type = models.ForeignKey(ChartType, db_index=True, on_delete=models.CASCADE)
     shortname = models.SlugField(max_length=255)
     chartwrapper = models.TextField(blank=True, default='')
     sqlsource = models.TextField(blank=True, default='', verbose_name="SQL Source Query")
@@ -1292,7 +1292,7 @@ class GoogleProjection:
 
 
 class SurveyChartPlugin(CMSPlugin):
-    chart = models.ForeignKey(Chart)
+    chart = models.ForeignKey(Chart, on_delete=models.CASCADE)
 
 
 class ZipCodes(models.Model):

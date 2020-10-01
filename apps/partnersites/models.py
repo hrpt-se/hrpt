@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 from django.conf import settings
 
 class SiteSettings(models.Model):
-    site = models.OneToOneField(Site)
+    site = models.OneToOneField(Site, on_delete=models.CASCADE)
     logo = models.ImageField(_("Logo"), help_text=_("Preferred height: 70px, maximum width: 756px"), upload_to='uploads', blank=True, null=True)
     light_color = models.CharField(max_length=6, default="ce2626")
     footer = models.TextField(_("Footer"), help_text=_("The footer will be displayed at the bottom of each page"), blank=True, null=True)

@@ -5,7 +5,7 @@ from traceback import format_exc
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.template import Context, loader, Template
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.contrib.sites.models import Site

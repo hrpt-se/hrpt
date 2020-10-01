@@ -4,7 +4,7 @@ import datetime
 import json
 import re
 
-from django.core.urlresolvers import reverse, RegexURLResolver
+from django.urls import reverse, RegexURLResolver
 from django.db import DatabaseError
 from django.http import (
     HttpResponse, HttpResponseRedirect, Http404, JsonResponse
