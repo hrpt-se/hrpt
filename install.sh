@@ -50,8 +50,6 @@ function install_apt_dependencies {
                        gdal-bin \
                        python-gdal
 
-                       # libmysqlclient-dev \
-
     apt-get clean
 }
 
@@ -69,9 +67,14 @@ function setup_mariadb {
     mysql_install_db
     service mysql start
 
+    # move to it's own command and
+    # remove IF EXISTS since it is not supported for MySQL<5.7
+    mysql -uroot -proot <<EOF
+      DROP USER $DB_USERNAME;
+EOF
+
     mysql -uroot -proot <<EOF
       DROP DATABASE IF EXISTS $DB_NAME;
-      DROP USER IF EXISTS $DB_USERNAME;
       CREATE USER $DB_USERNAME IDENTIFIED BY '$DB_PASSWORD';
       CREATE DATABASE $DB_NAME CHARACTER SET = 'utf8' COLLATE = 'utf8_bin';
       GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USERNAME'@'%';
@@ -126,7 +129,7 @@ function setup_django_scaffolding {
 
 function install_fixtures {
     python manage.py loaddata db/fixtures.json
-    python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
+    python manage.py shell -c "from apps.pollster.models import Survey;Survey.objects.get(shortname='intake').unpublish(); Survey.objects.get(shortname='intake').publish()"
 }
 
 function start_mail_service {
