@@ -4,6 +4,7 @@ from math import pi, sin, log, exp, atan
 import os
 import shutil
 import re
+import json
 
 from django.contrib.gis.db.models import MultiPolygonField
 from django.db import (
@@ -15,7 +16,7 @@ from django.core.validators import RegexValidator
 from django.conf import settings
 
 from cms.models import CMSPlugin
-import dynamicmodels
+from . import dynamicmodels
 from apps.survey.models import SurveyIdCode, SurveyUser
 
 
@@ -87,10 +88,9 @@ def _get_fieldval_survery(result_row, field_name):
     val = getattr(result_row, field_name)
     if callable(val):
         val = val()
-    if type(val) is unicode:
+    if type(val) is str:
         val = val.encode('utf-8')
     return val
-
 
 
 class Survey(models.Model):
@@ -368,7 +368,7 @@ class QuestionDataType(models.Model):
     def as_field_type(self, verbose_name=None, regex=None):
         #really? just copy pasting code from the web without knowing what it does????
         import django.db.models
-        import db.models
+        import apps.pollster.db.models
         field = eval(self.db_type)
         field.verbose_name = verbose_name
         if regex:
@@ -1010,9 +1010,6 @@ class Chart(models.Model):
 
         return json.dumps(data)
 
-
-
-
     def get_map_click(self, lat, lng):
         result = {}
         skip_cols = ("ogc_fid", "color", "geometry")
@@ -1021,7 +1018,7 @@ class Chart(models.Model):
             for i in range(len(data[0])):
                 if description[i][0] not in skip_cols:
                     result[description[i][0]] = str(data[0][i])
-        return json.dumps(resu1lt)
+        return json.dumps(result)
 
     def get_map_tile(self, user_id, global_id, z, x, y):
         filename = self.get_map_tile_filename(z, x, y)
@@ -1208,7 +1205,7 @@ class Chart(models.Model):
             cursor = connection.cursor()
             cursor.execute(query, params)
             return (cursor.description, cursor.fetchall())
-        except DatabaseError, e:
+        except DatabaseError as e:
             return ((('Error',),), ((str(e),),))
 
     def load_colors(self, user_id, global_id):
@@ -1223,7 +1220,7 @@ class Chart(models.Model):
             cursor = connection.cursor()
             cursor.execute(query, params)
             return [x[0] for x in cursor.fetchall()]
-        except DatabaseError, e:
+        except DatabaseError as e:
             # If the SQL query is wrong we just return 'red'. We don't try to pop
             # up a warning because this probably is an async Javascript call: the
             # query error should be shown by the map editor.
@@ -1236,7 +1233,7 @@ class Chart(models.Model):
             cursor = connection.cursor()
             cursor.execute(query, (lng, lat))
             return (cursor.description, cursor.fetchall())
-        except DatabaseError, e:
+        except DatabaseError as e:
             return (None, [])
 
     def load_zip_coords(self, zip_code_key, zip_code_country=None):
@@ -1258,7 +1255,7 @@ class Chart(models.Model):
                 return {"lat": data[0][0], "lng": data[0][1]}
             else:
                 return {}
-        except DatabaseError, e:
+        except DatabaseError as e:
             return {}
 
 class GoogleProjection:

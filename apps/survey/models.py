@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.db import connection, transaction
 from cms.models.pluginmodel import CMSPlugin
 
-from times import epoch
 
 def create_global_id():
     return str(uuid.uuid4())

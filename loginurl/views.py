@@ -7,12 +7,14 @@ from django.conf import settings
 from loginurl import utils
 from loginurl.models import Key
 
+
 def cleanup(request):
     """
     Remove expired keys.
     """
     utils.cleanup()
     return HttpResponse('ok', content_type='text/plain')
+
 
 def login(request, key):
     """
@@ -57,6 +59,5 @@ def login(request, key):
 
     if data.next is not None:
         next = data.next
-    
-    return HttpResponseRedirect(next)
 
+    return HttpResponseRedirect(next)

@@ -9,8 +9,6 @@ import time
 import traceback
 
 
-
-
 class Command(BaseCommand):
     """
     If called without argunments, this command will never return and it will continuously
@@ -19,7 +17,6 @@ class Command(BaseCommand):
     Probably, the easiest is to run this inside screen and then detach.
     Might be a good idea to redirect the output too.
     """
-
 
     help = "Send emails queued manually from a template."
 
@@ -32,9 +29,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options.get('queues'):
-            print "QueuedEmail: " + str(QueuedEmail.objects.count())
-            print "SentEmail: " + str(SentEmail.objects.count())
-            print "FailedEmail: " + str(FailedEmail.objects.count())
+            print("QueuedEmail: " + str(QueuedEmail.objects.count()))
+            print("SentEmail: " + str(SentEmail.objects.count()))
+            print("FailedEmail: " + str(FailedEmail.objects.count()))
             return None
 
         self.timestamped_print("======= Started email sending job...")
@@ -66,31 +63,28 @@ class Command(BaseCommand):
                     sent_email = SentEmail(
                         user=queued_email.user,
                         manual_newsletter=nl_instance,
-                        queued = nl_instance.timestamp #TODO: remove this from the model
+                        queued = nl_instance.timestamp  # TODO: remove this from the model
                     )
 
                     queued_email.delete()
                     sent_email.save()
 
-
-                except Exception, e:
+                except Exception as e:
                     self.timestamped_print("FAILED!!!! Stacktrace saved to reminder_failedemail database table")
 
                     failed_email = FailedEmail(
-                        user = queued_email.user,
-                        manual_newsletter = nl_instance,
-                        message = str(e)[:254],
-                        traceback = traceback.format_exc()
+                        user=queued_email.user,
+                        manual_newsletter=nl_instance,
+                        message=str(e)[:254],
+                        traceback=traceback.format_exc()
                     )
 
                     failed_email.save()
 
             interval_seconds = 60
             self.timestamped_print("Wait " + str(interval_seconds) + " seconds...")
-            time.sleep(interval_seconds) #EvS 2016/01/27 changed from 3s to 60s to prevent peak
-
-
+            time.sleep(interval_seconds)  # EvS 2016/01/27 changed from 3s to 60s to prevent peak
 
     def timestamped_print(self, message):
         timenow_readable_string = time.strftime('%Y-%m-%d %H:%M:%S')
-        print "[" + timenow_readable_string + "] " + str(message)
+        print("[{}]{}".format(timenow_readable_string, message))

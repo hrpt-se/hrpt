@@ -9,5 +9,5 @@ def get_user_profile(user_id, global_id):
         return profile
     except models.Survey.DoesNotExist:
         return None
-    except StandardError, e:
+    except Exception as e:
         return None

@@ -10,12 +10,12 @@ from django.conf import settings
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 
-from models import (
+from .models import (
     UserReminderInfo, get_upcoming_dates, get_prev_reminder,
     NewsLetterTemplate, QueuedEmail, ManualNewsLetter
 )
 
-from send import create_message, send_message_and_update_reminder_info
+from .send import create_message, send_message_and_update_reminder_info
 
 
 import apps.pollster.models as pollster_models

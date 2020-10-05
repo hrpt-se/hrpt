@@ -163,7 +163,7 @@ def show_survey(request, survey_short_name):
 
 
 def _save_survey_response_draft(request):
-    raw_data = json.loads(request.body)
+    raw_data = json.loads(request.body.decode("utf-8"))
     survey_id = raw_data['survey_id']
     questions_data = raw_data['form_data']
 

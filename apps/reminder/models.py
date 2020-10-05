@@ -95,7 +95,7 @@ class ReminderSettings(models.Model):
     )
 
     def __unicode__(self):
-        return _(u"Reminder settings")
+        return _("Reminder settings")
 
     def get_interval(self):
         if self.interval == WEEKLY_WITH_BATCHES:

@@ -1,4 +1,4 @@
-from deployed import *
+from .deployed import *
 
 ADMINS = (
     ('Edward van Straten', 'edward.van.straten@folkhalsomyndigheten.se'),

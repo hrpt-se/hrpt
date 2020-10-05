@@ -135,15 +135,14 @@ def get_template_context(spec, context):
     completed survey, as well a other contextual information required by the
     questionnaires.
     """
-    from utils import get_last_response
+    from apps.survey.utils import get_last_response
     lrdir = get_last_response(context.user) or {}
 
-    from models import LastResponse, epoch
+    from apps.survey.models import LastResponse
+    from apps.survey.times import epoch
     lr = LastResponse.objects.get(user=context.user)
-    if ( lr.participation
-         and lr.participation.date
-         and not lr.participation.date == epoch() ):
-       lrdir['DATE'] = lr.participation.date
+    if lr.participation and lr.participation.date and not lr.participation.date == epoch():
+        lrdir['DATE'] = lr.participation.date
 
     def season(delta=0):
         from datetime import datetime
@@ -154,11 +153,7 @@ def get_template_context(spec, context):
         else:
             return '%d-%d' % (year-1, year)
 
-    d = { 'LAST_SURVEY': lrdir,
-          'SEASON': season(),
-          'LAST_SEASON': season(-1) }
-
-    return d 
+    return {'LAST_SURVEY': lrdir, 'SEASON': season(), 'LAST_SEASON': season(-1)}
 
 class SurveyFormBase(forms.Form):
     def clean(self):
@@ -185,13 +180,13 @@ class SurveyFormBase(forms.Form):
                 # print 'DELETE', question.id
                 if question.id in self._errors.keys():
                     del self._errors[question.id]
-            elif not data.has_key(question.id):
+            elif question.id not in data:
                 self._errors[question.id] = ErrorList(['Please correct the answers.'])
             elif self._is_empty(data, question) and not question.blank:
                 self._errors[question.id] = ErrorList(['Please answer this question.'])
                 del data[question.id]
 
-            if data.has_key(question.id):
+            if question.id in data:
                 field = self.fields[question.id]
                 if hasattr(field, 'clean_all'):
                     try:

@@ -12,4 +12,4 @@ class UserProfile(models.Model):
     idcode = models.CharField(max_length=10)
 
     def __unicode__(self):
-        return u'%s %s' % (self.user, self.idcode)
+        return '%s %s' % (self.user, self.idcode)

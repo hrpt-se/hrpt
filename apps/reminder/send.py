@@ -64,7 +64,7 @@ def send_reminders(fake=False):
         if not fake:
             send_message_and_update_reminder_info(user, message, language)
         else:
-            print 'Fake sending', user.email, message.subject
+            print('Fake sending', user.email, message.subject)
         i = i + 1
     return i
 
@@ -94,10 +94,10 @@ def send_message_and_update_reminder_info(user, message, language, is_test_messa
 
     try:
         msg.send()
-    except Exception, e:
+    except Exception as e:
         ReminderError.objects.create(
             user=user,
-            message=unicode(e),
+            message=str(e),
             traceback=format_exc(),
         )
 

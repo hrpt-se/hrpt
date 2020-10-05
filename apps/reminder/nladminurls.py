@@ -3,7 +3,7 @@ from django.conf import settings
 from loginurl.views import cleanup, login
 
 
-from views import (
+from .views import (
     list_newsletter_templates, send_manual_newsletter,
     show_newsletter_template, send_test_email_to_myself,
     show_newsletter_template_in_iframe

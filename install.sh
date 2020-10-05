@@ -36,8 +36,8 @@ function install_apt_dependencies {
     apt-get update -y
 
     apt-get install -y build-essential \
-                       python-dev \
-                       python-pip \
+                       python3-dev \
+                       python3-pip \
                        git \
                        libjpeg8 \
                        libjpeg8-dev \
@@ -46,9 +46,9 @@ function install_apt_dependencies {
                        gettext \
                        zlib1g-dev \
                        libssl-dev \
-                       python-mysqldb \
+                       python3-mysqldb \
                        gdal-bin \
-                       python-gdal
+                       python3-gdal
 
     apt-get clean
 }
@@ -84,7 +84,7 @@ EOF
 function install_python_dependencies {
     export LDFLAGS="-L/usr/local/opt/openssl/lib $LDFLAGS"
     export CPPFLAGS="-I/usr/local/opt/openssl/include $CPPFLAGS"
-    pip install -r /var/www/hrpt/requirements.txt
+    pip3 install -r /var/www/hrpt/requirements.txt
 }
 
 function setup_environment_variables {
@@ -123,13 +123,13 @@ function create_data_directories {
 
 function setup_django_scaffolding {
     cd /var/www/hrpt/
-    python manage.py migrate --noinput
-    python manage.py collectstatic --noinput
+    python3 manage.py migrate --noinput
+    python3 manage.py collectstatic --noinput
 }
 
 function install_fixtures {
-    python manage.py loaddata db/fixtures.json
-    python manage.py shell -c "from apps.pollster.models import Survey;Survey.objects.get(shortname='intake').unpublish(); Survey.objects.get(shortname='intake').publish()"
+    python3 manage.py loaddata db/fixtures.json
+    python3 manage.py shell -c "from apps.pollster.models import Survey;Survey.objects.get(shortname='intake').unpublish(); Survey.objects.get(shortname='intake').publish()"
 }
 
 function start_mail_service {

@@ -40,4 +40,4 @@ class Command(BaseCommand):
         data.save()
 
         if verbosity > 0:
-            print 'Rule type "%s" registered' % (data,)
+            print('Rule type "%s" registered' % (data,))

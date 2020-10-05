@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import urllib2
+from urllib import request
 
 from django.template import Library, Node
 from django.contrib.sites.models import Site
@@ -41,7 +41,7 @@ class MemberCountNode(Node):
             return cache.get(key)
 
         try:
-            result = urllib2.urlopen(SOURCES[country], timeout=0.1 if settings.DEBUG else 0.08).read()
+            result = request.urlopen(SOURCES[country], timeout=0.1 if settings.DEBUG else 0.08).read()
         except:
             result = '2300'
 
@@ -59,5 +59,5 @@ class MemberCountNode(Node):
 
         return self.get(self.country)
 
-register.tag('member_count', do_member_count)
 
+register.tag('member_count', do_member_count)

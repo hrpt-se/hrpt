@@ -1,7 +1,7 @@
 # This file contains shared settings for deployed environments,
 # i.e. stage and prod. It should not be referenced directly.
 
-from base import *
+from .base import *
 
 ALLOWED_HOSTS = '*'
 

@@ -170,7 +170,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='surveyidcode',
             name='surveyuser_global_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='survey.SurveyUser', to_field=b'global_id'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='survey.SurveyUser', to_field='global_id'),
         ),
         migrations.AddField(
             model_name='profilesendqueue',

@@ -1,7 +1,8 @@
 from django.db import models
 from xml.etree import ElementTree
-import re, warnings
-import models
+import re
+import warnings
+from . import models
 
 #########################
 # decorated XHTML parsing
@@ -9,7 +10,7 @@ import models
 
 def survey_update_from_xhtml(survey, xmlstring):
     # ElementTree does not like being passed unicode objects
-    xmlstring = '<?xml version="1.0" encoding="UTF-8"?>'+xmlstring.encode('utf-8')
+    xmlstring = '<?xml version="1.0" encoding="UTF-8"?>'+xmlstring #xmlstring.encode('utf-8')
     root = ElementTree.XML(xmlstring)
 
     survey.title = root.find('h1').text or ''
@@ -109,7 +110,7 @@ def _update_question_from_xhtml(survey, idmap, root, ordinal):
     elif match:
         question = models.Question.objects.get(id = int(match.group(1)))
         if question.type == 'builtin':
-            raise StandardError('cannot modify builtin questions')
+            raise Exception('cannot modify builtin questions')
         question.data_name = data_name or ''
         question.title = title or ''
         question.description = description or ''

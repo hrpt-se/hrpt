@@ -58,14 +58,14 @@ USE_I18N = True
 USE_L10N = True
 
 LANGUAGES = (
-   ('en', u'English'),
-   ('de', u'Deutsch'),
-   ('fr', u'Français'),
-   ('nl', u'Nederlands'),
-   ('it', u'Italiano'),
-   ('sv', u'Svenska'),
-   ('pt', u'Português'),
-   ('es', u'Español'),
+   ('en', 'English'),
+   ('de', 'Deutsch'),
+   ('fr', 'Français'),
+   ('nl', 'Nederlands'),
+   ('it', 'Italiano'),
+   ('sv', 'Svenska'),
+   ('pt', 'Português'),
+   ('es', 'Español'),
 )
 
 CMS_LANGUAGES = {

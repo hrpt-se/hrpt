@@ -4,7 +4,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-from forms import EmailSettingsForm, UsernameForm, DeactivationForm
+from .forms import EmailSettingsForm, UsernameForm, DeactivationForm
 
 
 @login_required

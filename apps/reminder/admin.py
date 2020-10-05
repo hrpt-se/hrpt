@@ -5,11 +5,11 @@ from django.http import HttpResponseRedirect
 
 from hvad.admin import TranslatableAdmin
 
-from models import (
+from .models import (
     UserReminderInfo, ReminderSettings, NewsLetterTemplate, NewsLetter,
     ReminderError
 )
-from forms import ReminderSettingsForm, NewsLetterTemplateForm, NewsLetterForm
+from .forms import ReminderSettingsForm, NewsLetterTemplateForm, NewsLetterForm
 
 
 @admin.register(UserReminderInfo)

@@ -3,6 +3,7 @@ from django import forms
 from django.db import models, connection
 from django.apps import apps as cache
 from django.core.management import color
+from django.contrib import admin
 
 """
 This module is cancer. This is a contradition on itself.
@@ -18,10 +19,12 @@ Waste of anyone's time. Kill with fire!
 
 """
 
+
 def create(name, fields=None, app_label='', module='', options=None, admin_opts=None):
     """
     Create specified model
     """
+
     class Meta:
         # Using type('Meta', ...) gives a dictproxy error during model creation
         managed = False
@@ -33,7 +36,7 @@ def create(name, fields=None, app_label='', module='', options=None, admin_opts=
 
     # Update Meta with any options that were provided
     if options is not None:
-        for key, value in options.iteritems():
+        for key, value in options.items():
             setattr(Meta, key, value)
 
     # Set up a dictionary to simulate declarations within a class
@@ -53,11 +56,13 @@ def create(name, fields=None, app_label='', module='', options=None, admin_opts=
     if admin_opts is not None:
         class Admin(admin.ModelAdmin):
             pass
+
         for key, value in admin_opts:
             setattr(Admin, key, value)
         admin.site.register(model, Admin)
 
     return model
+
 
 def install(model):
     # Standard syncdb expects models to be in reliable locations,
@@ -71,9 +76,11 @@ def install(model):
     with connection.schema_editor() as schema_editor:
         schema_editor.create_model(model)
 
+
 def to_form(model, fields=None):
     class Meta:
         pass
+
     Meta.model = model
     Meta.fields = '__all__'
 

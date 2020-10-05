@@ -25,19 +25,19 @@ class Command(BaseCommand):
         reminder_settings = get_settings()
 
         if reminder_settings is None:
-            return u"0 reminders sent"
+            return "0 reminders sent"
 
         if (reminder_settings.currently_sending
             and reminder_settings.last_process_started_date
                 + timedelta(hours=3) > datetime.now()):
-            return u"0 reminders sent"
+            return "0 reminders sent"
 
         reminder_settings.currently_sending = True
         reminder_settings.last_process_started_date = datetime.now()
         reminder_settings.save()
 
         try:
-            return u'%d reminders sent.\n' % send_reminders(fake=fake)
+            return '%d reminders sent.\n' % send_reminders(fake=fake)
         finally:
             reminder_settings = get_settings()
             reminder_settings.currently_sending = False

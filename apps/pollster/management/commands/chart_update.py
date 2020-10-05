@@ -11,6 +11,6 @@ class Command(BaseCommand):
 
         for chart in models.Chart.objects.all():
             if not chart.update_data():
-                print 'Chart "%s" update FAILED' % (chart,)
+                print('Chart "%s" update FAILED' % (chart,))
             elif verbosity > 0:
-                print 'Chart "%s" updated' % (chart,)
+                print('Chart "%s" updated' % (chart,))

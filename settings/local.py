@@ -1,4 +1,4 @@
-from base import *
+from .base import *
 from utils import PrivateIPs
 
 DEBUG = True

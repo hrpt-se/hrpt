@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from views import manage, overview, preview, unsubscribe
+from .views import manage, overview, preview, unsubscribe
 
 urlpatterns = [
     url(r'^unsubscribe/$', unsubscribe, name='unsubscribe'),

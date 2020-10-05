@@ -13,38 +13,42 @@ from nocaptcha_recaptcha.fields import NoReCaptchaField
 from apps.reminder.models import UserReminderInfo
 from apps.survey.models import SurveyIdCode
 
-
 attrs_dict = {'class': 'required'}
 
 
 class UnicodeRegistrationForm(RegistrationForm):
-    username = forms.RegexField(regex=r'(?u)^[\w.@+-]+$',
-                                max_length=30,
-                                widget=forms.TextInput(attrs=attrs_dict),
-                                label=_("Username"),
-                                error_messages={'invalid': _("This value must contain only letters, numbers and underscores.")})
+    username = forms.RegexField(
+        regex=r'(?u)^[\w.@+-]+$',
+        max_length=30,
+        widget=forms.TextInput(attrs=attrs_dict),
+        label=_("Username"),
+        error_messages={'invalid': _("This value must contain only letters, numbers and underscores.")})
 
 
 class UnicodeUserChangeForm(UserChangeForm):
-    username = forms.RegexField(label=_("Username"), max_length=30, regex=r'(?u)^[\w.@+-]+$',
-        help_text = _("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
-        error_messages = {'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")})
+    username = forms.RegexField(
+        label=_("Username"), max_length=30, regex=r'(?u)^[\w.@+-]+$',
+        help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+        error_messages={'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")})
 
 
 class UnicodeUserCreationForm(UserCreationForm):
     username = forms.RegexField(label=_("Username"), max_length=30, regex=r'(?u)^[\w.@+-]+$',
-        help_text = _("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
-        error_messages = {'invalid': _("This value may contain only letters, numbers and @/./+/-/_ characters.")})
+                                help_text=_("Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."),
+                                error_messages={'invalid': _(
+                                    "This value may contain only letters, numbers and @/./+/-/_ characters.")})
 
 
 class EmailSettingsForm(forms.Form):
     email = forms.EmailField(label=_("Email"))
-    #send_reminders = forms.BooleanField(label=_("Send reminders"), help_text=_("Check this box if you wish to receive weekly reminders throughout the flu season"), required=False)
-    #language = forms.ChoiceField(label=_("Language"), choices=settings.LANGUAGES)
+
+    # send_reminders = forms.BooleanField(label=_("Send reminders"), help_text=_("Check this box if you wish to receive weekly reminders throughout the flu season"), required=False)
+    # language = forms.ChoiceField(label=_("Language"), choices=settings.LANGUAGES)
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance')
-        self.reminder_info, _ = UserReminderInfo.objects.get_or_create(user=self.instance, defaults={'active': True, 'last_reminder': self.instance.date_joined})
+        self.reminder_info, _ = UserReminderInfo.objects.get_or_create(
+            user=self.instance, defaults={'active': True, 'last_reminder': self.instance.date_joined})
 
         initial = kwargs.pop('initial', {})
         initial['email'] = self.instance.email
@@ -81,7 +85,7 @@ class EmailSettingsForm(forms.Form):
 class UsernameForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', )
+        fields = ('username',)
 
     def clean_username(self):
         value = self.cleaned_data['username']
@@ -95,7 +99,7 @@ class UsernameForm(forms.ModelForm):
 class DeactivationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('is_active', )
+        fields = ('is_active',)
 
     def clean_is_active(self):
         value = self.cleaned_data['is_active']
@@ -121,17 +125,13 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
         max_length=30,
         widget=forms.TextInput(attrs=attrs_dict),
         label=_("Username"),
-        help_text=_("Choose a name you want to use for login. "
-                    "For example: anders2009"),
-        error_messages={
-            'invalid': _("This value must contain only letters, "
-                         "numbers and underscores.")
-        }
+        help_text=_("Choose a name you want to use for login. For example: anders2009"),
+        error_messages={'invalid': _("This value must contain only letters, numbers and underscores.")}
     )
 
     # Override the email-field from the super-class to add a field label
     email = forms.EmailField(
-        label=_(u'Email address'),
+        label=_('Email address'),
         required=True
     )
 
@@ -160,22 +160,17 @@ class CaptchaUnicodeRegistrationForm(RegistrationForm):
     )
 
     max_birthyear = datetime.today().year
-    min_birthyear = max_birthyear - 86 # Should be max 85 years old, but if born 31 december it could be 86 years ago
+    min_birthyear = max_birthyear - 86  # Should be max 85 years old, but if born 31 december it could be 86 years ago
 
     year_of_birth = forms.IntegerField(
         max_value=max_birthyear,
         min_value=min_birthyear,
         label=_("Year of birth"),
-        help_text=_("Please enter the 4 digits of your year of birth. "
-                    "For example: 1989"),
-        error_messages={
-            'invalid': _("This value must contain 4 digits.")
-        }
+        help_text=_("Please enter the 4 digits of your year of birth. For example: 1989"),
+        error_messages={'invalid': _("This value must contain 4 digits.")}
     )
 
-    captcha = NoReCaptchaField(
-        label=_("Captcha")
-    )
+    captcha = NoReCaptchaField(label=_("Captcha"))
 
     def clean_email_confirm(self):
         email = self.cleaned_data.get("email")

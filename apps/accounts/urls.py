@@ -5,9 +5,9 @@ from django.views.generic import TemplateView
 from registration.backends.model_activation.views import RegistrationView
 
 
-from backend import TweakedDefaultActivationView
+from .backend import TweakedDefaultActivationView
 from . import views
-from forms import CaptchaUnicodeRegistrationForm, CaptchaPasswordResetForm
+from .forms import CaptchaUnicodeRegistrationForm, CaptchaPasswordResetForm
 
 urlpatterns = [
     # From registration.backends.default.urls
