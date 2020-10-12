@@ -308,7 +308,7 @@ def survey_results_csv(request, id):
     now = datetime.datetime.now()
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=survey-results-%d-%s.csv' % (survey.id, format(now, '%Y%m%d%H%M'))
-    response.write(u'\ufeff'.encode('utf8'))
+    response.write('\ufeff'.encode('utf8'))
     writer = csv.writer(response)
     survey.write_csv(writer)
     return response
@@ -324,7 +324,7 @@ def survey_results_csv_extended(request, id):
             now = datetime.datetime.now()
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename=survey-results-%d-%s.csv' % (survey.id, format(now, '%Y%m%d%H%M'))
-            response.write(u'\ufeff'.encode('utf8'))
+            response.write('\ufeff'.encode('utf8'))
             #side effecting the response... great...
             writer = csv.writer(response)
             survey.write_csv(writer, extra_fields = form.cleaned_data)

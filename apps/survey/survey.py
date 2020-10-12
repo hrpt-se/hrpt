@@ -376,7 +376,7 @@ class FormBuilder(object):
                 required_rows = checker(rows, q().id)
             elif (qta and isinstance(qta[0], str)):
                 # We're dealing with literal args
-                rows = zip(xrange(len(qta)), qta)
+                rows = zip(range(len(qta)), qta)
                 required_rows = None
             else:
                 raise NotImplementedError('Question type_args unrecognised.')
