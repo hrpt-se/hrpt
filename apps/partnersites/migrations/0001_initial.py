@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -19,7 +20,7 @@ class Migration(migrations.Migration):
                 ('light_color', models.CharField(default=b'ce2626', max_length=6)),
                 ('footer', models.TextField(help_text='Fotsidan visas l\xe4ngst ner p\xe5 varje sida', null=True, verbose_name='Fotsida', blank=True)),
                 ('contact_form_recipient', models.EmailField(default=b'admin.halsorapport@folkhalsomyndigheten.se', max_length=254, blank=True)),
-                ('site', models.OneToOneField(to='sites.Site')),
+                ('site', models.OneToOneField(to='sites.Site', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'verbose_name': 'Sajtens Inst\xe4llningar',

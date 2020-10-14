@@ -6,6 +6,7 @@ import shutil
 import re
 import json
 
+from django.urls import reverse
 from django.contrib.gis.db.models import MultiPolygonField
 from django.db import (
     models, connection, transaction, IntegrityError, DatabaseError
@@ -220,9 +221,10 @@ class Survey(models.Model):
     def translation(self):
         return self.translation_survey
 
-    @models.permalink
+    # @models.permalink
     def get_absolute_url(self):
-        return ('pollster_survey_edit', [str(self.id)])
+        return reverse('pollster_survey_edit', args=[str(self.id)])
+        # return ('pollster_survey_edit', [str(self.id)])
 
     def __unicode__(self):
         return "Survey #%d %s" % (self.id, self.title)
@@ -836,9 +838,10 @@ class TranslationSurvey(models.Model):
         ordering = ['survey', 'language']
         unique_together = ('survey', 'language')
 
-    @models.permalink
+    # @models.permalink
     def get_absolute_url(self):
-        return ('pollster_survey_translation_edit', [str(self.survey.id), self.language])
+        # return ('pollster_survey_translation_edit', [str(self.survey.id), self.language])
+        return reverse('pollster_survey_translation_edit', args=[str(self.survey.id), self.language])
 
     def __unicode__(self):
         return "TranslationSurvey(%s) for %s" % (self.language, self.survey)
@@ -955,9 +958,10 @@ class Chart(models.Model):
     def __unicode__(self):
         return "Chart %s for %s" % (self.shortname, self.survey)
 
-    @models.permalink
+    # @models.permalink
     def get_absolute_url(self):
-        return ('pollster_survey_chart_edit', [str(self.survey.id), self.shortname])
+        # return ('pollster_survey_chart_edit', [str(self.survey.id), self.shortname])
+        return reverse('pollster_survey_chart_edit', args=[str(self.survey.id), self.shortname])
 
     @property
     def is_draft(self):

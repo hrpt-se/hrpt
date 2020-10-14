@@ -46,6 +46,7 @@ function install_apt_dependencies {
                        gettext \
                        zlib1g-dev \
                        libssl-dev \
+                       libmysqlclient-dev \
                        python3-mysqldb \
                        gdal-bin \
                        python3-gdal

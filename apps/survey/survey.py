@@ -396,7 +396,7 @@ class SurveyAnswerEncoder(json.JSONEncoder):
         import datetime
         if isinstance(obj, datetime.date):
             return obj.strftime('%d/%m/%Y')
-        return super(JSONSurveyEncoder, self).default(obj)
+        return super().default(obj)
 
 class JavascriptBuilder(object):
     def __init__(self, spec):

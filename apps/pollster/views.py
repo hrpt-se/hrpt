@@ -4,7 +4,8 @@ import datetime
 import json
 import re
 
-from django.urls import reverse, RegexURLResolver
+from django.urls import reverse, URLResolver
+from django.urls.resolvers import RegexPattern
 from django.db import DatabaseError
 from django.http import (
     HttpResponse, HttpResponseRedirect, Http404, JsonResponse
@@ -411,15 +412,14 @@ def urls(request, prefix=''):
         javascript variable names by converting all letters to the upper
         case and replacing '-' with '_'.
         """
-    resolver = RegexURLResolver(r'^/', settings.ROOT_URLCONF, app_name='pollster', namespace='pollster')
-
+    resolver = URLResolver(RegexPattern(r'^/'), settings.ROOT_URLCONF, app_name='pollster', namespace='pollster')
     urls = {}
 
     for name in resolver.reverse_dict:
         if isinstance(name, str) and name.startswith(prefix):
             url_regex = resolver.reverse_dict.get(name)[1]
             param_names = resolver.reverse_dict.get(name)[0][0][1]
-            arg_pattern = r'\(\?P\<[^\)]+\)'  #matches named groups in the form of (?P<name>pattern)
+            arg_pattern = r'\(\?P\<[^\)]+\)'  # matches named groups in the form of (?P<name>pattern)
 
             i = 0
             for match in re.findall(arg_pattern, url_regex):

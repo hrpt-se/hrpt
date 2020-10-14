@@ -15,7 +15,7 @@ from apps.hrptinfo.forms import CaptchaContactForm
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^admin/manual-newsletters/', include('apps.reminder.nladminurls')),
     url(r'^admin/surveys-editor/', include('apps.pollster.urls')),
     url(r'^surveys/(?P<survey_shortname>.+)/charts/(?P<chart_shortname>.+)/tile/(?P<z>\d+)/(?P<x>\d+)/(?P<y>\d+)$',

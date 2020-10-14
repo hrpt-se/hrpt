@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -51,7 +52,7 @@ class Migration(migrations.Migration):
                 ('virtual_inf', models.CharField(default=b'', max_length=255, blank=True)),
                 ('virtual_sup', models.CharField(default=b'', max_length=255, blank=True)),
                 ('virtual_regex', models.CharField(default=b'', max_length=255, blank=True)),
-                ('clone', models.ForeignKey(blank=True, to='pollster.Option', null=True)),
+                ('clone', models.ForeignKey(blank=True, to='pollster.Option', null=True, on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['question', 'ordinal'],
@@ -83,7 +84,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('ordinal', models.IntegerField()),
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
-                ('question', models.ForeignKey(related_name='column_set', to='pollster.Question')),
+                ('question', models.ForeignKey(related_name='column_set', to='pollster.Question', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['question', 'ordinal'],
@@ -105,7 +106,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('ordinal', models.IntegerField()),
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
-                ('question', models.ForeignKey(related_name='row_set', to='pollster.Question')),
+                ('question', models.ForeignKey(related_name='row_set', to='pollster.Question', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['question', 'ordinal'],
@@ -117,7 +118,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('is_sufficient', models.BooleanField(default=True)),
                 ('object_options', models.ManyToManyField(related_name='object_of_rules', to='pollster.Option')),
-                ('object_question', models.ForeignKey(related_name='object_of_rules', blank=True, to='pollster.Question', null=True)),
+                ('object_question', models.ForeignKey(related_name='object_of_rules', blank=True, to='pollster.Question', null=True, on_delete=django.db.models.deletion.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -138,14 +139,14 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('status', models.CharField(default=b'DRAFT', help_text=b'Use full editor to publish and unpublish', max_length=255, choices=[(b'DRAFT', b'Draft'), (b'PUBLISHED', b'Published'), (b'UNPUBLISHED', b'Unpublished')])),
-                ('parent', models.ForeignKey(blank=True, to='pollster.Survey', null=True)),
+                ('parent', models.ForeignKey(blank=True, to='pollster.Survey', null=True, on_delete=django.db.models.deletion.CASCADE)),
             ],
         ),
         migrations.CreateModel(
             name='SurveyChartPlugin',
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, related_name='pollster_surveychartplugin', auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
-                ('chart', models.ForeignKey(to='pollster.Chart')),
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, related_name='pollster_surveychartplugin', auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin', on_delete=django.db.models.deletion.CASCADE)),
+                ('chart', models.ForeignKey(to='pollster.Chart', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -158,7 +159,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('text', models.CharField(default=b'', max_length=4095, blank=True)),
                 ('description', models.TextField(default=b'', blank=True)),
-                ('option', models.ForeignKey(to='pollster.Option')),
+                ('option', models.ForeignKey(to='pollster.Option', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['translation', 'option'],
@@ -171,7 +172,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
                 ('description', models.TextField(default=b'', blank=True)),
                 ('error_message', models.TextField(default=b'', blank=True)),
-                ('question', models.ForeignKey(to='pollster.Question')),
+                ('question', models.ForeignKey(to='pollster.Question', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['translation', 'question'],
@@ -182,7 +183,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
-                ('column', models.ForeignKey(to='pollster.QuestionColumn')),
+                ('column', models.ForeignKey(to='pollster.QuestionColumn', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['translation', 'column'],
@@ -193,7 +194,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
-                ('row', models.ForeignKey(to='pollster.QuestionRow')),
+                ('row', models.ForeignKey(to='pollster.QuestionRow', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['translation', 'row'],
@@ -206,7 +207,7 @@ class Migration(migrations.Migration):
                 ('language', models.CharField(max_length=3, db_index=True)),
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
                 ('status', models.CharField(default=b'DRAFT', max_length=255, choices=[(b'DRAFT', b'Draft'), (b'PUBLISHED', b'Published')])),
-                ('survey', models.ForeignKey(to='pollster.Survey')),
+                ('survey', models.ForeignKey(to='pollster.Survey', on_delete=django.db.models.deletion.CASCADE)),
             ],
             options={
                 'ordering': ['survey', 'language'],
@@ -219,33 +220,33 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(default=b'', max_length=255, blank=True)),
                 ('js_class', models.CharField(unique=True, max_length=255)),
-                ('question_data_type', models.ForeignKey(to='pollster.QuestionDataType')),
+                ('question_data_type', models.ForeignKey(to='pollster.QuestionDataType', on_delete=django.db.models.deletion.CASCADE)),
             ],
         ),
         migrations.AddField(
             model_name='translationquestionrow',
             name='translation',
-            field=models.ForeignKey(to='pollster.TranslationSurvey'),
+            field=models.ForeignKey(to='pollster.TranslationSurvey', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='translationquestioncolumn',
             name='translation',
-            field=models.ForeignKey(to='pollster.TranslationSurvey'),
+            field=models.ForeignKey(to='pollster.TranslationSurvey', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='translationquestion',
             name='translation',
-            field=models.ForeignKey(to='pollster.TranslationSurvey'),
+            field=models.ForeignKey(to='pollster.TranslationSurvey', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='translationoption',
             name='translation',
-            field=models.ForeignKey(to='pollster.TranslationSurvey'),
+            field=models.ForeignKey(to='pollster.TranslationSurvey', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='rule',
             name='rule_type',
-            field=models.ForeignKey(to='pollster.RuleType'),
+            field=models.ForeignKey(to='pollster.RuleType', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='rule',
@@ -255,52 +256,52 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='rule',
             name='subject_question',
-            field=models.ForeignKey(related_name='subject_of_rules', to='pollster.Question'),
+            field=models.ForeignKey(related_name='subject_of_rules', to='pollster.Question', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='question',
             name='data_type',
-            field=models.ForeignKey(to='pollster.QuestionDataType'),
+            field=models.ForeignKey(to='pollster.QuestionDataType', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='question',
             name='open_option_data_type',
-            field=models.ForeignKey(related_name='questions_with_open_option', blank=True, to='pollster.QuestionDataType', null=True),
+            field=models.ForeignKey(related_name='questions_with_open_option', blank=True, to='pollster.QuestionDataType', null=True, on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='question',
             name='survey',
-            field=models.ForeignKey(to='pollster.Survey'),
+            field=models.ForeignKey(to='pollster.Survey', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='option',
             name='column',
-            field=models.ForeignKey(blank=True, to='pollster.QuestionColumn', null=True),
+            field=models.ForeignKey(blank=True, to='pollster.QuestionColumn', null=True, on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='option',
             name='question',
-            field=models.ForeignKey(to='pollster.Question'),
+            field=models.ForeignKey(to='pollster.Question', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='option',
             name='row',
-            field=models.ForeignKey(blank=True, to='pollster.QuestionRow', null=True),
+            field=models.ForeignKey(blank=True, to='pollster.QuestionRow', null=True, on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='option',
             name='virtual_type',
-            field=models.ForeignKey(blank=True, to='pollster.VirtualOptionType', null=True),
+            field=models.ForeignKey(blank=True, to='pollster.VirtualOptionType', null=True, on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='chart',
             name='survey',
-            field=models.ForeignKey(to='pollster.Survey'),
+            field=models.ForeignKey(to='pollster.Survey', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AddField(
             model_name='chart',
             name='type',
-            field=models.ForeignKey(to='pollster.ChartType'),
+            field=models.ForeignKey(to='pollster.ChartType', on_delete=django.db.models.deletion.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='translationsurvey',

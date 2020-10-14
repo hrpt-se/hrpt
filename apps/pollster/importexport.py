@@ -99,6 +99,8 @@ IMPORT_ENTITIES_DEFINITIONS = [
 
 
 def create_survey_from_json(json_string):
+    if isinstance(json_string, bytes):
+        json_string = json_string.decode('utf-8')
     data_from_json = json.loads(json_string)
 
     # we use this to map old keys present in the exported file, to new keys obtained on insert
