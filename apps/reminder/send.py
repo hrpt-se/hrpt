@@ -1,9 +1,7 @@
 import datetime
-import smtplib
 from traceback import format_exc
 
 from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 from django.template import Context, loader, Template
 from django.urls import reverse
 from django.conf import settings
@@ -23,35 +21,33 @@ def create_message(user, message, language):
     if language:
         activate(language)
 
-    SITE_URL = 'http://%s' % Site.objects.get_current().domain
+    site_url = 'http://%s' % Site.objects.get_current().domain
 
     inner_template = Template(message.message)
 
-    survey_list_url = 'http://%s%s'\
-                      % (Site.objects.get_current(), "/sv/valkommen/")
+    survey_list_url = 'http://%s%s' % (Site.objects.get_current(), "/sv/valkommen/")
     profile_url = 'http://%s%s' % (Site.objects.get_current(), "/accounts/settings/")
 
     context_dict = {
         'url': get_self_authenticating_url(user, survey_list_url),
-        'profile_url' : get_self_authenticating_url(user, profile_url),
+        'profile_url': get_self_authenticating_url(user, profile_url),
         # 'unsubscribe_url': get_self_authenticating_url(user, reverse('unsubscribe')),
         'first_name': user.first_name,
         'last_name': user.last_name,
         'username': user.username,
     }
     context_dict.update(site_context())
-    context_dict['site_logo'] = SITE_URL + context_dict['site_logo']
+    context_dict['site_logo'] = site_url + context_dict['site_logo']
 
     inner = inner_template.render(Context(context_dict))
 
     context_dict['inner'] = inner
-    context_dict['MEDIA_URL'] = '%s%s' % (SITE_URL, settings.MEDIA_URL)
+    context_dict['MEDIA_URL'] = '%s%s' % (site_url, settings.MEDIA_URL)
     context_dict['message'] = message
 
-    context = Context(context_dict)
     templ = loader.get_template('message.html')
 
-    return inner, templ.render(context)
+    return inner, templ.render(context_dict)
 
 
 def send_reminders(fake=False):

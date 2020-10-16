@@ -83,17 +83,6 @@ def _get_or_default(queryset, default=None):
     return default
 
 
-#this was extracted from the huge csv export function when it was refactored
-# not that it ins't still disturbing... (it is), just trying to tidying things a little bit
-def _get_fieldval_survery(result_row, field_name):
-    val = getattr(result_row, field_name)
-    if callable(val):
-        val = val()
-    if type(val) is str:
-        val = val.encode('utf-8')
-    return val
-
-
 class Survey(models.Model):
     parent = models.ForeignKey('self', db_index=True, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
@@ -324,26 +313,29 @@ class Survey(models.Model):
         self.status = 'UNPUBLISHED'
         self.save()
 
-    def write_csv(self, writer, extra_fields = []):
+    def write_csv(self, writer, extra_fields=[]):
+        def _get_fieldval_survery(obj, field_name):
+            val = getattr(obj, field_name)
+            return val() if callable(val) else val
+
         model = self.as_model()
-        fields = model._meta.fields
-        fieldNames = [field.name for field in fields]
-        fieldNames.extend(extra_fields)
-        writer.writerow(fieldNames)
+        field_names = [field.name for field in model._meta.fields]
+        field_names.extend(extra_fields)
+        writer.writerow(field_names)
         for result_row in model.objects.all():
-            row = [_get_fieldval_survery(result_row, field.name) for field in fields]
-            rowUser = User.objects.get(id=result_row.user)
-            rowIdCode = SurveyIdCode.objects.get(surveyuser_global_id = result_row.global_id)
+            row = [_get_fieldval_survery(result_row, field.name) for field in model._meta.fields]
+            user = User.objects.get(id=result_row.user)
+            id_code = SurveyIdCode.objects.get(surveyuser_global_id=result_row.global_id)
 
             #note that this should contain a means to getch the data, not the data itself
             # but oh well, let's leave it be for now
 
             #TODO: add is_staf_member... or just filter them out
             possible_extra_fields = {
-                "email" : rowUser.email,
-                "is_active": rowUser.is_active,
-                "id_code": rowIdCode.idcode,
-                "dob_from_idcode": rowIdCode.fodelsedatum
+                "email": user.email,
+                "is_active": user.is_active,
+                "id_code": id_code.idcode,
+                "dob_from_idcode": id_code.fodelsedatum
             }
 
             for extra_field in extra_fields:

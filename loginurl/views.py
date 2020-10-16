@@ -1,6 +1,4 @@
-from datetime import datetime
-
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseGone
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.conf import settings
 
@@ -36,19 +34,14 @@ def login(request, key):
     specified in ``settings.LOGIN_REDIRECT_URL``. Any value in the ``next``
     parameter in the query string will be also forwarded.
     """
-    next = request.GET.get('next', None)
-    if next is None:
-        next = settings.LOGIN_REDIRECT_URL
+    next = request.GET.get('next', default=settings.LOGIN_REDIRECT_URL)
 
     # Validate the key through the standard Django's authentication mechanism.
     # It also means that the authentication backend of this django-loginurl
     # application has to be added to the authentication backends configuration.
-    user = auth.authenticate(key=key)
+    user = auth.authenticate(None, key=key)
     if user is None:
-        url = settings.LOGIN_URL
-        if next is not None:
-            url = '%s?next=%s' % (url, next)
-        return HttpResponseRedirect(url)
+        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, next))
 
     # The key is valid, then now log the user in.
     auth.login(request, user)

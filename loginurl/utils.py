@@ -3,10 +3,10 @@ import hashlib
 from datetime import datetime
 
 from django.db.models import Q
-from django.conf import settings
-from django.utils.http import int_to_base36, base36_to_int
+from django.utils.http import int_to_base36
 
 from loginurl.models import Key
+
 
 def _create_token(user):
     """
@@ -16,9 +16,10 @@ def _create_token(user):
     from UUIDv4. Then both are hashed using MD5 digest algorithm.
     """
     id = '%d-%s' % (user.id, str(uuid.uuid4()))
-    hash = hashlib.md5(id)
+    hash = hashlib.md5(id.encode('utf-8'))
     hash.digest()
     return hash.hexdigest()
+
 
 def create(user, usage_left=1, expires=None, next=None):
     """
@@ -68,6 +69,7 @@ def create(user, usage_left=1, expires=None, next=None):
 
     return data
 
+
 def cleanup():
     """
     Remove expired keys.
@@ -78,8 +80,7 @@ def cleanup():
     This can be done in at least two ways: opening the ``cleanup`` view or
     running ``loginurl_cleanup`` command from the Django's management script.
     """
-    data = Key.objects.filter(Q(usage_left__lte=0) | 
+    data = Key.objects.filter(Q(usage_left__lte=0) |
                               Q(expires__lt=datetime.now()))
     if data is not None:
         data.delete()
-

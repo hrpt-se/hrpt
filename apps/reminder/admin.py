@@ -3,7 +3,7 @@ from django.contrib import admin, messages
 from django.contrib.sites.models import Site
 from django.http import HttpResponseRedirect
 
-from hvad.admin import TranslatableAdmin
+from parler.admin import TranslatableAdmin
 
 from .models import (
     UserReminderInfo, ReminderSettings, NewsLetterTemplate, NewsLetter,
