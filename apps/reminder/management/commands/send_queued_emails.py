@@ -44,8 +44,8 @@ class Command(BaseCommand):
                 try:
                     nl_instance = queued_email.manual_newsletter
 
-                    user_email_string = queued_email.user.email.encode('utf8', 'ignore')
-                    self.timestamped_print("Sending email to " + user_email_string + "(id:" + str(queued_email.user.id) +")")
+                    self.timestamped_print("Sending email to {} (id: {})".format(
+                        queued_email.user.email, queued_email.user.id))
 
                     text_base, html_content = create_message(queued_email.user, nl_instance, "sv")
                     text_content = strip_tags(text_base)
