@@ -47,7 +47,6 @@ function install_apt_dependencies {
                        zlib1g-dev \
                        libssl-dev \
                        libmysqlclient-dev \
-                       python3-mysqldb \
                        gdal-bin \
                        python3-gdal
 
@@ -100,14 +99,13 @@ function setup_environment_variables {
 }
 
 function setup_apache {
-    apt-get install -y apache2 \
-                       libapache2-mod-wsgi
+    apt-get install -y apache2 libapache2-mod-wsgi-py3
 
-    git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
     cd /var/www/hrpt/
     cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
     cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
     echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
+    cat /etc/profile.d/hrpt.sh >> /etc/apache2/envvars
     a2dissite 000-default
     a2ensite 000-hrpt 001-hrpt-prod-redirect
     service apache2 restart
@@ -118,7 +116,7 @@ function create_data_directories {
     mkdir -p /var/lib/hrpt/static
 
     chown -R www-data:www-data /var/lib/hrpt
-    chmod 775 /var/lib/hrpt/*
+    chmod 755 /var/lib/hrpt/*
     usermod -a -G www-data ubuntu
 }
 
@@ -131,6 +129,24 @@ function setup_django_scaffolding {
 function install_fixtures {
     python3 manage.py loaddata db/fixtures.json
     python3 manage.py shell -c "from apps.pollster.models import Survey;Survey.objects.get(shortname='intake').unpublish(); Survey.objects.get(shortname='intake').publish()"
+}
+
+function setup_mailhog {
+    sudo apt-get -y install golang-go
+    go get github.com/mailhog/MailHog
+    cat > /etc/systemd/system/mailhog.service << EOF
+[Unit]
+Description=MailHog service
+
+[Service]
+ExecStart=/root/go/bin/MailHog
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    systemctl enable mailhog
+    systemctl start mailhog
 }
 
 function start_mail_service {
@@ -153,6 +169,7 @@ if [ $ENVIRONMENT != "local" ];
 then
     setup_apache
 fi
+setup_apache
 
 create_data_directories
 install_python_dependencies
@@ -161,6 +178,7 @@ setup_django_scaffolding
 if [ $ENVIRONMENT == "local" ];
 then
     install_fixtures
+    setup_mailhog
 fi
 
 start_mail_service
