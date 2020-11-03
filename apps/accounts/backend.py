@@ -62,7 +62,24 @@ class TweakedDefaultActivationView(ActivationView):
         idcode.surveyuser_global_id = survey_user
         idcode.save()
 
+        # Remove the UserProfile after the user has been activated.
+        # profile.delete()
+        self._cleanup(idcode.idcode, profile)
+
         return registration_profile.user
+
+    def _cleanup(self, code, profile):
+        # Remove the UserProfile after the user has been activated.
+        profile.delete()
+
+        # Remove any UserProfiles and related auth.User that have the same
+        # idcode as the activated user since they can never be activated.
+        profiles = UserProfile.objects.filter(idcode=code)
+        for p in profiles:
+            # Make sure that the auth.User is not active and does not have any SurveyUser
+            if not p.user.is_active and not p.user.surveyuser_set.all().exists():
+                p.user.delete()
+            p.delete()
 
     def get_success_url(self, user):
         return 'registration_activation_complete', (), {}
