@@ -95,16 +95,12 @@ class Survey(models.Model):
     form = None
     translation_survey = None
 
-    _standard_result_field_types = [
-        ('user', models.IntegerField, {'null': True, 'blank': True, 'verbose_name': "User"}),
-        ('global_id', models.CharField, {'max_length': 36, 'null': True, 'blank': True, 'verbose_name': "Person"}),
-        ('channel', models.CharField, {'max_length': 36, 'null': True, 'blank': True, 'verbose_name': "Channel"})
-    ]
-
     @property
     def _standard_result_fields(self):
         return [
-            (name, field_type(**kwargs)) for name, field_type, kwargs in Survey._standard_result_field_types
+            ('user', models.IntegerField(unique=True, null=True, blank=True, verbose_name="User")),
+            ('global_id', models.CharField(unique=True, max_length=36, null=True, blank=True, verbose_name="Person")),
+            ('channel', models.CharField(max_length=36, null=True, blank=True, verbose_name="Channel")),
         ]
 
     @property
