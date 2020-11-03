@@ -8,7 +8,8 @@
         <div class="tool">
             <label>Shortname</label>
             <button type="button" class="action-save">Save</button>
-            <input type="text" class="short" name="survey-shortname" value="{{ survey.shortname|default:'' }}" />
+            <input type="text" class="short" name="survey-shortname" value="{{ survey.shortname|default:'' }}"
+                   maxlength="{{ survey.shortname_max_length }}"/>
         </div>
         <input type="hidden" name="survey-version" value="{{ survey.version|default:'' }}" />
         <!--div class="tool">
@@ -35,7 +36,8 @@
         </h2>
         <div class="property">
             <label title="DB column names in the results table for the current question will be based on this value">Data Name</label>
-            <input type="text" name="field_question_data_name" title="only letters, numbers and underscores allowed"/>
+            <input type="text" name="field_question_data_name" title="only letters, numbers and underscores allowed"
+                   maxlength="{{ survey.q_data_name_max_length }}"/>
         </div>
         <div class="property">
             <label title="User input will be checked to match the specified type">Data Type</label>
@@ -152,7 +154,8 @@
         </div>
         <div class="property">
             <label>Value</label>
-            <input type="text" name="field_choice_value" title="only letters, numbers and underscores allowed"/>
+            <input type="text" name="field_choice_value" title="only letters, numbers and underscores allowed"
+                   maxlength="{{ survey.opt_value_max_length }}"/>
         </div>
         <div class="property">
             <label>Start</label>

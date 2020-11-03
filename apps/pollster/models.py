@@ -86,8 +86,8 @@ def _get_or_default(queryset, default=None):
 class Survey(models.Model):
     parent = models.ForeignKey('self', db_index=True, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
-    shortname = models.SlugField(max_length=255, default='')
-    version = models.SlugField(max_length=255, blank=True, default='')
+    shortname = models.SlugField(max_length=28, default='')
+    version = models.SlugField(max_length=2, blank=True, default='')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=255, default='DRAFT', choices=SURVEY_STATUS_CHOICES, help_text="Use full editor to publish and unpublish")
@@ -113,6 +113,17 @@ class Survey(models.Model):
 
     update = False
 
+    @property
+    def shortname_max_length(self):
+        return self._meta.get_field("shortname").max_length
+
+    @property
+    def q_data_name_max_length(self):
+        return Question._meta.get_field("data_name").max_length
+
+    @property
+    def opt_value_max_length(self):
+        return Option._meta.get_field("value").max_length
 
     @staticmethod
     def get_user_open_surveys(guid):
@@ -295,7 +306,7 @@ class Survey(models.Model):
         table = model._meta.db_table
         if table in connection.introspection.table_names():
             now = datetime.datetime.now()
-            backup = table+'_vx_'+format(now, '%Y%m%d%H%M%s')
+            backup = table + '_vx_' + now.strftime('%Y%m%d%H%M%S')
             connection.cursor().execute('ALTER TABLE '+table+' RENAME TO '+backup)
         dynamicmodels.install(model)
         self.save()
@@ -308,7 +319,7 @@ class Survey(models.Model):
         if table in connection.introspection.table_names():
             now = datetime.datetime.now()
             version = self.version or 0
-            backup = table+'_v'+str(version)+'_'+format(now, '%Y%m%d%H%M%s')
+            backup = table + '_v' + str(version) + '_' + now.strftime('%Y%m%d%H%M%S')
             connection.cursor().execute('ALTER TABLE '+table+' RENAME TO '+backup)
         self.status = 'UNPUBLISHED'
         self.save()
@@ -399,7 +410,7 @@ class Question(models.Model):
     type = models.CharField(max_length=255, choices=QUESTION_TYPE_CHOICES)
     data_type = models.ForeignKey(QuestionDataType, on_delete=models.CASCADE)
     open_option_data_type = models.ForeignKey(QuestionDataType, related_name="questions_with_open_option", null=True, blank=True, on_delete=models.CASCADE)
-    data_name = models.CharField(max_length=255)
+    data_name = models.CharField(max_length=40)
     visual = models.CharField(max_length=255, blank=True, default='')
     tags = models.CharField(max_length=255, blank=True, default='')
     regex = models.CharField(max_length=1023, blank=True, default='')
@@ -697,7 +708,7 @@ class Option(models.Model):
     ordinal = models.IntegerField()
     text = models.CharField(max_length=4095, blank=True, default='')
     group = models.CharField(max_length=255, blank=True, default='')
-    value = models.CharField(max_length=255, default='')
+    value = models.CharField(max_length=20, default='')
     description = models.TextField(blank=True, default='')
 
     virtual_type = models.ForeignKey(VirtualOptionType, blank=True, null=True, on_delete=models.CASCADE)
