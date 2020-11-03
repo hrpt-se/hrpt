@@ -154,7 +154,7 @@
                     {% for column in columns %}
                     <td>
                         <select name="{{ column.data_name }}" class="user-field">
-                            {% for option in column.option_set.all %}
+                            {% for option in column.options %}
                             <option value="{{ option.value }}" title="{{ option.translated_description }}">{{ option.translated_text }}</option>
                             {% endfor %}
                         </select>
