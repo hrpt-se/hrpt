@@ -9,6 +9,7 @@ current_user_admin = type(admin.site._registry[User])
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
+    extra = 0  # only show UserProfiles that exist
 
 
 class UnicodeUserAdmin(current_user_admin):
