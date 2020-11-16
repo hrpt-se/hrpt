@@ -1,9 +1,10 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib import admin, messages
 from django.contrib.auth.models import User
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 from .models import RuleType, QuestionDataType, VirtualOptionType, Survey, TranslationSurvey, Chart
 
@@ -26,6 +27,7 @@ class ExtendedUserAdmin(current_user_admin):
     actions = [
         'batch_deactivate',
         'batch_obfuscate',
+        'remove_response',
     ]
 
     def batch_deactivate(self, request, queryset):
@@ -72,6 +74,42 @@ class ExtendedUserAdmin(current_user_admin):
             survey_user.save()
 
     batch_obfuscate.short_description = 'Obfuscate selected users'
+
+    def _get_surveys(self, users):
+        surveys = Survey.objects.filter(status="PUBLISHED")
+        return [s for s in surveys if s.as_model().objects.filter(user__in=users).exists()]
+
+    def _remove_responses(self, request, users):
+        survey = Survey.objects.get(shortname=request.POST.get("survey"))
+        responses = survey.as_model().objects.filter(user__in=users)
+        count = responses.count()
+        responses.delete()
+        return count, survey.shortname
+
+    def remove_response(self, request, queryset):
+        # If the form is being submitted, remove responses to the selected survey
+        # and display the results.
+        if request.POST.get("do_action", False):
+            result = self._remove_responses(request, queryset)
+            self.message_user(request, "Removed {} response(s) to survey {}".format(*result))
+            return HttpResponseRedirect(request.get_full_path())
+
+        # Get all surveys that any of the selected users have answered.
+        # If no answers were found, warn and return.
+        surveys = self._get_surveys(queryset)
+        if not surveys:
+            self.message_user(request, "Selected users have not answered any surveys", messages.WARNING)
+            return HttpResponseRedirect(request.get_full_path())
+        return render(
+            request,
+            "remove_response.html",
+            context={
+                "users": queryset,
+                "surveys": surveys,
+            }
+        )
+
+    remove_response.short_description = "Remove response to a survey"
 
 
 admin.site.unregister(User)
