@@ -47,6 +47,7 @@ function install_apt_dependencies {
                        zlib1g-dev \
                        libssl-dev \
                        python3-mysqldb \
+                       libmysqlclient-dev \
                        gdal-bin \
                        python3-gdal
 
@@ -108,7 +109,13 @@ function setup_apache {
     cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
     echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
     a2dissite 000-default
-    a2ensite 000-hrpt 001-hrpt-prod-redirect
+    a2ensite 000-hrpt
+
+    if [ $ENVIRONMENT == "prod" ];
+    then
+      a2ensite 001-hrpt-prod-redirect
+    fi
+
     service apache2 restart
 }
 
