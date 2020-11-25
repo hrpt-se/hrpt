@@ -101,7 +101,7 @@ function setup_environment_variables {
 
 function setup_apache {
     apt-get install -y apache2 \
-                       libapache2-mod-wsgi
+                       libapache2-mod-wsgi-py3
 
     git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
     cd /var/www/hrpt/
