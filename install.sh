@@ -107,7 +107,13 @@ function setup_apache {
     echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
     cat /etc/profile.d/hrpt.sh >> /etc/apache2/envvars
     a2dissite 000-default
-    a2ensite 000-hrpt 001-hrpt-prod-redirect
+    a2ensite 000-hrpt
+
+    if [ $ENVIRONMENT == "prod" ];
+    then
+      a2ensite 001-hrpt-prod-redirect
+    fi
+
     service apache2 restart
 }
 
