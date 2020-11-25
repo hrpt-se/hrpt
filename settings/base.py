@@ -267,7 +267,7 @@ MULTI_PROFILE_ALLOWED = 'false' #pekka
 
 # Import secret values, proceed if no secrets file exists.
 try:
-    from secrets import *
+    from settings.secrets import *
 except ImportError:
     pass
 
