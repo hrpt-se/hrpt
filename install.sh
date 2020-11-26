@@ -67,8 +67,7 @@ function setup_mariadb {
     mysql_install_db
     service mysql start
 
-    # move to it's own command and
-    # remove IF EXISTS since it is not supported for MySQL<5.7
+    # move to it's own command and remove IF EXISTS since it is not supported for MySQL<5.7
     mysql -uroot -proot <<EOF
       DROP USER $DB_USERNAME;
 EOF
@@ -84,6 +83,11 @@ EOF
 function install_python_dependencies {
     export LDFLAGS="-L/usr/local/opt/openssl/lib $LDFLAGS"
     export CPPFLAGS="-I/usr/local/opt/openssl/include $CPPFLAGS"
+    # This should always be done regardless of environment but fails locally due to certificates
+    if [ $ENVIRONMENT != "local" ];
+    then
+        pip3 install --upgrade pip
+    fi
     pip3 install -r /var/www/hrpt/requirements.txt
 }
 
@@ -103,14 +107,20 @@ function setup_apache {
 
     cd /var/www/hrpt/
     cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
-    cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
-    echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
-    cat /etc/profile.d/hrpt.sh >> /etc/apache2/envvars
+
+    if grep -q ". /etc/profile.d/hrpt.sh" /etc/apache2/envvars;
+    then
+      echo 'Apache2 envvars have already been added'
+    else
+      echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
+    fi
+
     a2dissite 000-default
     a2ensite 000-hrpt
 
     if [ $ENVIRONMENT == "prod" ];
     then
+      cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
       a2ensite 001-hrpt-prod-redirect
     fi
 
@@ -158,6 +168,7 @@ EOF
 function start_mail_service {
     cp vagrant/hrpt-mail.service /etc/systemd/system/
     systemctl enable hrpt-mail
+    systemctl start hrpt-mail
 }
 
 install_certificates
