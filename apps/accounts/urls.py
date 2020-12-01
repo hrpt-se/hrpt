@@ -44,7 +44,7 @@ urlpatterns = [
         name='registration_disallowed'),
     # From registration.auth_urls
     url(r'^login/$', auth_views.LoginView.as_view(), name='auth_login'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(), name='auth_logout'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='auth_logout'),
     url(r'^password/change/$', auth_views.PasswordChangeView.as_view(), name='password_change'),
     url(r'^password/change/done/$', auth_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
     url(r'^password/reset/$',
