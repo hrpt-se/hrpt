@@ -30,15 +30,14 @@ urlpatterns = [
     url(r'^accounts/', include('apps.accounts.urls')),
     url(r'^login/', include('loginurl.urls')),
     url(r'^count/', include('apps.count.urls')),
-
+    url(r'^contact/$', ContactFormView.as_view(form_class=CaptchaContactForm), name='contact_form'),
+    url(r'^contact/sent/$', TemplateView.as_view(template_name='contact_form/contact_form_sent.html'),
+        name='contact_form_sent'),
     url(r'^colors.css$', colors_css)
 ]
 
 # Catchall
 urlpatterns += i18n_patterns(
-    url(r'^contact/$', ContactFormView.as_view(form_class=CaptchaContactForm), name='contact_form'),
-    url(r'^contact/sent/$', TemplateView.as_view(template_name='contact_form/contact_form_sent.html'),
-        name='contact_form_sent'),
     url(r'^', include('cms.urls'))
 )
 
