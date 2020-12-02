@@ -14,8 +14,8 @@ def survey_update_from_xhtml(survey, xmlstring):
     root = ElementTree.XML(xmlstring)
 
     survey.title = root.find('h1').text or ''
-    survey.shortname = root.find('h1').get('data-shortname') or ''
-    survey.version = root.find('h1').get('data-version') or ''
+    survey.shortname = root.find('h1').get('data-shortname', '').lower()
+    survey.version = root.find('h1').get('data-version', '')
     survey.save()
 
     builtins = [q.data_name for q in survey.question_set.all() if q.is_builtin]
@@ -315,7 +315,7 @@ def survey_update_from_xml(survey, xmlstring):
     xsurvey = ElementTree.XML(xmlstring)
 
     survey.title = xsurvey.findtext(p+'title')
-    survey.shortname = xsurvey.findtext(p+'shortname')
+    survey.shortname = xsurvey.findtext(p+'shortname').lower()
     survey.version = xsurvey.findtext(p+'version')
     survey.save()
 
