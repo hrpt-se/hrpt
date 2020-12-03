@@ -32,6 +32,9 @@ class SurveyIdCode(models.Model):
     def __unicode__(self):
         return self.idcode
 
+    def __str__(self):
+        return self.__unicode__()
+
 
 class SurveyUser(models.Model):
     # null=True: only so because this happens 'in the wild', i.e. in already existing data.
@@ -50,6 +53,9 @@ class SurveyUser(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def __str__(self):
+        return self.__unicode__()
 
     def get_edit_url(self):
         from . import views
@@ -108,6 +114,9 @@ class Survey(models.Model):
     def __unicode__(self):
         return '%s - %s' % (self.survey_id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
 class Participation(models.Model):
     user = models.ForeignKey(SurveyUser, on_delete=models.CASCADE)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
@@ -118,6 +127,9 @@ class Participation(models.Model):
 
     def __unicode__(self):
         return '%s (%s)' % (self.user.name, self.date)
+
+    def __str__(self):
+        return self.__unicode__()
 
     class Meta:
         verbose_name_plural = 'Survey participation log'
