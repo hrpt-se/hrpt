@@ -274,6 +274,9 @@ class TextTemplate(object):
         c = Context(template_context)
         return t.render(c)
 
+    def __str__(self):
+        return self.__unicode__()
+
 class FormBuilder(object):
     def __init__(self, spec):
         self.spec = spec

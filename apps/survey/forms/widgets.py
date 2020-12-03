@@ -45,6 +45,9 @@ class RadioInputNoLabel(RadioSelect):
     def __unicode__(self):
         return mark_safe('%s' % self.tag())
 
+    def __str__(self):
+        return self.__unicode__()
+
 @python_2_unicode_compatible
 class TableOptionsSingleRowRenderer(object):
     """
