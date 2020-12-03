@@ -21,6 +21,9 @@ class SiteSettings(models.Model):
     def __unicode__(self):
         return _("Site settings")
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         verbose_name = _("Site settings")
         verbose_name_plural = _("Site settings")

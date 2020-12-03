@@ -13,3 +13,6 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.user, self.idcode)
+
+    def __str__(self):
+        return self.__unicode__()

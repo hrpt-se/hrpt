@@ -218,6 +218,9 @@ class Survey(models.Model):
     def __unicode__(self):
         return "Survey #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def get_table_name(self):
         if self.is_published and not self.shortname:
             raise RuntimeError('cannot generate tables for surveys with no shortname')
@@ -350,6 +353,9 @@ class RuleType(models.Model):
     def __unicode__(self):
         return "RuleType #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
 class QuestionDataType(models.Model):
     title = models.CharField(max_length=255, blank=True, default='')
     db_type = models.CharField(max_length=255)
@@ -358,6 +364,9 @@ class QuestionDataType(models.Model):
 
     def __unicode__(self):
         return "QuestionDataType #%d %s" % (self.id, self.title)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def as_field_type(self, verbose_name=None, regex=None):
         #really? just copy pasting code from the web without knowing what it does????
@@ -388,6 +397,9 @@ class VirtualOptionType(models.Model):
 
     def __unicode__(self):
         return "VirtualOptionType #%d %s for %s" % (self.id, self.title, self.question_data_type.title)
+
+    def __str__(self):
+        return self.__unicode__()
 
 class Question(models.Model):
     survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
@@ -534,6 +546,9 @@ class Question(models.Model):
     def __unicode__(self):
         return "Question #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ['survey', 'ordinal']
 
@@ -615,6 +630,9 @@ class QuestionRow(models.Model):
     def __unicode__(self):
         return "QuestionRow #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
     @property
     def translated_title(self):
         if self.translation and self.translation.title:
@@ -646,6 +664,9 @@ class QuestionColumn(models.Model):
 
     def __unicode__(self):
         return "QuestionColumn #%d %s" % (self.id, self.title)
+
+    def __str__(self):
+        return self.__unicode__()
 
     @property
     def translated_title(self):
@@ -750,6 +771,9 @@ class Option(models.Model):
     def __unicode__(self):
         return 'Option #%d %s' % (self.id, self.value)
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ['question', 'ordinal']
 
@@ -817,6 +841,9 @@ class Rule(models.Model):
     def __unicode__(self):
         return 'Rule #%d' % (self.id)
 
+    def __str__(self):
+        return self.__unicode__()
+
 # I18n models
 
 class TranslationSurvey(models.Model):
@@ -837,6 +864,9 @@ class TranslationSurvey(models.Model):
 
     def __unicode__(self):
         return "TranslationSurvey(%s) for %s" % (self.language, self.survey)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def as_form(self, data=None):
         class TranslationSurveyForm(ModelForm):
@@ -859,6 +889,9 @@ class TranslationQuestion(models.Model):
     def __unicode__(self):
         return "TranslationQuestion(%s) for %s" % (self.translation.language, self.question)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_form(self, data=None):
         class TranslationQuestionForm(ModelForm):
             class Meta:
@@ -878,6 +911,9 @@ class TranslationQuestionRow(models.Model):
     def __unicode__(self):
         return "TranslationQuestionRow(%s) for %s" % (self.translation.language, self.row)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_form(self, data=None):
         class TranslationRowForm(ModelForm):
             class Meta:
@@ -896,6 +932,9 @@ class TranslationQuestionColumn(models.Model):
 
     def __unicode__(self):
         return "TranslationQuestionColumn(%s) for %s" % (self.translation.language, self.column)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def as_form(self, data=None):
         class TranslationColumnForm(ModelForm):
@@ -917,6 +956,9 @@ class TranslationOption(models.Model):
     def __unicode__(self):
         return "TranslationOption(%s) for %s" % (self.translation.language, self.option)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_form(self, data=None):
         class TranslationOptionForm(ModelForm):
             class Meta:
@@ -930,6 +972,9 @@ class ChartType(models.Model):
 
     def __unicode__(self):
         return self.description or self.shortname
+
+    def __str__(self):
+        return self.__unicode__()
 
 class Chart(models.Model):
     survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
@@ -949,6 +994,9 @@ class Chart(models.Model):
 
     def __unicode__(self):
         return "Chart %s for %s" % (self.shortname, self.survey)
+
+    def __str__(self):
+        return self.__unicode__()
 
     # @models.permalink
     def get_absolute_url(self):
