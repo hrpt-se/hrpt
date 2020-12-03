@@ -36,6 +36,9 @@ class UserReminderInfo(models.Model):
     def __unicode__(self):
         return self.user.username
 
+    def __str__(self):
+        return self.__unicode__()
+
     def get_language(self):
         if not self.language:
             return settings.LANGUAGE_CODE
@@ -97,6 +100,9 @@ class ReminderSettings(models.Model):
     def __unicode__(self):
         return _("Reminder settings")
 
+    def __str__(self):
+        return self.__unicode__()
+
     def get_interval(self):
         if self.interval == WEEKLY_WITH_BATCHES:
             return 7
@@ -135,6 +141,9 @@ class NewsLetterTemplate(TranslatableModel):
     def __unicode__(self):
         return self.subject
 
+    def __str__(self):
+        return self.__unicode__()
+
 
 class NewsLetter(TranslatableModel):
     date = models.DateTimeField(_("Date"), unique=True, choices=[])
@@ -166,6 +175,9 @@ class NewsLetter(TranslatableModel):
     def __unicode__(self):
         return self.subject
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ("-date",)
 
@@ -187,6 +199,9 @@ class ReminderError(models.Model):
 
     def __unicode__(self):
         return self.message
+
+    def __str__(self):
+        return self.__unicode__()
 
     class Meta:
         ordering = ("-timestamp",)
@@ -441,6 +456,9 @@ class ManualNewsLetter(models.Model):
     def __unicode__(self):
         return self.subject
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ("-timestamp",)
 
@@ -457,6 +475,9 @@ class FailedEmail(models.Model):
 
     def __unicode__(self):
         return self.message
+
+    def __str__(self):
+        return self.__unicode__()
 
     class Meta:
         ordering = ("-timestamp",)

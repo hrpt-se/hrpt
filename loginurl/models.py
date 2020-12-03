@@ -17,6 +17,9 @@ class Key(models.Model):
     def __unicode__(self):
         return '%s (%s)' % (self.key, self.user.username)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def is_valid(self):
         """
         Check if the key is valid.
