@@ -61,12 +61,6 @@ class EmailSettingsForm(forms.Form):
         if len(settings.LANGUAGES) == 1:
             del self.fields['language']
 
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.exclude(id=self.instance.id).filter(email=email).count():
-            raise forms.ValidationError(_("This email is already in use"))
-        return email
-
     def save(self):
         if self.instance.email == self.instance.username:
             self.instance.username = self.cleaned_data['email']
