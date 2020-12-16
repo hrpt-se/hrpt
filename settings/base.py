@@ -186,7 +186,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'parler',
     'sekizai',
-    'registration',
+    'django_registration',
     'loginurl',
     'apps.accounts',
     'apps.survey',

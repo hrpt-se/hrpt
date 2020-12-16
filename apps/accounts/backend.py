@@ -1,7 +1,7 @@
 from django.db import transaction
-from registration.models import RegistrationProfile
-from registration.views import ActivationView
-
+from django_registration.backends.activation.views import ActivationView
+from django_registration.exceptions import ActivationError, RegistrationError
+from django_registration.backends.activation.views import ActivationView
 from apps.survey.models import SurveyUser, SurveyIdCode
 from .models import UserProfile
 
@@ -27,42 +27,33 @@ class TweakedDefaultActivationView(ActivationView):
     """
     @transaction.atomic
     def activate(self, request, activation_key):
+        # Get the username from the key and validate that it has not expired.
+        username = self.validate_key(activation_key)
+
+        # Get the user and validate that it has not already been activated.
+        # If the user is already activated return success.
         try:
-            registration_profile = RegistrationProfile.objects.get(
-                activation_key=activation_key)
-        except RegistrationProfile.DoesNotExist:
-            # If no profile is found, the link is invalid
-            return False
+            user = self.get_user(username)
+        except ActivationError as activation_error:
+            if activation_error.code != "already_activated":
+                raise activation_error
+            return
 
-        # If the user is already activated, abort further processing
-        if registration_profile.user.is_active:
-            return registration_profile.user
-
-        profile = UserProfile.objects.get(user=registration_profile.user)
+        profile = UserProfile.objects.get(user=user)
         idcode = SurveyIdCode.objects.get(idcode=profile.idcode)
 
         # If the idcode is already assigned to another user.
         if idcode.surveyuser_global_id is not None:
-            return False
+            raise ActivationError(self.INVALID_KEY_MESSAGE)
 
         # Set the user as active.
-        # Note that this is not done through the
-        # RegistrationManager.activate_user() method by intention. That method
-        # will remove the mapping between the activation code and user, making
-        # the first step of this view impossible.
-        registration_profile.user.is_active = True
-        registration_profile.user.save()
+        user.is_active = True
+        user.save()
 
-        survey_user = SurveyUser.objects.create(
-            user=registration_profile.user,
-            name=registration_profile.user.username
-        )
+        survey_user = SurveyUser.objects.create(user=user, name=user.username)
 
         idcode.fodelsedatum = profile.year_of_birth
         idcode.surveyuser_global_id = survey_user
         idcode.save()
 
-        return registration_profile.user
-
-    def get_success_url(self, user):
-        return 'registration_activation_complete', (), {}
+        return user
