@@ -3,7 +3,7 @@ from datetime import datetime
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djangocms_text_ckeditor.widgets import TextEditorWidget
-from hvad.forms import TranslatableModelForm
+from parler.forms import TranslatableModelForm
 
 from .models import (
     NO_INTERVAL, ReminderSettings, NewsLetterTemplate, NewsLetter,
@@ -65,9 +65,9 @@ class NewsLetterForm(TranslatableModelForm):
             self.language = 'en'
 
         for fieldname in ('sender_email', 'sender_name', 'subject', 'message'):
-            self.fields[fieldname].initial = getattr(
-                get_default_for_newsitem(self.language), fieldname
-            ) if get_default_for_newsitem(self.language) else ""
+            default = get_default_for_newsitem(self.language)
+            self.fields[fieldname].initial = getattr(default, fieldname, "")
 
     class Meta:
         model = NewsLetter
+        fields = '__all__'

@@ -58,14 +58,14 @@ USE_I18N = True
 USE_L10N = True
 
 LANGUAGES = (
-   ('en', u'English'),
-   ('de', u'Deutsch'),
-   ('fr', u'Français'),
-   ('nl', u'Nederlands'),
-   ('it', u'Italiano'),
-   ('sv', u'Svenska'),
-   ('pt', u'Português'),
-   ('es', u'Español'),
+   ('en', 'English'),
+   ('de', 'Deutsch'),
+   ('fr', 'Français'),
+   ('nl', 'Nederlands'),
+   ('it', 'Italiano'),
+   ('sv', 'Svenska'),
+   ('pt', 'Português'),
+   ('es', 'Español'),
 )
 
 CMS_LANGUAGES = {
@@ -155,7 +155,6 @@ TEMPLATES = [{
         'loaders': [
             'django.template.loaders.filesystem.Loader',
             'django.template.loaders.app_directories.Loader',
-            'django.template.loaders.eggs.Loader'
         ],
     }
 }]
@@ -185,7 +184,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'hvad',
+    'parler',
     'sekizai',
     'registration',
     'loginurl',
@@ -271,7 +270,7 @@ TEXT_ADDITIONAL_ATTRIBUTES = ('allow', 'allowfullscreen', 'frameborder')
 
 # Import secret values, proceed if no secrets file exists.
 try:
-    from secrets import *
+    from settings.secrets import *
 except ImportError:
     pass
 

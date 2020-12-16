@@ -7,7 +7,7 @@ class Key(models.Model):
     """
     A simple key store.
     """
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     key = models.CharField(max_length=40, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     usage_left = models.IntegerField(null=True, default=1)
@@ -16,6 +16,9 @@ class Key(models.Model):
 
     def __unicode__(self):
         return '%s (%s)' % (self.key, self.user.username)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def is_valid(self):
         """

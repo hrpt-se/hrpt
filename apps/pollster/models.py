@@ -4,7 +4,9 @@ from math import pi, sin, log, exp, atan
 import os
 import shutil
 import re
+import json
 
+from django.urls import reverse
 from django.contrib.gis.db.models import MultiPolygonField
 from django.db import (
     models, connection, transaction, IntegrityError, DatabaseError
@@ -15,7 +17,7 @@ from django.core.validators import RegexValidator
 from django.conf import settings
 
 from cms.models import CMSPlugin
-import dynamicmodels
+from . import dynamicmodels
 from apps.survey.models import SurveyIdCode, SurveyUser
 
 
@@ -81,20 +83,8 @@ def _get_or_default(queryset, default=None):
     return default
 
 
-#this was extracted from the huge csv export function when it was refactored
-# not that it ins't still disturbing... (it is), just trying to tidying things a little bit
-def _get_fieldval_survery(result_row, field_name):
-    val = getattr(result_row, field_name)
-    if callable(val):
-        val = val()
-    if type(val) is unicode:
-        val = val.encode('utf-8')
-    return val
-
-
-
 class Survey(models.Model):
-    parent = models.ForeignKey('self', db_index=True, blank=True, null=True)
+    parent = models.ForeignKey('self', db_index=True, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     shortname = models.SlugField(max_length=255, default='')
     version = models.SlugField(max_length=255, blank=True, default='')
@@ -220,12 +210,16 @@ class Survey(models.Model):
     def translation(self):
         return self.translation_survey
 
-    @models.permalink
+    # @models.permalink
     def get_absolute_url(self):
-        return ('pollster_survey_edit', [str(self.id)])
+        return reverse('pollster_survey_edit', args=[str(self.id)])
+        # return ('pollster_survey_edit', [str(self.id)])
 
     def __unicode__(self):
         return "Survey #%d %s" % (self.id, self.title)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def get_table_name(self):
         if self.is_published and not self.shortname:
@@ -322,26 +316,29 @@ class Survey(models.Model):
         self.status = 'UNPUBLISHED'
         self.save()
 
-    def write_csv(self, writer, extra_fields = []):
+    def write_csv(self, writer, extra_fields=[]):
+        def _get_fieldval_survery(obj, field_name):
+            val = getattr(obj, field_name)
+            return val() if callable(val) else val
+
         model = self.as_model()
-        fields = model._meta.fields
-        fieldNames = [field.name for field in fields]
-        fieldNames.extend(extra_fields)
-        writer.writerow(fieldNames)
+        field_names = [field.name for field in model._meta.fields]
+        field_names.extend(extra_fields)
+        writer.writerow(field_names)
         for result_row in model.objects.all():
-            row = [_get_fieldval_survery(result_row, field.name) for field in fields]
-            rowUser = User.objects.get(id=result_row.user)
-            rowIdCode = SurveyIdCode.objects.get(surveyuser_global_id = result_row.global_id)
+            row = [_get_fieldval_survery(result_row, field.name) for field in model._meta.fields]
+            user = User.objects.get(id=result_row.user)
+            id_code = SurveyIdCode.objects.get(surveyuser_global_id=result_row.global_id)
 
             #note that this should contain a means to getch the data, not the data itself
             # but oh well, let's leave it be for now
 
             #TODO: add is_staf_member... or just filter them out
             possible_extra_fields = {
-                "email" : rowUser.email,
-                "is_active": rowUser.is_active,
-                "id_code": rowIdCode.idcode,
-                "dob_from_idcode": rowIdCode.fodelsedatum
+                "email": user.email,
+                "is_active": user.is_active,
+                "id_code": id_code.idcode,
+                "dob_from_idcode": id_code.fodelsedatum
             }
 
             for extra_field in extra_fields:
@@ -356,6 +353,9 @@ class RuleType(models.Model):
     def __unicode__(self):
         return "RuleType #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
 class QuestionDataType(models.Model):
     title = models.CharField(max_length=255, blank=True, default='')
     db_type = models.CharField(max_length=255)
@@ -365,10 +365,13 @@ class QuestionDataType(models.Model):
     def __unicode__(self):
         return "QuestionDataType #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_field_type(self, verbose_name=None, regex=None):
         #really? just copy pasting code from the web without knowing what it does????
         import django.db.models
-        import db.models
+        import apps.pollster.db.models
         field = eval(self.db_type)
         field.verbose_name = verbose_name
         if regex:
@@ -389,22 +392,25 @@ class QuestionDataType(models.Model):
 
 class VirtualOptionType(models.Model):
     title = models.CharField(max_length=255, blank=True, default='')
-    question_data_type = models.ForeignKey(QuestionDataType)
+    question_data_type = models.ForeignKey(QuestionDataType, on_delete=models.CASCADE)
     js_class = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
         return "VirtualOptionType #%d %s for %s" % (self.id, self.title, self.question_data_type.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
 class Question(models.Model):
-    survey = models.ForeignKey(Survey, db_index=True)
+    survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
     starts_hidden = models.BooleanField(default=False)
     is_mandatory = models.BooleanField(default=False)
     ordinal = models.IntegerField()
     title = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
     type = models.CharField(max_length=255, choices=QUESTION_TYPE_CHOICES)
-    data_type = models.ForeignKey(QuestionDataType)
-    open_option_data_type = models.ForeignKey(QuestionDataType, related_name="questions_with_open_option", null=True, blank=True)
+    data_type = models.ForeignKey(QuestionDataType, on_delete=models.CASCADE)
+    open_option_data_type = models.ForeignKey(QuestionDataType, related_name="questions_with_open_option", null=True, blank=True, on_delete=models.CASCADE)
     data_name = models.CharField(max_length=255)
     visual = models.CharField(max_length=255, blank=True, default='')
     tags = models.CharField(max_length=255, blank=True, default='')
@@ -540,6 +546,9 @@ class Question(models.Model):
     def __unicode__(self):
         return "Question #%d %s" % (self.id, self.title)
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ['survey', 'ordinal']
 
@@ -608,7 +617,7 @@ class Question(models.Model):
 
 
 class QuestionRow(models.Model):
-    question = models.ForeignKey(Question, related_name="row_set", db_index=True)
+    question = models.ForeignKey(Question, related_name="row_set", db_index=True, on_delete=models.CASCADE)
     ordinal = models.IntegerField()
     title = models.CharField(max_length=255, blank=True, default='')
 
@@ -620,6 +629,9 @@ class QuestionRow(models.Model):
 
     def __unicode__(self):
         return "QuestionRow #%d %s" % (self.id, self.title)
+
+    def __str__(self):
+        return self.__unicode__()
 
     @property
     def translated_title(self):
@@ -639,7 +651,7 @@ class QuestionRow(models.Model):
             self.translation_row = _get_or_default(r, default)
 
 class QuestionColumn(models.Model):
-    question = models.ForeignKey(Question, related_name="column_set", db_index=True)
+    question = models.ForeignKey(Question, related_name="column_set", db_index=True, on_delete=models.CASCADE)
     ordinal = models.IntegerField()
     title = models.CharField(max_length=255, blank=True, default='')
 
@@ -652,6 +664,9 @@ class QuestionColumn(models.Model):
 
     def __unicode__(self):
         return "QuestionColumn #%d %s" % (self.id, self.title)
+
+    def __str__(self):
+        return self.__unicode__()
 
     @property
     def translated_title(self):
@@ -693,10 +708,10 @@ class QuestionColumn(models.Model):
         return self.question.data_name_for_row_column(self.row, self)
 
 class Option(models.Model):
-    question = models.ForeignKey(Question, db_index=True)
-    clone = models.ForeignKey('self', db_index=True, blank=True, null=True)
-    row = models.ForeignKey(QuestionRow, blank=True, null=True)
-    column = models.ForeignKey(QuestionColumn, blank=True, null=True)
+    question = models.ForeignKey(Question, db_index=True, on_delete=models.CASCADE)
+    clone = models.ForeignKey('self', db_index=True, blank=True, null=True, on_delete=models.CASCADE)
+    row = models.ForeignKey(QuestionRow, blank=True, null=True, on_delete=models.CASCADE)
+    column = models.ForeignKey(QuestionColumn, blank=True, null=True, on_delete=models.CASCADE)
     is_virtual = models.BooleanField(default=False)
     is_open = models.BooleanField(default=False)
     starts_hidden = models.BooleanField(default=False)
@@ -706,7 +721,7 @@ class Option(models.Model):
     value = models.CharField(max_length=255, default='')
     description = models.TextField(blank=True, default='')
 
-    virtual_type = models.ForeignKey(VirtualOptionType, blank=True, null=True)
+    virtual_type = models.ForeignKey(VirtualOptionType, blank=True, null=True, on_delete=models.CASCADE)
     virtual_inf = models.CharField(max_length=255, blank=True, default='')
     virtual_sup = models.CharField(max_length=255, blank=True, default='')
     virtual_regex = models.CharField(max_length=255, blank=True, default='')
@@ -755,6 +770,9 @@ class Option(models.Model):
 
     def __unicode__(self):
         return 'Option #%d %s' % (self.id, self.value)
+
+    def __str__(self):
+        return self.__unicode__()
 
     class Meta:
         ordering = ['question', 'ordinal']
@@ -810,12 +828,12 @@ class Option(models.Model):
         return errors
 
 class Rule(models.Model):
-    rule_type = models.ForeignKey(RuleType)
+    rule_type = models.ForeignKey(RuleType, on_delete=models.CASCADE)
     is_sufficient = models.BooleanField(default=True)
-    subject_question = models.ForeignKey(Question, related_name='subject_of_rules', db_index=True)
-    subject_options = models.ManyToManyField(Option, related_name='subject_of_rules', limit_choices_to = {'question': subject_question})
-    object_question = models.ForeignKey(Question, related_name='object_of_rules', blank=True, null=True)
-    object_options = models.ManyToManyField(Option, related_name='object_of_rules', limit_choices_to = {'question': object_question})
+    subject_question = models.ForeignKey(Question, related_name='subject_of_rules', db_index=True, on_delete=models.CASCADE)
+    subject_options = models.ManyToManyField(Option, related_name='subject_of_rules', limit_choices_to={'question': subject_question})
+    object_question = models.ForeignKey(Question, related_name='object_of_rules', blank=True, null=True, on_delete=models.CASCADE)
+    object_options = models.ManyToManyField(Option, related_name='object_of_rules', limit_choices_to={'question': object_question})
 
     def js_class(self):
         return self.rule_type.js_class
@@ -823,10 +841,13 @@ class Rule(models.Model):
     def __unicode__(self):
         return 'Rule #%d' % (self.id)
 
+    def __str__(self):
+        return self.__unicode__()
+
 # I18n models
 
 class TranslationSurvey(models.Model):
-    survey = models.ForeignKey(Survey, db_index=True)
+    survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
     language = models.CharField(max_length=3, db_index=True)
     title = models.CharField(max_length=255, blank=True, default='')
     status = models.CharField(max_length=255, default='DRAFT', choices=SURVEY_TRANSLATION_STATUS_CHOICES)
@@ -836,12 +857,16 @@ class TranslationSurvey(models.Model):
         ordering = ['survey', 'language']
         unique_together = ('survey', 'language')
 
-    @models.permalink
+    # @models.permalink
     def get_absolute_url(self):
-        return ('pollster_survey_translation_edit', [str(self.survey.id), self.language])
+        # return ('pollster_survey_translation_edit', [str(self.survey.id), self.language])
+        return reverse('pollster_survey_translation_edit', args=[str(self.survey.id), self.language])
 
     def __unicode__(self):
         return "TranslationSurvey(%s) for %s" % (self.language, self.survey)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def as_form(self, data=None):
         class TranslationSurveyForm(ModelForm):
@@ -851,8 +876,8 @@ class TranslationSurvey(models.Model):
         return TranslationSurveyForm(data, instance=self, prefix="survey")
 
 class TranslationQuestion(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    question = models.ForeignKey(Question, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
     error_message = models.TextField(blank=True, default='')
@@ -864,6 +889,9 @@ class TranslationQuestion(models.Model):
     def __unicode__(self):
         return "TranslationQuestion(%s) for %s" % (self.translation.language, self.question)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_form(self, data=None):
         class TranslationQuestionForm(ModelForm):
             class Meta:
@@ -872,8 +900,8 @@ class TranslationQuestion(models.Model):
         return TranslationQuestionForm(data, instance=self, prefix="question_%s"%(self.id,))
 
 class TranslationQuestionRow(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    row = models.ForeignKey(QuestionRow, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    row = models.ForeignKey(QuestionRow, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
 
     class Meta:
@@ -883,6 +911,9 @@ class TranslationQuestionRow(models.Model):
     def __unicode__(self):
         return "TranslationQuestionRow(%s) for %s" % (self.translation.language, self.row)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_form(self, data=None):
         class TranslationRowForm(ModelForm):
             class Meta:
@@ -891,8 +922,8 @@ class TranslationQuestionRow(models.Model):
         return TranslationRowForm(data, instance=self, prefix="row_%s"%(self.id,))
 
 class TranslationQuestionColumn(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    column = models.ForeignKey(QuestionColumn, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    column = models.ForeignKey(QuestionColumn, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, default='')
 
     class Meta:
@@ -902,6 +933,9 @@ class TranslationQuestionColumn(models.Model):
     def __unicode__(self):
         return "TranslationQuestionColumn(%s) for %s" % (self.translation.language, self.column)
 
+    def __str__(self):
+        return self.__unicode__()
+
     def as_form(self, data=None):
         class TranslationColumnForm(ModelForm):
             class Meta:
@@ -910,8 +944,8 @@ class TranslationQuestionColumn(models.Model):
         return TranslationColumnForm(data, instance=self, prefix="column_%s"%(self.id,))
 
 class TranslationOption(models.Model):
-    translation = models.ForeignKey(TranslationSurvey, db_index=True)
-    option = models.ForeignKey(Option, db_index=True)
+    translation = models.ForeignKey(TranslationSurvey, db_index=True, on_delete=models.CASCADE)
+    option = models.ForeignKey(Option, db_index=True, on_delete=models.CASCADE)
     text = models.CharField(max_length=4095, blank=True, default='')
     description = models.TextField(blank=True, default='')
 
@@ -921,6 +955,9 @@ class TranslationOption(models.Model):
 
     def __unicode__(self):
         return "TranslationOption(%s) for %s" % (self.translation.language, self.option)
+
+    def __str__(self):
+        return self.__unicode__()
 
     def as_form(self, data=None):
         class TranslationOptionForm(ModelForm):
@@ -936,9 +973,12 @@ class ChartType(models.Model):
     def __unicode__(self):
         return self.description or self.shortname
 
+    def __str__(self):
+        return self.__unicode__()
+
 class Chart(models.Model):
-    survey = models.ForeignKey(Survey, db_index=True)
-    type = models.ForeignKey(ChartType, db_index=True)
+    survey = models.ForeignKey(Survey, db_index=True, on_delete=models.CASCADE)
+    type = models.ForeignKey(ChartType, db_index=True, on_delete=models.CASCADE)
     shortname = models.SlugField(max_length=255)
     chartwrapper = models.TextField(blank=True, default='')
     sqlsource = models.TextField(blank=True, default='', verbose_name="SQL Source Query")
@@ -955,9 +995,13 @@ class Chart(models.Model):
     def __unicode__(self):
         return "Chart %s for %s" % (self.shortname, self.survey)
 
-    @models.permalink
+    def __str__(self):
+        return self.__unicode__()
+
+    # @models.permalink
     def get_absolute_url(self):
-        return ('pollster_survey_chart_edit', [str(self.survey.id), self.shortname])
+        # return ('pollster_survey_chart_edit', [str(self.survey.id), self.shortname])
+        return reverse('pollster_survey_chart_edit', args=[str(self.survey.id), self.shortname])
 
     @property
     def is_draft(self):
@@ -1010,9 +1054,6 @@ class Chart(models.Model):
 
         return json.dumps(data)
 
-
-
-
     def get_map_click(self, lat, lng):
         result = {}
         skip_cols = ("ogc_fid", "color", "geometry")
@@ -1021,7 +1062,7 @@ class Chart(models.Model):
             for i in range(len(data[0])):
                 if description[i][0] not in skip_cols:
                     result[description[i][0]] = str(data[0][i])
-        return json.dumps(resu1lt)
+        return json.dumps(result)
 
     def get_map_tile(self, user_id, global_id, z, x, y):
         filename = self.get_map_tile_filename(z, x, y)
@@ -1208,7 +1249,7 @@ class Chart(models.Model):
             cursor = connection.cursor()
             cursor.execute(query, params)
             return (cursor.description, cursor.fetchall())
-        except DatabaseError, e:
+        except DatabaseError as e:
             return ((('Error',),), ((str(e),),))
 
     def load_colors(self, user_id, global_id):
@@ -1223,7 +1264,7 @@ class Chart(models.Model):
             cursor = connection.cursor()
             cursor.execute(query, params)
             return [x[0] for x in cursor.fetchall()]
-        except DatabaseError, e:
+        except DatabaseError as e:
             # If the SQL query is wrong we just return 'red'. We don't try to pop
             # up a warning because this probably is an async Javascript call: the
             # query error should be shown by the map editor.
@@ -1236,7 +1277,7 @@ class Chart(models.Model):
             cursor = connection.cursor()
             cursor.execute(query, (lng, lat))
             return (cursor.description, cursor.fetchall())
-        except DatabaseError, e:
+        except DatabaseError as e:
             return (None, [])
 
     def load_zip_coords(self, zip_code_key, zip_code_country=None):
@@ -1258,7 +1299,7 @@ class Chart(models.Model):
                 return {"lat": data[0][0], "lng": data[0][1]}
             else:
                 return {}
-        except DatabaseError, e:
+        except DatabaseError as e:
             return {}
 
 class GoogleProjection:
@@ -1292,7 +1333,7 @@ class GoogleProjection:
 
 
 class SurveyChartPlugin(CMSPlugin):
-    chart = models.ForeignKey(Chart)
+    chart = models.ForeignKey(Chart, on_delete=models.CASCADE)
 
 
 class ZipCodes(models.Model):

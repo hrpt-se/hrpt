@@ -1,7 +1,8 @@
 from django.db import models
 from xml.etree import ElementTree
-import re, warnings
-import models
+import re
+import warnings
+from . import models
 
 #########################
 # decorated XHTML parsing
@@ -9,12 +10,12 @@ import models
 
 def survey_update_from_xhtml(survey, xmlstring):
     # ElementTree does not like being passed unicode objects
-    xmlstring = '<?xml version="1.0" encoding="UTF-8"?>'+xmlstring.encode('utf-8')
+    xmlstring = '<?xml version="1.0" encoding="UTF-8"?>'+xmlstring #xmlstring.encode('utf-8')
     root = ElementTree.XML(xmlstring)
 
     survey.title = root.find('h1').text or ''
-    survey.shortname = root.find('h1').get('data-shortname') or ''
-    survey.version = root.find('h1').get('data-version') or ''
+    survey.shortname = root.find('h1').get('data-shortname', '').lower()
+    survey.version = root.find('h1').get('data-version', '')
     survey.save()
 
     builtins = [q.data_name for q in survey.question_set.all() if q.is_builtin]
@@ -109,7 +110,7 @@ def _update_question_from_xhtml(survey, idmap, root, ordinal):
     elif match:
         question = models.Question.objects.get(id = int(match.group(1)))
         if question.type == 'builtin':
-            raise StandardError('cannot modify builtin questions')
+            raise Exception('cannot modify builtin questions')
         question.data_name = data_name or ''
         question.title = title or ''
         question.description = description or ''
@@ -206,60 +207,39 @@ def _update_option_from_xhtml(survey, idmap, question, root, ordinal):
     hidden = 'starts-hidden' in (root.get('class') or '')
     is_open = 'open' in (root.get('class') or '')
     deleted = 'deleted' in (root.get('class') or '')
+
     if deleted or question is None:
         models.Option.objects.filter(id = int(match.group(1))).delete()
-        option = None
+        return
     elif xinput is not None:
-        text = root.find('label').text
-        value = xinput.get('value')
-        description = root.get('title')
         if match:
-            option = models.Option.objects.get(id = int(match.group(1)))
-            option.starts_hidden = hidden
-            option.is_open = is_open
-            option.text = text or ''
-            option.value = value or ''
-            option.description = description or ''
-            option.ordinal = ordinal
-            option.save()
+            option = models.Option.objects.get(id=int(match.group(1)))
         else:
-            option = models.Option()
-            option.question = question
-            option.is_virtual = False
-            option.starts_hidden = hidden
-            option.is_open = is_open
-            option.text = text or ''
-            option.value = value or ''
-            option.description = description or ''
-            option.ordinal = ordinal
-            option.save()
+            option = models.Option(question=question, is_virtual=False)
+        option.is_open = is_open
+        option.text = getattr(root.find('label'), 'text', '')
+        option.description = root.get('title', '')
+        option.value = xinput.get('value', '')
     else:
-        type_id = root.get('data-type')
-        value = root.get('data-value')
-        inf = root.get('data-inf')
-        sup = root.get('data-sup')
-        regex = root.get('data-regex')
+        type_id = root.get('data-type', '')
+
+        if not type_id or not type_id.isdecimal():
+            return
         if match:
-            option = models.Option.objects.get(id = int(match.group(1)))
-            option.virtual_type = models.VirtualOptionType.objects.get(id=int(type_id))
-            option.virtual_inf = inf or ''
-            option.virtual_sup = sup or ''
-            option.virtual_regex = regex or ''
-            option.value = value or ''
-            option.starts_hidden = hidden
-            option.ordinal = ordinal
-            option.save()
+            option = models.Option.objects.get(id=int(match.group(1)))
         else:
-            option = models.Option()
-            option.question = question
-            option.is_virtual = True
-            option.virtual_inf = inf or ''
-            option.virtual_sup = sup or ''
-            option.virtual_regex = regex or ''
-            option.value = value or ''
-            option.starts_hidden = hidden
-            option.ordinal = ordinal
-            option.save()
+            option = models.Option(question=question, is_virtual=True)
+
+        option.virtual_type = models.VirtualOptionType.objects.get(id=int(type_id))
+        option.virtual_inf = root.get('data-inf', '')
+        option.virtual_sup = root.get('data-sup', '')
+        option.virtual_regex = root.get('data-regex', '')
+        option.value = root.get('data-value', '')
+
+    option.starts_hidden = hidden
+    option.ordinal = ordinal
+    option.save()
+
     idmap[temp_id] = option and option.id
     return option
 
@@ -335,7 +315,7 @@ def survey_update_from_xml(survey, xmlstring):
     xsurvey = ElementTree.XML(xmlstring)
 
     survey.title = xsurvey.findtext(p+'title')
-    survey.shortname = xsurvey.findtext(p+'shortname')
+    survey.shortname = xsurvey.findtext(p+'shortname').lower()
     survey.version = xsurvey.findtext(p+'version')
     survey.save()
 

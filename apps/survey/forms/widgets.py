@@ -6,7 +6,7 @@ from django import forms
 from django.forms.widgets import Widget, Select, RadioSelect
 from django.utils.dates import MONTHS
 from django.utils.safestring import mark_safe
-from django.utils.encoding import python_2_unicode_compatible, force_unicode
+from django.utils.encoding import python_2_unicode_compatible, force_text
 
 __all__ = ['AdviseWidget', 'DatePickerWidget', 'MonthYearWidget',
            'TableOptionsSingleWidget']
@@ -43,7 +43,10 @@ class RadioInputNoLabel(RadioSelect):
     """
 
     def __unicode__(self):
-        return mark_safe(u'%s' % self.tag())
+        return mark_safe('%s' % self.tag())
+
+    def __str__(self):
+        return self.__unicode__()
 
 @python_2_unicode_compatible
 class TableOptionsSingleRowRenderer(object):
@@ -73,8 +76,7 @@ class TableOptionsSingleRowRenderer(object):
 
     def render(self):
         """Outputs a <ul> for this set of radio fields."""
-        return mark_safe(u''.join([u'<td>%s</td>'
-                % force_unicode(w) for w in self]))
+        return mark_safe(''.join(['<td>%s</td>' % force_text(w) for w in self]))
     
 class TableOptionsSingleWidget(forms.MultiWidget):
     def __init__(self, options, rows, attrs=None):
@@ -150,7 +152,7 @@ class MonthYearWidget(Widget):
             month_val = value.month
         except (AttributeError, ValueError):
             year_val = month_val = None
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 match = RE_YEAR_MONTH.match(value)
                 if match:
                     year_val, month_val = [int(v) for v in match.groups()]
@@ -179,7 +181,7 @@ class MonthYearWidget(Widget):
         select_html = s.render(self.year_field % name, year_val, local_attrs)
         output.append(select_html)
 
-        return mark_safe(u'\n'.join(output))
+        return mark_safe('\n'.join(output))
 
     def id_for_label(self, id_):
         return '%s_month' % id_

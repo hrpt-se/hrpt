@@ -1,9 +1,12 @@
-from base import *
+from settings.base import *
 from utils import PrivateIPs
 
 DEBUG = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 1025
 
 INTERNAL_IPS = PrivateIPs()
 

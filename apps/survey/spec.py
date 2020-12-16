@@ -1,4 +1,5 @@
 import simplejson as json
+from functools import reduce
 
 __all__ = ['Survey', 'Question', 'Profile', 'Response',
            'Advise',
@@ -400,8 +401,9 @@ class Compare(Evaluator):
             else:
                 raise SpecSyntaxError()
             self.comparisons.append(Equal(key, val))
+
     def eval(self, values):
-        return all([comparison.eval(value) for comparison in self.comparisons])
+        return all([comparison.eval(values) for comparison in self.comparisons])
 
     def __str__(self):
         return '<Compare [%s]>' % ' '.join([str(comparison) for comparison in self.comparisons])

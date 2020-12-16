@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
-from hvad.models import TranslatableModel, TranslatedFields
+from parler.models import TranslatableModel, TranslatedFields
 
 from apps.survey.models import SurveyUser
 
@@ -28,13 +28,16 @@ WEEKLY_WITH_BATCHES = -2
 
 
 class UserReminderInfo(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     last_reminder = models.DateTimeField(null=True, blank=True)
     active = models.BooleanField()
     language = models.CharField(max_length=5, blank=True, null=True)
 
     def __unicode__(self):
         return self.user.username
+
+    def __str__(self):
+        return self.__unicode__()
 
     def get_language(self):
         if not self.language:
@@ -43,7 +46,7 @@ class UserReminderInfo(models.Model):
 
 
 class ReminderSettings(models.Model):
-    site = models.OneToOneField(Site)
+    site = models.OneToOneField(Site, on_delete=models.CASCADE)
     send_reminders = models.BooleanField(
         _("Send reminders"),
         help_text=_("Check this box to send reminders")
@@ -95,7 +98,10 @@ class ReminderSettings(models.Model):
     )
 
     def __unicode__(self):
-        return _(u"Reminder settings")
+        return _("Reminder settings")
+
+    def __str__(self):
+        return self.__unicode__()
 
     def get_interval(self):
         if self.interval == WEEKLY_WITH_BATCHES:
@@ -135,6 +141,9 @@ class NewsLetterTemplate(TranslatableModel):
     def __unicode__(self):
         return self.subject
 
+    def __str__(self):
+        return self.__unicode__()
+
 
 class NewsLetter(TranslatableModel):
     date = models.DateTimeField(_("Date"), unique=True, choices=[])
@@ -166,6 +175,9 @@ class NewsLetter(TranslatableModel):
     def __unicode__(self):
         return self.subject
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ("-date",)
 
@@ -181,12 +193,15 @@ class MockNewsLetter(object):
 
 class ReminderError(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     traceback = models.TextField()
 
     def __unicode__(self):
         return self.message
+
+    def __str__(self):
+        return self.__unicode__()
 
     class Meta:
         ordering = ("-timestamp",)
@@ -436,10 +451,13 @@ class ManualNewsLetter(models.Model):
     sender_name = models.CharField(max_length=255)
     subject = models.CharField(max_length=255)
     message = models.TextField()
-    template = models.ForeignKey(NewsLetterTemplate)
+    template = models.ForeignKey(NewsLetterTemplate, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.subject
+
+    def __str__(self):
+        return self.__unicode__()
 
     class Meta:
         ordering = ("-timestamp",)
@@ -450,26 +468,29 @@ class FailedEmail(models.Model):
     We already had ReminderError but let's leave it alone
     """
     timestamp = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User)
-    manual_newsletter = models.ForeignKey(ManualNewsLetter)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    manual_newsletter = models.ForeignKey(ManualNewsLetter, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
     traceback = models.TextField()
 
     def __unicode__(self):
         return self.message
 
+    def __str__(self):
+        return self.__unicode__()
+
     class Meta:
         ordering = ("-timestamp",)
 
 
 class QueuedEmail(models.Model):
-    user = models.ForeignKey(User)
-    manual_newsletter = models.ForeignKey(ManualNewsLetter)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    manual_newsletter = models.ForeignKey(ManualNewsLetter, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
 
 class SentEmail(models.Model):
-    user = models.ForeignKey(User)
-    manual_newsletter = models.ForeignKey(ManualNewsLetter)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    manual_newsletter = models.ForeignKey(ManualNewsLetter, on_delete=models.CASCADE)
     queued = models.DateTimeField()  # TODO: remove the field
     sent = models.DateTimeField(auto_now_add=True)

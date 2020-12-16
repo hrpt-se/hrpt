@@ -8,19 +8,18 @@ from django.core import serializers
 from django.apps import apps
 from django.core.serializers.json import DjangoJSONEncoder
 
-from . import models
-
+from apps.pollster import models
 
 ModelKey = namedtuple('ModelKey', ['model', 'pk'])
 
-EntityDef = namedtuple('EntityDef',['json_key','fkeys', 'm2ms'])
+EntityDef = namedtuple('EntityDef', ['json_key', 'fkeys', 'm2ms'])
 
 FKeyDef = namedtuple('FKeyDef', ['field_name', 'model'])
 
-#We could use FKeyDef where we use this, but it becomes clearer this way
+# We could use FKeyDef where we use this, but it becomes clearer this way
 M2MDef = namedtuple('M2MDef', ['field_name', 'model'])
 
-#TODO: define only the survey id and the models. The rest can easily be done using
+# TODO: define only the survey id and the models. The rest can easily be done using
 # the inspect module.
 IMPORT_ENTITIES_DEFINITIONS = [
     EntityDef(
@@ -47,7 +46,7 @@ IMPORT_ENTITIES_DEFINITIONS = [
         'options',
         [
             "question",
-            FKeyDef("virtual_type", "virtualoptiontype")], # TODO: possibly row and column, check this
+            FKeyDef("virtual_type", "virtualoptiontype")],  # TODO: possibly row and column, check this
         []
     ),
     EntityDef(
@@ -95,11 +94,13 @@ IMPORT_ENTITIES_DEFINITIONS = [
         []
     ),
 
-    #TODO. go throught tables and check if any missing
+    # TODO. go throught tables and check if any missing
 ]
 
 
 def create_survey_from_json(json_string):
+    if isinstance(json_string, bytes):
+        json_string = json_string.decode('utf-8')
     data_from_json = json.loads(json_string)
 
     # we use this to map old keys present in the exported file, to new keys obtained on insert
@@ -109,7 +110,7 @@ def create_survey_from_json(json_string):
     # we need to prevent survey shortname colisions
     keys_save = _save_serialized_survey(data_from_json['survey'][0], keys_save)
 
-    #this is just so we can define relationships both with a string in the simple case,
+    # this is just so we can define relationships both with a string in the simple case,
     # or with a FKeyDef in the case where the target model name does not match the attribute name
     normalized_import_defs = _normalize_fkey_definitions(IMPORT_ENTITIES_DEFINITIONS)
 
@@ -118,45 +119,46 @@ def create_survey_from_json(json_string):
             keys_save = _save_model_from_serialized_data(serialized_instance, definition, keys_save)
 
 
-
 def survey_to_json(survey):
     survey_questions = survey.question_set.all()
     survey_translations = survey.translationsurvey_set.all()
 
-    all_options_nested          = [ question.option_set.all() for question in survey_questions ]
-    all_transl_questions_nested = [ trasl_survey.translationquestion_set.all() for trasl_survey in survey_translations ]
-    all_transl_columns_nested   = [ trasl_survey.translationquestioncolumn_set.all() for trasl_survey in survey_translations ]
-    all_transl_rows_nested      = [ translationsurvey.translationquestionrow_set.all() for translationsurvey in survey_translations ]
-    all_transl_options_nested   = [ translationsurvey.translationoption_set.all() for translationsurvey in survey_translations ]
-    all_rules_nested            = [ q.subject_of_rules.all() for q in survey_questions ]
-    all_rows_nested             = [ q.rows for q in survey_questions ]
-    all_columns_nested          = [ q.columns for q in survey_questions ]
+    all_options_nested = [question.option_set.all() for question in survey_questions]
+    all_transl_questions_nested = [trasl_survey.translationquestion_set.all() for trasl_survey in survey_translations]
+    all_transl_columns_nested = [trasl_survey.translationquestioncolumn_set.all() for trasl_survey in
+                                 survey_translations]
+    all_transl_rows_nested = [translationsurvey.translationquestionrow_set.all() for translationsurvey in
+                              survey_translations]
+    all_transl_options_nested = [translationsurvey.translationoption_set.all() for translationsurvey in
+                                 survey_translations]
+    all_rules_nested = [q.subject_of_rules.all() for q in survey_questions]
+    all_rows_nested = [q.rows for q in survey_questions]
+    all_columns_nested = [q.columns for q in survey_questions]
 
-
-    all_options          = _flaten(all_options_nested)
+    all_options = _flaten(all_options_nested)
     all_transl_questions = _flaten(all_transl_questions_nested)
-    all_transl_columns   = _flaten(all_transl_columns_nested)
-    all_transl_rows      = _flaten(all_transl_rows_nested)
-    all_transl_options   = _flaten(all_transl_options_nested)
-    all_rules            = _flaten(all_rules_nested)
-    all_rows             = _flaten(all_rows_nested)
-    all_columns          = _flaten(all_columns_nested)
+    all_transl_columns = _flaten(all_transl_columns_nested)
+    all_transl_rows = _flaten(all_transl_rows_nested)
+    all_transl_options = _flaten(all_transl_options_nested)
+    all_rules = _flaten(all_rules_nested)
+    all_rows = _flaten(all_rows_nested)
+    all_columns = _flaten(all_columns_nested)
 
-    #note that IMPORT_ENTITIES_DEFINITIONS must match this... obviously.
+    # note that IMPORT_ENTITIES_DEFINITIONS must match this... obviously.
     serialize_this = {
-        'survey':                 serializers.serialize("python", [survey],),
-        'survey_questions':       serializers.serialize("python", survey_questions),
-        'survey_translations':    serializers.serialize("python", survey_translations),
-        "rows":                   serializers.serialize("python", all_rows),
-        "columns":                serializers.serialize("python", all_columns),
-        'options' :               serializers.serialize("python", all_options),
-        "rules":                  serializers.serialize("python", all_rules),
-        "translation_questions" : serializers.serialize("python", all_transl_questions),
-        "translation_column" :    serializers.serialize("python", all_transl_columns),
-        "translation_row" :       serializers.serialize("python", all_transl_rows),
-        "translation_option":     serializers.serialize("python", all_transl_options),
+        'survey': serializers.serialize("python", [survey], ),
+        'survey_questions': serializers.serialize("python", survey_questions),
+        'survey_translations': serializers.serialize("python", survey_translations),
+        "rows": serializers.serialize("python", all_rows),
+        "columns": serializers.serialize("python", all_columns),
+        'options': serializers.serialize("python", all_options),
+        "rules": serializers.serialize("python", all_rules),
+        "translation_questions": serializers.serialize("python", all_transl_questions),
+        "translation_column": serializers.serialize("python", all_transl_columns),
+        "translation_row": serializers.serialize("python", all_transl_rows),
+        "translation_option": serializers.serialize("python", all_transl_options),
     }
-    
+
     return json.dumps(serialize_this, indent=2, cls=DjangoJSONEncoder)
 
 
@@ -165,14 +167,14 @@ def _normalize_fkey_definitions(import_entities_definition):
     for ed in import_entities_definition:
         normalized_fkeys = []
         for fk in ed.fkeys:
-            if isinstance(fk,basestring):
-                normalized_fkeys.append(FKeyDef(fk,fk))
+            if isinstance(fk, str):
+                normalized_fkeys.append(FKeyDef(fk, fk))
             else:
                 normalized_fkeys.append(fk)
-        #not suported for many to many relations, could be easily added if needed
+        # not suported for many to many relations, could be easily added if needed
         normalized_ed = EntityDef(ed.json_key, normalized_fkeys, ed.m2ms)
         normalized_entity_definitions.append(normalized_ed)
-    #TODO: convert all model names to lowercase.
+    # TODO: convert all model names to lowercase.
     return normalized_entity_definitions
 
 
@@ -189,7 +191,7 @@ def _change_shortname_if_exists(survey_shortname):
     all_survey_shornames = [survey.shortname for survey in models.Survey.objects.all()]
     if survey_shortname not in all_survey_shornames:
         return survey_shortname
-    #TODO: replace instead of append if the survey shortname looks like it already has a time in its name
+    # TODO: replace instead of append if the survey shortname looks like it already has a time in its name
     ts_string = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     return survey_shortname + "_" + ts_string
 
@@ -220,13 +222,13 @@ def _prepare_m2m_fields(serialized_instance, m2m_defs, keys_save):
         for other_entity_id in serialized_instance['fields'][m2m_def.field_name]:
             lookup_key = ModelKey("pollster." + m2m_def.model, other_entity_id)
             if lookup_key in keys_save:
-                #in this case we have created this object during the import, use the id of the created instance
-                #(i.e. relative to this import)
+                # in this case we have created this object during the import, use the id of the created instance
+                # (i.e. relative to this import)
                 model_key_to_insert = ModelKey("pollster." + m2m_def.model, keys_save[lookup_key])
                 translated_relative_modelkeys.append(model_key_to_insert)
             else:
-                #nothing we have created durint this import, reference something that exists on the database
-                #(i.e. absolute reference to id on the database)
+                # nothing we have created durint this import, reference something that exists on the database
+                # (i.e. absolute reference to id on the database)
                 translated_relative_modelkeys.append(lookup_key)
 
         serialized_instance['m2m_fields'][m2m_def.field_name] = translated_relative_modelkeys
@@ -238,7 +240,7 @@ def _save_m2m_relationships(instance, serialized_instance, entity_definition):
     for m2mdef in entity_definition.m2ms:
         attr = getattr(instance, m2mdef.field_name)
         full_model_name = "pollster." + m2mdef.model
-        TargetModelClass = apps.get_model(*full_model_name.split('.',1))
+        TargetModelClass = apps.get_model(*full_model_name.split('.', 1))
         models_instances_to_add = []
         for model_key_to_insert in serialized_instance["m2m_fields"][m2mdef.field_name]:
             models_instances_to_add.append(TargetModelClass.objects.get(pk=model_key_to_insert.pk))
@@ -246,7 +248,7 @@ def _save_m2m_relationships(instance, serialized_instance, entity_definition):
 
 
 def _save_model_from_serialized_data(serialized_instance, entity_definition, keys_save):
-    ModelClass = apps.get_model(*serialized_instance["model"].split('.',1) )
+    ModelClass = apps.get_model(*serialized_instance["model"].split('.', 1))
     serialized_instance = _prepare_m2m_fields(serialized_instance, entity_definition.m2ms, keys_save)
     serialized_instance = _prepare_fkey_fields(serialized_instance, entity_definition.fkeys, keys_save)
     new_instance = ModelClass(**serialized_instance["fields"])
@@ -261,5 +263,6 @@ def _save_model_from_serialized_data(serialized_instance, entity_definition, key
 def _flaten(list2d):
     return list(itertools.chain.from_iterable(list2d))
 
+
 def specialPrint(msg):
-    print >> sys.stderr,msg
+    print(msg, file=sys.stderr)

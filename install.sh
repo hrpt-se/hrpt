@@ -36,16 +36,19 @@ function install_apt_dependencies {
     apt-get update -y
 
     apt-get install -y build-essential \
-                       python-dev \
-                       python-pip \
+                       python3-dev \
+                       python3-pip \
                        git \
                        libjpeg8 \
                        libjpeg8-dev \
                        libfreetype6 \
                        libfreetype6-dev \
-                       libmysqlclient-dev \
                        gettext \
-                       zlib1g-dev
+                       zlib1g-dev \
+                       libssl-dev \
+                       libmysqlclient-dev \
+                       gdal-bin \
+                       python3-gdal
 
     apt-get clean
 }
@@ -64,9 +67,13 @@ function setup_mariadb {
     mysql_install_db
     service mysql start
 
+    # move to it's own command and remove IF EXISTS since it is not supported for MySQL<5.7
+    mysql -uroot -proot <<EOF
+      DROP USER $DB_USERNAME;
+EOF
+
     mysql -uroot -proot <<EOF
       DROP DATABASE IF EXISTS $DB_NAME;
-      DROP USER IF EXISTS $DB_USERNAME;
       CREATE USER $DB_USERNAME IDENTIFIED BY '$DB_PASSWORD';
       CREATE DATABASE $DB_NAME CHARACTER SET = 'utf8' COLLATE = 'utf8_bin';
       GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USERNAME'@'%';
@@ -74,7 +81,14 @@ EOF
 }
 
 function install_python_dependencies {
-    pip install -r /var/www/hrpt/requirements.txt
+    export LDFLAGS="-L/usr/local/opt/openssl/lib $LDFLAGS"
+    export CPPFLAGS="-I/usr/local/opt/openssl/include $CPPFLAGS"
+    # This should always be done regardless of environment but fails locally due to certificates
+    if [ $ENVIRONMENT != "local" ];
+    then
+        pip3 install --upgrade pip
+    fi
+    pip3 install -r /var/www/hrpt/requirements.txt
 }
 
 function setup_environment_variables {
@@ -89,16 +103,27 @@ function setup_environment_variables {
 }
 
 function setup_apache {
-    apt-get install -y apache2 \
-                       libapache2-mod-wsgi
+    apt-get install -y apache2 libapache2-mod-wsgi-py3
 
-    git clone https://github.com/hrpt-se/hrpt.git -b feature/el-deployment-preparation /var/www/hrpt/
     cd /var/www/hrpt/
     cp vagrant/000-hrpt.conf /etc/apache2/sites-available/
-    cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
-    echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
+
+    if grep -q ". /etc/profile.d/hrpt.sh" /etc/apache2/envvars;
+    then
+      echo 'Apache2 envvars have already been added'
+    else
+      echo '. /etc/profile.d/hrpt.sh' >> /etc/apache2/envvars
+    fi
+
     a2dissite 000-default
-    a2ensite 000-hrpt 001-hrpt-prod-redirect
+    a2ensite 000-hrpt
+
+    if [ $ENVIRONMENT == "prod" ];
+    then
+      cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
+      a2ensite 001-hrpt-prod-redirect
+    fi
+
     service apache2 restart
 }
 
@@ -107,24 +132,43 @@ function create_data_directories {
     mkdir -p /var/lib/hrpt/static
 
     chown -R www-data:www-data /var/lib/hrpt
-    chmod 775 /var/lib/hrpt/*
+    chmod 755 /var/lib/hrpt/*
     usermod -a -G www-data ubuntu
 }
 
 function setup_django_scaffolding {
     cd /var/www/hrpt/
-    python manage.py migrate --noinput
-    python manage.py collectstatic --noinput
+    python3 manage.py migrate --noinput
+    python3 manage.py collectstatic --noinput
 }
 
 function install_fixtures {
-    python manage.py loaddata db/fixtures.json
-    python manage.py shell -c "from apps.pollster.models import Survey; Survey.objects.get(shortname='intake').publish()"
+    python3 manage.py loaddata db/fixtures.json
+    python3 manage.py shell -c "from apps.pollster.models import Survey;Survey.objects.get(shortname='intake').unpublish(); Survey.objects.get(shortname='intake').publish()"
+}
+
+function setup_mailhog {
+    sudo apt-get -y install golang-go
+    go get github.com/mailhog/MailHog
+    cat > /etc/systemd/system/mailhog.service << EOF
+[Unit]
+Description=MailHog service
+
+[Service]
+ExecStart=/root/go/bin/MailHog
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    systemctl enable mailhog
+    systemctl start mailhog
 }
 
 function start_mail_service {
     cp vagrant/hrpt-mail.service /etc/systemd/system/
     systemctl enable hrpt-mail
+    systemctl start hrpt-mail
 }
 
 install_certificates
@@ -142,6 +186,7 @@ if [ $ENVIRONMENT != "local" ];
 then
     setup_apache
 fi
+setup_apache
 
 create_data_directories
 install_python_dependencies
@@ -150,6 +195,7 @@ setup_django_scaffolding
 if [ $ENVIRONMENT == "local" ];
 then
     install_fixtures
+    setup_mailhog
 fi
 
 start_mail_service

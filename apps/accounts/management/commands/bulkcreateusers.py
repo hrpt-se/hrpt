@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.core.management import BaseCommand
 from django.db import IntegrityError
+from django.contrib.auth.hashers import make_password
 
-from apps.accounts.models import user_profile
+from apps.accounts.models import UserProfile
 from apps.survey.models import SurveyIdCode, SurveyUser
 
 
@@ -19,7 +20,7 @@ class Command(BaseCommand):
             try:
                 user = User.objects.create_user(
                     username='test{0}'.format(i),
-                    password='password'
+                    password='password',
                 )
             except IntegrityError:
                 print('user{0} already exists, skipping'.format(i))
@@ -32,11 +33,12 @@ class Command(BaseCommand):
 
             s = SurveyIdCode.objects.create(
                 idcode=5000+i,
+                fodelsedatum='1950',
                 surveyuser_global_id=survey_user
             )
 
-            user_profile.objects.create(
+            UserProfile.objects.create(
                 user=user,
-                yearofbirth=1950,
+                year_of_birth=1950,
                 idcode=s.idcode
             )

@@ -1,3 +1,3 @@
-from deployed import *
+from .deployed import *
 
 EMAIL_HOST = 'smtp.fohm.local'

@@ -7,7 +7,7 @@ from django import forms
 from django.db import OperationalError
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render_to_response, get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy as _
@@ -163,7 +163,7 @@ def show_survey(request, survey_short_name):
 
 
 def _save_survey_response_draft(request):
-    raw_data = json.loads(request.body)
+    raw_data = json.loads(request.body.decode("utf-8"))
     survey_id = raw_data['survey_id']
     questions_data = raw_data['form_data']
 

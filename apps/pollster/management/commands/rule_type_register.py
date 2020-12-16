@@ -30,5 +30,5 @@ class Command(BaseCommand):
         rule.save()
 
         if verbosity > 0:
-            print 'Rule type "%s" registered' % (rule,)
+            print('Rule type "%s" registered' % (rule,))
 

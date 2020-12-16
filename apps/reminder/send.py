@@ -1,11 +1,9 @@
 import datetime
-import smtplib
 from traceback import format_exc
 
 from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 from django.template import Context, loader, Template
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from django.utils.html import strip_tags
 from django.contrib.sites.models import Site
@@ -23,35 +21,33 @@ def create_message(user, message, language):
     if language:
         activate(language)
 
-    SITE_URL = 'http://%s' % Site.objects.get_current().domain
+    site_url = 'http://%s' % Site.objects.get_current().domain
 
     inner_template = Template(message.message)
 
-    survey_list_url = 'http://%s%s'\
-                      % (Site.objects.get_current(), "/sv/valkommen/")
+    survey_list_url = 'http://%s%s' % (Site.objects.get_current(), "/sv/valkommen/")
     profile_url = 'http://%s%s' % (Site.objects.get_current(), "/accounts/settings/")
 
     context_dict = {
         'url': get_self_authenticating_url(user, survey_list_url),
-        'profile_url' : get_self_authenticating_url(user, profile_url),
+        'profile_url': get_self_authenticating_url(user, profile_url),
         # 'unsubscribe_url': get_self_authenticating_url(user, reverse('unsubscribe')),
         'first_name': user.first_name,
         'last_name': user.last_name,
         'username': user.username,
     }
     context_dict.update(site_context())
-    context_dict['site_logo'] = SITE_URL + context_dict['site_logo']
+    context_dict['site_logo'] = site_url + context_dict['site_logo']
 
     inner = inner_template.render(Context(context_dict))
 
     context_dict['inner'] = inner
-    context_dict['MEDIA_URL'] = '%s%s' % (SITE_URL, settings.MEDIA_URL)
+    context_dict['MEDIA_URL'] = '%s%s' % (site_url, settings.MEDIA_URL)
     context_dict['message'] = message
 
-    context = Context(context_dict)
     templ = loader.get_template('message.html')
 
-    return inner, templ.render(context)
+    return inner, templ.render(context_dict)
 
 
 def send_reminders(fake=False):
@@ -64,7 +60,7 @@ def send_reminders(fake=False):
         if not fake:
             send_message_and_update_reminder_info(user, message, language)
         else:
-            print 'Fake sending', user.email, message.subject
+            print('Fake sending', user.email, message.subject)
         i = i + 1
     return i
 
@@ -94,10 +90,10 @@ def send_message_and_update_reminder_info(user, message, language, is_test_messa
 
     try:
         msg.send()
-    except Exception, e:
+    except Exception as e:
         ReminderError.objects.create(
             user=user,
-            message=unicode(e),
+            message=str(e),
             traceback=format_exc(),
         )
 

@@ -7,4 +7,4 @@ class AccountsConfig(AppConfig):
     def ready(self):
         # When the app is ready, activate the signals defined in signals.py
         # by importing them.
-        import signals
+        from . import signals

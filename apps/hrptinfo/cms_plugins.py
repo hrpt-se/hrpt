@@ -4,8 +4,8 @@ from cms.models import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from models import NewsItem
-from forms import CaptchaContactForm
+from .models import NewsItem
+from .forms import CaptchaContactForm
 
 
 class ContactFormPlugin(CMSPluginBase):

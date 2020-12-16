@@ -45,5 +45,5 @@ class Command(BaseCommand):
         data.save()
 
         if verbosity > 0:
-            print 'Question data type "%s" registered' % (data,)
+            print('Question data type "%s" registered' % (data,))
 

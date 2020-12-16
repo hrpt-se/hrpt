@@ -1,7 +1,7 @@
 from optparse import make_option
 from django.core.management.base import CommandError, BaseCommand
-import cPickle as pickle
-import MySQLdb
+import pickle
+import mysql.connector as MySQLdb
 
 def yearmonth(date):
     if not date:
