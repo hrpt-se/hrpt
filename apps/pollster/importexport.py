@@ -198,7 +198,7 @@ def _change_shortname_if_invalid(shortname):
     # Retuan a 20 character shortname ending with the current timestamp,
     # the shortname will be truncated to fit the timestamp.
     ts_string = datetime.datetime.now().strftime('%y%m%d%H%M%S')
-    return "{}_{}".format(shortname[:-len(ts_string) - 1], ts_string)
+    return "{}_{}".format(shortname[:20-len(ts_string) - 1], ts_string)
 
 
 def _prepare_fkey_fields(serialized_instance, fkey_defs, keys_save):
