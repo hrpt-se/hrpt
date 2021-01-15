@@ -104,6 +104,12 @@ def show_survey(request, survey_short_name):
     survey_user = _get_active_survey_user(request)
     global_id = survey_user.global_id
 
+    # Redirect the user if the intake survey has not been answered
+    if survey.shortname != "intake":
+        intake = Survey.objects.get(shortname="intake")
+        if not intake.as_model().objects.filter(user=survey_user.id).exists():
+            return HttpResponseRedirect("/sv/valkommen/")
+
     if survey.get_last_participation_data(request.user.id, global_id):
         return HttpResponseRedirect('/already-answered')
 

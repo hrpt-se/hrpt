@@ -360,7 +360,8 @@ def survey_export(request, id):
     survey = get_object_or_404(models.Survey, pk=id)
     serialized_survey = importexport.survey_to_json(survey)
     response = HttpResponse(serialized_survey, content_type="application/json")
-    response['Content-Disposition'] = 'attachment; filename=survey-export-%d-%s.json' % (survey.id, format(datetime.datetime.now(), '%Y%m%d%H%M'))
+    filename = "survey-export-%d-%s-%s" % (survey.id, survey.shortname, format(datetime.datetime.now(), '%Y%m%d%H%M'))
+    response['Content-Disposition'] = 'attachment; filename=%s.json' % filename
     return response
 
 
