@@ -50,6 +50,15 @@ def survey_list(request):
         "form_import": form_import
     })
 
+
+def suvey_parse_error(request, exception):
+    messages.error(request, 'Unable to save the survey, please check the errors below')
+    errors = exception.messages
+    for error in errors:
+        messages.warning(request, error)
+    return JsonResponse({'error': errors}, status=400)
+
+
 @staff_member_required
 def survey_add(request):
     survey = models.Survey()
@@ -57,7 +66,11 @@ def survey_add(request):
         form = forms.SurveyXmlForm(request.POST)
         if form.is_valid():
             # create and redirect
-            parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
+            try:
+                parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
+            except parser.InvalidSurveyError as err:
+                return suvey_parse_error(request, err)
+
             return redirect(survey)
     # return an empty survey structure
     virtual_option_types = models.VirtualOptionType.objects.all()
@@ -81,11 +94,11 @@ def survey_edit(request, id):
         if form.is_valid():
             try:
                 parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
+            except parser.InvalidSurveyError as err:
+                return suvey_parse_error(request, err)
             except DatabaseError as dbe:
                 _, error_text = dbe.args
-                return JsonResponse({
-                    'error': error_text
-                }, status=400)
+                return JsonResponse({'error': error_text}, status=400)
 
             return redirect(survey)
     virtual_option_types = models.VirtualOptionType.objects.all()
