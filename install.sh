@@ -134,6 +134,9 @@ function create_data_directories {
     chown -R www-data:www-data /var/lib/hrpt
     chmod 755 /var/lib/hrpt/*
     usermod -a -G www-data ubuntu
+
+    mkdir -p /var/log/hrpt
+    chown -R www-data:www-data /var/log/hrpt
 }
 
 function setup_django_scaffolding {

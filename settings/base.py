@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from django.utils.log import DEFAULT_LOGGING
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,6 +24,24 @@ DATABASES = {
         }
     }
 }
+
+# Add handler for logging to files
+LOGGING = DEFAULT_LOGGING
+LOGGING["formatters"]["file"] = {
+    'format': '[%(asctime)s] %(message)s',
+}
+LOGGING["handlers"]["file"] = {
+    'level': 'ERROR',
+    'formatter': "file",
+    'filters': ['require_debug_false'],
+    'class': 'logging.handlers.TimedRotatingFileHandler',
+    'filename': "/var/log/hrpt/halsorapport.log",
+    'when': 'midnight',
+    'backupCount': 0,  # 0 keeps all logs, change to the desired nr to save
+}
+LOGGING["loggers"]["django"]["handlers"] += ["file"]
+
+CMS_PERMISSION = True
 
 SITE_ID = 1
 
