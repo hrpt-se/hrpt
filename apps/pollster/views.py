@@ -52,8 +52,16 @@ def survey_list(request):
 
 
 def suvey_parse_error(request, exception):
-    messages.error(request, 'Unable to save the survey, please check the errors below')
-    errors = exception.messages
+    error_msg = 'Unable to save the survey, please check the errors below.'
+
+    if isinstance(exception, parser.InvalidSurveyError):
+        errors = exception.messages
+    else:
+        _, error = exception.args
+        errors = [error]
+        error_msg += " This error might hide other errors."
+
+    messages.error(request, error_msg)
     for error in errors:
         messages.warning(request, error)
     return JsonResponse({'error': errors}, status=400)
@@ -68,7 +76,7 @@ def survey_add(request):
             # create and redirect
             try:
                 parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
-            except parser.InvalidSurveyError as err:
+            except (parser.InvalidSurveyError, DatabaseError) as err:
                 return suvey_parse_error(request, err)
 
             return redirect(survey)
@@ -94,11 +102,8 @@ def survey_edit(request, id):
         if form.is_valid():
             try:
                 parser.survey_update_from_xhtml(survey, form.cleaned_data['surveyxml'])
-            except parser.InvalidSurveyError as err:
+            except (parser.InvalidSurveyError, DatabaseError) as err:
                 return suvey_parse_error(request, err)
-            except DatabaseError as dbe:
-                _, error_text = dbe.args
-                return JsonResponse({'error': error_text}, status=400)
 
             return redirect(survey)
     virtual_option_types = models.VirtualOptionType.objects.all()
