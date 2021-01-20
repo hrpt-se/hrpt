@@ -221,7 +221,7 @@ def _update_option_from_xhtml(survey, idmap, question, root, ordinal):
         else:
             option = models.Option(question=question, is_virtual=False)
         option.is_open = is_open
-        option.text = getattr(root.find('label'), 'text', '')
+        option.text = root.find('label').get('text', '')
         option.description = root.get('title', '')
         option.value = xinput.get('value', '')
     else:
