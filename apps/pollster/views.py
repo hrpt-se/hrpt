@@ -56,6 +56,9 @@ def suvey_parse_error(request, exception):
 
     if isinstance(exception, parser.InvalidSurveyError):
         errors = exception.messages
+        if len(errors) > 5:
+            error_msg += " Showing 5/{} errors.".format(len(errors))
+            errors = errors[:5]
     else:
         _, error = exception.args
         errors = [error]
