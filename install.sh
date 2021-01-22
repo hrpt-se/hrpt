@@ -118,12 +118,6 @@ function setup_apache {
     a2dissite 000-default
     a2ensite 000-hrpt
 
-    if [ $ENVIRONMENT == "prod" ];
-    then
-      cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
-      a2ensite 001-hrpt-prod-redirect
-    fi
-
     service apache2 restart
 }
 
