@@ -118,12 +118,6 @@ function setup_apache {
     a2dissite 000-default
     a2ensite 000-hrpt
 
-    if [ $ENVIRONMENT == "prod" ];
-    then
-      cp vagrant/001-hrpt-prod-redirect.conf /etc/apache2/sites-available/
-      a2ensite 001-hrpt-prod-redirect
-    fi
-
     service apache2 restart
 }
 
@@ -134,6 +128,9 @@ function create_data_directories {
     chown -R www-data:www-data /var/lib/hrpt
     chmod 755 /var/lib/hrpt/*
     usermod -a -G www-data ubuntu
+
+    mkdir -p /var/log/hrpt
+    chown -R www-data:www-data /var/log/hrpt
 }
 
 function setup_django_scaffolding {

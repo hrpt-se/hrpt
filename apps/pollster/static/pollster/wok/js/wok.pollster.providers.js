@@ -11,7 +11,7 @@
     }
 
     function getQuestionDataType($element) {
-        return $element.attr("data-data-type") || "1";
+        return $element.attr("data-data-type") || "2";
     }
 
     function getQuestionStartsHidden($element) {
@@ -270,7 +270,7 @@
                 self.$element = $e;
                 var type = getQuestionType($e);
                 $properties
-                    .find("[name=field_question_data_type]").val($e.attr("data-data-type")).end()
+                    .find("[name=field_question_data_type]").val(getQuestionDataType($e)).end()
                     .find("[name=field_question_open_option_data_type]").val($e.attr("data-open-option-data-type")).end()
                     .find("[name=field_question_visual]").val($e.attr("data-visual")).end()
                     .find("[name=field_question_tags]").val($e.attr("data-tags")).end()
