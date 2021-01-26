@@ -32,7 +32,11 @@
             else
                 window.location.reload();
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            wok.error("Error on save: " + jqXHR.responseJSON.error);
+            if (jqXHR.status != 400)
+                wok.error("Error on save: " + jqXHR.responseJSON.error);
+            else
+                $(evt.target).removeAttr('disabled');
+                $('#wok-messages').load(location.href + " #wok-messages");
         });
     }
 

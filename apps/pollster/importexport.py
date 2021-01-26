@@ -179,7 +179,7 @@ def _normalize_fkey_definitions(import_entities_definition):
 
 
 def _save_serialized_survey(input_survey_object, keys_save):
-    input_survey_object['fields']['shortname'] = _change_shortname_if_exists(input_survey_object['fields']['shortname'])
+    input_survey_object['fields']['shortname'] = _change_shortname_if_invalid(input_survey_object['fields']['shortname'])
     new_survey = models.Survey(**input_survey_object['fields'])
     new_survey.save()
     key = ModelKey(model="pollster.survey", pk=input_survey_object['pk'])
@@ -187,13 +187,18 @@ def _save_serialized_survey(input_survey_object, keys_save):
     return keys_save
 
 
-def _change_shortname_if_exists(survey_shortname):
-    all_survey_shornames = [survey.shortname for survey in models.Survey.objects.all()]
-    if survey_shortname not in all_survey_shornames:
-        return survey_shortname
-    # TODO: replace instead of append if the survey shortname looks like it already has a time in its name
-    ts_string = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    return survey_shortname + "_" + ts_string
+def _change_shortname_if_invalid(shortname):
+    # Change a given shortname if it is too long by truncating anything above max_length
+    max_len = models.Survey._meta.get_field("shortname").max_length
+    shortname = shortname[:max_len]
+
+    if not models.Survey.objects.filter(shortname=shortname).exists():
+        return shortname
+
+    # Retuan a 20 character shortname ending with the current timestamp,
+    # the shortname will be truncated to fit the timestamp.
+    ts_string = datetime.datetime.now().strftime('%y%m%d%H%M%S')
+    return "{}_{}".format(shortname[:20-len(ts_string) - 1], ts_string)
 
 
 def _prepare_fkey_fields(serialized_instance, fkey_defs, keys_save):

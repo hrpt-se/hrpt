@@ -23,5 +23,8 @@ epidb/client/epidb_results.sql*
 .settings/
 local/
 vagrant/certs/*.crt
+vagrant/certs/*.pem
 .idea/*
 /settings/secrets.py
+.vagrant/*
+ubuntu-*.log
