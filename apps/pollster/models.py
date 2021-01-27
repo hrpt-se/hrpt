@@ -266,7 +266,7 @@ class Survey(models.Model):
 
         def clean(self):
             for question in questions:
-                if question.is_text:
+                if question.is_text and question.data_type.title == "Text":
                     self.cleaned_data[question.data_name] = emoji.demojize(self.cleaned_data[question.data_name])
                 for opt in question.options:
                     if opt.is_open and opt.open_option_data_type.title == "Text":
@@ -274,7 +274,7 @@ class Survey(models.Model):
                             self.cleaned_data[opt.open_option_data_name])
 
                 if question.is_matrix_entry:
-                    for row, cols in q.rows_columns:
+                    for row, cols in question.rows_columns:
                         for col in cols:
                             self.cleaned_data[col.data_name] = emoji.demojize(self.cleaned_data[col.data_name])
 
