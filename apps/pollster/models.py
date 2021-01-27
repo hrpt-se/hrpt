@@ -11,6 +11,7 @@ from django.contrib.gis.db.models import MultiPolygonField
 from django.db import (
     models, connection, transaction, IntegrityError, DatabaseError
 )
+from django.db.models import Count
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
@@ -287,6 +288,12 @@ class Survey(models.Model):
             errors.append('Missing survey shortname')
         elif not re.match(IDENTIFIER_REGEX, self.shortname):
             errors.append('Invalid survey shortname "%s"' % (self.shortname,))
+
+        data_names = self.question_set.values("data_name").annotate(
+            nr=Count("data_name")).order_by().filter(nr__gt=1).values_list("data_name", flat=True)
+        if data_names.exists():
+            errors.append("Duplicate data name for " + ", ".join(["{}"]*data_names.count()).format(*data_names))
+
         for question in self.questions:
             errors.extend(question.get_errors())
         return errors
