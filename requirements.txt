@@ -33,4 +33,5 @@ djangocms-link==2.6.1
 djangocms-picture==2.4.0
 djangocms-file==2.4.0
 djangocms-attributes-field==1.2.0
+emoji==0.6
 

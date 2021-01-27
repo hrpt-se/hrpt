@@ -21,6 +21,8 @@ from cms.models import CMSPlugin
 from . import dynamicmodels
 from apps.survey.models import SurveyIdCode, SurveyUser
 
+import emoji
+
 
 DEG_TO_RAD = pi/180
 RAD_TO_DEG = 180/pi
@@ -261,13 +263,27 @@ class Survey(models.Model):
     def as_form(self):
         model = self.as_model()
         questions = list(self.questions)
+
         def clean(self):
             for question in questions:
+                if question.is_text:
+                    self.cleaned_data[question.data_name] = emoji.demojize(self.cleaned_data[question.data_name])
+                for opt in question.options:
+                    if opt.is_open and opt.open_option_data_type.title == "Text":
+                        self.cleaned_data[opt.open_option_data_name] = emoji.demojize(
+                            self.cleaned_data[opt.open_option_data_name])
+
+                if question.is_matrix_entry:
+                    for row, cols in q.rows_columns:
+                        for col in cols:
+                            self.cleaned_data[col.data_name] = emoji.demojize(self.cleaned_data[col.data_name])
+
                 if question.is_multiple_choice and question.is_mandatory:
                     valid = any([self.cleaned_data.get(d, False) for d in question.data_names])
                     if not valid:
                         self._errors[question.data_name] = self.error_class('At least one option should be selected')
             return self.cleaned_data
+
         form = dynamicmodels.to_form(model, {'clean': clean})
 
         for question in questions:
@@ -333,6 +349,8 @@ class Survey(models.Model):
     def write_csv(self, writer, extra_fields=[]):
         def _get_fieldval_survery(obj, field_name):
             val = getattr(obj, field_name)
+            if isinstance(val, str):
+                val = emoji.emojize(val)
             return val() if callable(val) else val
 
         model = self.as_model()
