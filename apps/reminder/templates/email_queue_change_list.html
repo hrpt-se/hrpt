@@ -38,8 +38,8 @@
                     <td> {{ row.subject }} </td>
                     <td> {{ row.total }} </td>
                     <td> {{ row.queued }} </td>
-                    <td> {% widthratio row.sent row.total 100 as psent %} {{ psent }}% </td>
-                    <td> {% widthratio row.failed row.total 100 as pfailed %} {{ pfailed }}% </td>
+                    <td> {% widthratio row.sent row.total 100 as psent %} {{ psent }}% ({{ row.sent }})</td>
+                    <td> {% widthratio row.failed row.total 100 as pfailed %} {{ pfailed }}% ({{ row.failed }})</td>
                 </tr>
             {% endfor %}
             </tbody>

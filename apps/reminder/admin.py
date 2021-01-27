@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib import admin, messages
 from django.contrib.sites.models import Site
 from django.http import HttpResponseRedirect
-from django.db.models import Count
+from django.db.models import Count, F
 
 from parler.admin import TranslatableAdmin
 
@@ -126,12 +126,13 @@ class EmailQueueAdmin(admin.ModelAdmin):
             return response
 
         metrics = {
-            "total": Count("id"),
             "queued": Count("queuedemail"),
             "sent": Count("sentemail"),
             "failed": Count("failedemail"),
         }
 
-        response.context_data["summary"] = qs.annotate(**metrics).order_by("-timestamp")
+        response.context_data["summary"] = qs.annotate(**metrics).annotate(
+            total=F("queued") + F("sent") + F("failed")
+        ).order_by("-timestamp")
 
         return response
