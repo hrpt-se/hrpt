@@ -14,6 +14,10 @@
         return $element.attr("data-data-type") || "2";
     }
 
+    function getQuestionVisual($element) {
+        return $element.attr("data-visual") || "radio"
+    }
+
     function getQuestionStartsHidden($element) {
         return $element.is(".starts-hidden") ? 'true' : 'false';
     }
@@ -272,7 +276,7 @@
                 $properties
                     .find("[name=field_question_data_type]").val(getQuestionDataType($e)).end()
                     .find("[name=field_question_open_option_data_type]").val($e.attr("data-open-option-data-type")).end()
-                    .find("[name=field_question_visual]").val($e.attr("data-visual")).end()
+                    .find("[name=field_question_visual]").val(getQuestionVisual($e)).end()//$e.attr("data-visual")).end()
                     .find("[name=field_question_tags]").val($e.attr("data-tags")).end()
                     .find("[name=field_question_title]").val($.trim($e.find(".title").text())).end()
                     .find("[name=field_question_text]").val(getText($e.find("p").first())).end()
@@ -286,7 +290,7 @@
                 // We display visual options depending on the question type.
 
                 var $v = $properties.find("[name=field_question_visual]");
-                var visual = $e.attr("data-visual");
+                var visual = getQuestionVisual($e); //$e.attr("data-visual");
                 var enabled;
                 if (type === "text") {
                     enabled = "[value=entry]";
