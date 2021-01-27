@@ -2,12 +2,13 @@ from django.contrib.auth.models import User
 from django.contrib import admin, messages
 from django.contrib.sites.models import Site
 from django.http import HttpResponseRedirect
+from django.db.models import Count
 
 from parler.admin import TranslatableAdmin
 
 from .models import (
     UserReminderInfo, ReminderSettings, NewsLetterTemplate, NewsLetter,
-    ReminderError
+    ReminderError, ManualNewsLetter
 )
 from .forms import ReminderSettingsForm, NewsLetterTemplateForm, NewsLetterForm
 
@@ -95,3 +96,42 @@ class NewsLetterAdmin(TranslatableAdmin):
 class ReminderErrorAdmin(admin.ModelAdmin):
     list_display = ("timestamp", "message", "user", "email")
     search_fields = ('user__username', 'user__email',)
+
+
+class EmailQueue(ManualNewsLetter):
+    class Meta:
+        proxy = True
+        verbose_name = "Email queue"
+        verbose_name_plural = "Email queue"
+
+
+@admin.register(EmailQueue)
+class EmailQueueAdmin(admin.ModelAdmin):
+    change_list_template = "email_queue_change_list.html"
+    date_hierarchy = 'timestamp'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = {"title": "Email Queue"}
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        try:
+            qs = response.context_data["cl"].queryset
+        except (AttributeError, KeyError):
+            return response
+
+        metrics = {
+            "total": Count("id"),
+            "queued": Count("queuedemail"),
+            "sent": Count("sentemail"),
+            "failed": Count("failedemail"),
+        }
+
+        response.context_data["summary"] = qs.annotate(**metrics).order_by("-timestamp")
+
+        return response
