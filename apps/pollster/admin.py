@@ -83,7 +83,7 @@ class ExtendedUserAdmin(current_user_admin):
         return [s for s in surveys if s.as_model().objects.filter(user__in=users).exists()]
 
     def _remove_responses(self, request, users):
-        survey = Survey.objects.get(shortname=request.POST.get("survey"))
+        survey = Survey.objects.get(shortname=request.POST.get("survey"), status="PUBLISHED")
         responses = survey.as_model().objects.filter(user__in=users)
         count = responses.count()
         responses.delete()
