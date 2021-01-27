@@ -51,6 +51,7 @@ class ExtendedUserAdmin(current_user_admin):
 
     def batch_obfuscate(self, request, queryset):
         # Exclude all users that are already obfuscated (correctly) or are still active
+        total = queryset.count()
         queryset = queryset.exclude(is_active=True).exclude(
             Q(username__startswith="AVAKT_USER") & Q(surveyuser__name__startswith="AVAKT_USER"))
         content_type = ContentType.objects.get_for_model(queryset.model)
@@ -72,6 +73,8 @@ class ExtendedUserAdmin(current_user_admin):
             survey_user = user.surveyuser_set.first()
             survey_user.name = username
             survey_user.save()
+
+        self.message_user(request, "Obfuscated {} out of {} selected users".format(queryset.count(), total))
 
     batch_obfuscate.short_description = 'Obfuscate selected users'
 
