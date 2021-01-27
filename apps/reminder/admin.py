@@ -126,9 +126,9 @@ class EmailQueueAdmin(admin.ModelAdmin):
             return response
 
         metrics = {
-            "queued": Count("queuedemail"),
-            "sent": Count("sentemail"),
-            "failed": Count("failedemail"),
+            "queued": Count("queuedemail", distinct=True),
+            "sent": Count("sentemail", distinct=True),
+            "failed": Count("failedemail", distinct=True),
         }
 
         response.context_data["summary"] = qs.annotate(**metrics).annotate(
