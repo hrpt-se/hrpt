@@ -17,11 +17,10 @@
             {% endfor %}
         </ul>
 
-        <select>
+        <select name="survey">
             <option value="">Select survey</option>
             {% for survey in surveys %}
                 <option value="{{ survey.shortname }}"> {{ survey.shortname }} </option>
-                <input type="hidden" name="survey" value="{{ survey.shortname }}" />
             {% endfor %}
         </select>
 
