@@ -318,6 +318,8 @@ class Survey(models.Model):
         if self.is_published:
             return None
         errors = self.get_errors()
+        if not self.translationsurvey_set.filter(language="sv", status="PUBLISHED").exists():
+            errors.append("Missing published `sv` translation survey for {}".format(self.shortname))
         if errors:
             return errors
         # Unpublish other surveys with the same shortname.
