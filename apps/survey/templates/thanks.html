@@ -1,0 +1,90 @@
+{# extends "base/twocol.html" #}
+{% extends base_template %}
+
+{% load i18n sekizai_tags static %}
+
+{% block add_js %}
+<script type="text/javascript" src="//www.google.com/jsapi"></script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="{% static "pollster/wok/js/wok.pollster.js" %}"></script>
+<script type="text/javascript" src="{% static "pollster/wok/js/wok.pollster.charts.js" %}"></script>
+
+<script type="text/javascript">
+    wok.pollster.charts.init(function() {
+        $(function() {
+            wok.pollster.charts.createCharts('.survey-chart .chart');
+        });
+    });
+</script>
+{% endblock %}
+
+
+{% block col1 %}
+
+<h2>{% trans "Thanks for taking the time to fill out this survey." %}</h2>
+
+
+<p>
+På denna sida kan du rapportera för veckan som varit och uppdatera bakgrundsenkäten.
+Nedanför i din hälsologg kan du också se hur du rapporterat. Om du vill uppdatera din rapport för veckan
+som varit kan du klicka på Rapportera i tabellen för att ändra dina svar.
+</p>
+
+
+
+<br/>
+
+<h2>Hälsologgen</h2>
+
+<p>{% trans "The flu status of each participant is based on the symptoms you reported. <strong>This is not a medical diagnosis</strong>. We only ask for symptoms indicative of influenza-like illness, common colds, gastric flu. If you have other symptoms, or you are at all worried, we recommend that you contact your doctor or telephone NHS Direct / NHS 24."%}</p>
+
+<br/>
+
+
+<table class="imagetable" style="width:500px;">
+
+<thead>
+<tr>
+    <th>{% trans "Fill out date" %}</th>
+    {% if multi_profile_allowed == 'true' %}
+    <th>{% trans "Member" %}</th>
+    {% endif %}
+    <th colspan="2">{% trans "Health status" %}</th>
+</tr>
+</thead>
+<tbody>
+{% for item in history reversed %}
+<tr>
+    <td title="{{ item.timestamp }}">{{ item.timestamp|date:'SHORT_DATE_FORMAT' }}</td>
+    {% if multi_profile_allowed == 'true' %}
+    <td>{{ item.person.name }}</td>
+    {% endif %}
+    <td>{{ item.diag }}</td>
+    <td><img class="diag-icon" src="{% static "/survey/img/diag" %}-{{ item.status|default:'UNKNOWN' }}-small.png"/></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% if mobile %}
+<a href="/accounts/logout">{% trans "Logout" %}</a>|<a href="/">{% trans "Start" %}</a>
+{% endif %}
+>
+<br/>
+
+<h2>Rapporteringskartor</h2>
+<p>Kartan visar andelen personer i varje län som den senaste veckan rapporterat luftvägsinfektion enligt Hälsorapportsystemets automatiska tolkning av symptomen.</p>
+<p>Kartan kan användas för att följa rapporteringen. Kartan bör inte tolkas som sjukdomsläget, för det behövs mer analyser. Är du nyfiken på sjukdomsläget enligt Hälsorapport kan du kolla på <a href="/sv/resultat/">Hälsorapports resultatsida</a>.</p>
+<p><strong>Vad står färgerna för?</strong><br />Vitt: för lite data. Grön 0-2%, Rosa 3-5%, Ljusblå 6-8%, Lila 9-11%, Orange 12-14%, Röd 15% eller mer.</p>
+
+<div class="survey-chart">
+    <div class="chart" data-chart-url="{% url pollster_chart_data "weekly" "neighbourhoodARI"  %}"
+        data-chart-type="google-map-centered" style="width:100%;height:330px">
+    </div>
+</div>
+
+<p><i>Fler kartor kommer framöver.</i></p>
+<!--<p>{% trans "Regions in which we currently have reports of influenza-like illness are red, and ones in which none of our participants currently report influenza-like illness are blue."%}<br>
+<strong>{% trans "Map updated hourly."%}</strong></p>-->
+
+<br/>
+{% endblock %}

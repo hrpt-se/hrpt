@@ -1,0 +1,1 @@
+from hrpt.localsettings import *

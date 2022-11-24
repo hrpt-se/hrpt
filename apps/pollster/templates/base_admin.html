@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/>
+    <meta name="description" content="Survey Designer"/>
+
+    <title>{% block title %}EPIWork Survey{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/wok/css/reset.css" %}" media="all" />
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/jquery/css/jquery-ui-1.12.1.css" %}" media="all" />
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/css/survey.css" %}" media="all" />
+
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery-3.5.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery-ui-1.12.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.form.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.cookie.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/portamento-min.js" %}"></script>
+
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/csrf.js" %}"></script>
+    <script type="text/javascript">jQuery().cmsPatchCSRF()</script>
+
+    <script type="text/javascript" src="{% static "/pollster/wok/js/xhtml.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.properties.js" %}"></script>
+    <script type="text/javascript" src="{% url 'pollster_urls' %}"></script>
+
+    {% block extrahead %}{% endblock %}
+
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/css/skin.css" %}" media="all" />
+</head>
+<body>
+    <div id="wok-body">
+        <div id="wok-header">
+            <img class="influenzanet" src="{% static "/pollster/css/im/influenzanet.gif" %}" alt="Influenzanet Logo"/>
+            <img class="epiwork" src="{% static "/pollster/css/im/logo-epiwork.jpg" %}" alt="Epiwork Logo"/>
+        </div>
+        <div id="wok-messages">
+        {% if messages %}
+        <ul class="messagelist">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        </div>
+        <div id="wok-navigation">
+            <ul>
+                {% block navigation %}{% endblock %}
+            </ul>
+        </div>
+        <div id="wok-main-panel">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="wok-footer">
+        </div>
+    </div>
+</body>
+</html>

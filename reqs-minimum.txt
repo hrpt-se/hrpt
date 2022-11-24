@@ -1,0 +1,7 @@
+#Ska alltid vara senaste version, därför ska inte versionsnummer skrivas in
+#Dessa måste installeras/uppgraderas före man kör requirements.txt för att undvika problem
+pip
+wheel
+setuptools
+#Måste installeras före GDAL, därför ligger det i denna fil:
+numpy

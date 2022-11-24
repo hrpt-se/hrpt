@@ -1,0 +1,15 @@
+{# extends "survey/base.html" #}
+{% extends base_template %}
+{% load i18n %}
+
+{% block col1 %}
+<p>{% trans "Thanks for changing your profile," %}
+</p>
+{% trans "Please, if you have not already done so, fill in" %}
+{% if person %}
+<a href="/survey/thanks/?gid={{person.global_id}}">
+{% else %}
+<a href="/survey/thanks/">
+{% endif %}
+{% trans "the symptoms questionaire" %}</a>.
+{% endblock %}

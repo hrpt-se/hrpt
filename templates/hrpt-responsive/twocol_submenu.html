@@ -1,0 +1,15 @@
+{% extends "hrpt-responsive/twocol.html" %}
+{% load menu_tags %}
+
+{% block col2 %}
+    <div class="m m-shortcuts">
+        <div class="m-h">
+            <h2>Meny</h2>
+        </div>
+        <div class="m-c cf">
+            <ul>
+                {% show_menu 1 %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

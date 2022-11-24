@@ -1,0 +1,7 @@
+{% load static %}
+
+{% block add_js %}
+    <script type="text/javascript" src="{% static "captcha/js/refresh.js" %}"></script>
+{% endblock add_js %}
+
+{{image}} <img src="{% static 'captcha/img/refresh-captcha-small.png' %}" class="captcha-refresh">{{hidden_field}}{{text_field}}

@@ -1,0 +1,26 @@
+{% extends "hrpt-responsive/singlecol.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }}: {% trans "Login" %}{% endblock %}
+
+{% block col1 %}
+    <h1>{% trans "Login" %}</h1>
+    {% if messages %}
+        <div class="callout">
+            <ul class="messagelist">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <p>
+        {% trans "Enter your username and password to log in." %}
+        <a href="{% url 'password_reset' %}">{% trans "Forgot your password?" %}</a>
+    </p>
+    <form method="post" id="login">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="button" value="{% trans "Log in" %}">
+    </form>
+{% endblock col1 %}

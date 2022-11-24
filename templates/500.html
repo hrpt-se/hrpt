@@ -1,0 +1,16 @@
+{% extends "hrpt-responsive/sitebase.html" %}
+{% load i18n sekizai_tags %}
+
+{% block title %}
+    {{ block.super }}
+    {% trans "Error" %}
+{% endblock title %}
+
+{% block content %}
+    <h1>{% trans "Error" %}</h1>
+    <p>
+        {% trans "An unexpected system error has occured. We apologize for the inconvenience. Go to" %}
+        <a href="/">{% trans "home" %}</a>
+    </p>
+{% endblock content %}
+

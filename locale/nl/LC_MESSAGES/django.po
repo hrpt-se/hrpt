@@ -1,0 +1,1424 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Antwan Wiersma <antwan@prime-creation.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: apps/ew_contact_form/forms.py:12
+#: apps/survey/forms/__init__.py:16
+#: templates/survey/people.html:8
+msgid "Name"
+msgstr "Naam"
+
+#: apps/ew_contact_form/forms.py:13
+msgid "Email"
+msgstr "E-mail"
+
+#: apps/ew_contact_form/forms.py:14
+msgid "Message"
+msgstr "Bericht"
+
+#: apps/journal/admin.py:43
+#, python-format
+msgid "%(count)d newsitem was published"
+msgid_plural "%(count)d newsitems where published"
+msgstr[0] "%(count)d nieuwsbericht is gepubliceerd"
+msgstr[1] "%(count)d nieuwsberichten zijn gepubliceerd"
+
+#: apps/journal/admin.py:46
+msgid "Publish selected news"
+msgstr "Publiceer het geselecteerde nieuwsbericht"
+
+#: apps/journal/admin.py:53
+#, python-format
+msgid "%(count)d newsitem was unpublished"
+msgid_plural "%(count)d newsitems where unpublished"
+msgstr[0] "%(count)d nieuwsbericht is niet langer gepubliceerd"
+msgstr[1] "%(count)d nieuwsberichten zijn niet langer gepubliceerd"
+
+#: apps/journal/admin.py:56
+msgid "Unpublish selected news"
+msgstr "Zet het geselecteerde nieuwsbericht terug op ongepubliceerd"
+
+#: apps/journal/cms_app.py:7
+msgid "Journal"
+msgstr "Nieuws"
+
+#: apps/journal/cms_plugins.py:15
+msgid "Journal entries"
+msgstr "Laatste nieuws"
+
+#: apps/journal/models.py:9
+#: apps/journal/models.py:35
+#: apps/journal/models.py:81
+msgid "Title"
+msgstr "Titel"
+
+#: apps/journal/models.py:10
+#: apps/journal/models.py:36
+msgid "Slug"
+msgstr "Slug"
+
+#: apps/journal/models.py:11
+msgid "A slug is a short name which uniquely identifies the category"
+msgstr "Een slug is een korte, unieke naam om een categorie mee te identificeren."
+
+#: apps/journal/models.py:14
+msgid "Category"
+msgstr "Categorie"
+
+#: apps/journal/models.py:15
+msgid "Categories"
+msgstr "Categorieën"
+
+#: apps/journal/models.py:37
+msgid "A slug is a short name which uniquely identifies the news item for this day"
+msgstr "Een slug is een korte, unieke naam om een nieuwsbericht mee te identificeren."
+
+#: apps/journal/models.py:38
+msgid "Excerpt"
+msgstr "Uittreksel"
+
+#: apps/journal/models.py:39
+msgid "Content"
+msgstr "Inhoud"
+
+#: apps/journal/models.py:40
+msgid "Image"
+msgstr "Afbeelding"
+
+#: apps/journal/models.py:41
+msgid "Alignment"
+msgstr "Uitlijning"
+
+#: apps/journal/models.py:41
+msgid "Alignment of the image"
+msgstr "Afbeelding uitlijnen"
+
+#: apps/journal/models.py:41
+msgid "Left"
+msgstr "Links"
+
+#: apps/journal/models.py:41
+msgid "Right"
+msgstr "Rechts"
+
+#: apps/journal/models.py:43
+msgid "Published"
+msgstr "Gepubliceerd"
+
+#: apps/journal/models.py:44
+msgid "Publication date"
+msgstr "Publicatie datum"
+
+#: apps/journal/models.py:55
+msgid "Entry"
+msgstr "Item"
+
+#: apps/journal/models.py:56
+msgid "Entries"
+msgstr "Items"
+
+#: apps/journal/models.py:82
+msgid "Number of entries to show"
+msgstr "Aantal items dat getoond wordt"
+
+#: apps/journal/models.py:83
+msgid "Limits the number of entries that will be displayed"
+msgstr "Beperkt het aantal items dat getoond wordt"
+
+#: apps/journal/models.py:84
+msgid "Leave this field blank to match all categories"
+msgstr "Laat dit veld leeg om alle categoriën te tonen"
+
+#: apps/journal/templates/journal/latest.html:2
+#: templates/journal/latest.html:3
+msgid "Latest news"
+msgstr "Laatste nieuws"
+
+#: apps/journal/templates/journal/latest.html:7
+#: templates/journal/latest.html:17
+msgid "No news yet"
+msgstr "Nog geen nieuws ingevoerd"
+
+#: apps/partnersites/cms_plugins.py:10
+msgid "External link"
+msgstr "Externe link"
+
+#: apps/partnersites/forms.py:9
+msgid "Light color"
+msgstr "Lichte kleur"
+
+#: apps/partnersites/forms.py:9
+msgid "Hexidecimal value w/o preceding '#'; The dark color is calculated from this."
+msgstr "Hexidecimale waarde zonder #; de donkere kleur wordt automatisch berekend."
+
+#: apps/partnersites/forms.py:9
+msgid "Use a hexidecimal value (length: 6) without the preceding #"
+msgstr "Gebruik een hexidecimale waarde (6 karakters) zonder het voorafgaande #"
+
+#: apps/partnersites/models.py:8
+msgid "Logo"
+msgstr "Logo"
+
+#: apps/partnersites/models.py:8
+msgid "Preferred height: 70px, maximum width: 756px"
+msgstr "Voorkeurshoogte: 70px, maximale breedte 756px"
+
+#: apps/partnersites/models.py:10
+msgid "Footer"
+msgstr "Voetnoot"
+
+#: apps/partnersites/models.py:10
+msgid "The footer will be displayed at the bottom of each page"
+msgstr "De voetnoot is zichtbaar aan de onderkant van iedere pagina"
+
+#: apps/partnersites/models.py:19
+#: apps/partnersites/models.py:22
+#: apps/partnersites/models.py:23
+msgid "Site settings"
+msgstr "Website instellingen"
+
+#: apps/pollster/cms_plugins.py:9
+msgid "Survey Chart"
+msgstr "Griepkaart"
+
+#: apps/pollster/fields.py:17
+msgid "Enter a valid year and month."
+msgstr "Voer een geldig jaartal en een geldige maand in"
+
+#: apps/pollster/fields.py:46
+msgid "Enter a valid postal code."
+msgstr "Voer een geldige postcode in"
+
+#: apps/pollster/forms.py:16
+msgid "Enter a valid value consisting of letters, numbers or underscores"
+msgstr "Vul een geldige waarde in bestaande uit letters, cijfers of underscores"
+
+#: apps/pollster/db/models/fields.py:9
+msgid "Year and month (in YYYY-MM format)"
+msgstr "Geboortejaar en -maand (jjjj-mm)"
+
+#: apps/pollster/db/models/fields.py:24
+msgid "Postal code"
+msgstr "Postcode"
+
+#: apps/reminder/forms.py:16
+msgid "If 'send_reminders' is checked the other fields pertaining to reminders are required"
+msgstr "Als 'verstuur herinneringen' is aangevinkt moeten ook de andere velden die behoren bij herinneringen worden ingevuld"
+
+#: apps/reminder/forms.py:30
+msgid "If no dates are shown here, check your site settings"
+msgstr "Als er geen data zichtbaar zijn, controleer dan de website instellingen"
+
+#: apps/reminder/models.py:31
+msgid "Send reminders"
+msgstr "Verstuur herinneringen"
+
+#: apps/reminder/models.py:31
+msgid "Check this box to send reminders"
+msgstr "Vink dit hokje aan om herinneringen te versturen"
+
+#: apps/reminder/models.py:32
+msgid "Begin date"
+msgstr "Begin datum"
+
+#: apps/reminder/models.py:32
+msgid "Date & time of the first reminder and point of reference for subsequent reminders; (Time zone: MET)"
+msgstr "Datum en tijdstip van de eerste herinnering en tegelijktertijd referentie voor volgende herrineringen (tijdzone: MET)"
+
+#: apps/reminder/models.py:33
+msgid "Interval"
+msgstr "Interval"
+
+#: apps/reminder/models.py:33
+msgid "Weekly"
+msgstr "Wekelijks"
+
+#: apps/reminder/models.py:33
+msgid "Bi-weekly"
+msgstr "Om de week"
+
+#: apps/reminder/models.py:36
+msgid "Reminder settings"
+msgstr "Instellingen voor herinneringen"
+
+#: apps/reminder/models.py:39
+msgid "Is default reminder"
+msgstr "Is standaard herrinering"
+
+#: apps/reminder/models.py:39
+msgid "If this option is checked this template is the standard template for reminder emails."
+msgstr "Vink dit hokje aan om de opmaak van deze herinnering in te stellen als standaard opmaak voor de herinnerings e-mail."
+
+#: apps/reminder/models.py:40
+msgid "Is default newsitem"
+msgstr "Is standaard nieuwsbericht"
+
+#: apps/reminder/models.py:40
+msgid "If this option is checked this template is the standard template for new news items."
+msgstr "Vink dit hokje aan om de opmaak van dit nieuwsbericht in te stellen als standaard opmaak voor nieuwsberichten."
+
+#: apps/reminder/models.py:41
+#: apps/reminder/models.py:55
+msgid "Sender email"
+msgstr "E-mail adres van de verzender"
+
+#: apps/reminder/models.py:42
+#: apps/reminder/models.py:56
+msgid "Sender name"
+msgstr "Naam van de verzender"
+
+#: apps/reminder/models.py:53
+msgid "Date"
+msgstr "Datum"
+
+#: apps/reminder/models.py:106
+#, python-format
+msgid "%(current)s (in %(days)s days)"
+msgstr ""
+
+#: apps/reminder/models.py:108
+#, python-format
+msgid "%(current)s (in %(weeks)s weeks)"
+msgstr ""
+
+#: apps/reminder/templates/reminder/unsubscribe.html:6
+#: apps/reminder/templates/reminder/unsubscribe.html:10
+#: apps/reminder/templates/reminder/unsubscribe_successful.html:6
+msgid "Unsubscribe"
+msgstr "Afmelden"
+
+#: apps/reminder/templates/reminder/unsubscribe.html:7
+msgid "You may unsubscribe from the Influenzanet reminder/newsletter by pressing the button below."
+msgstr "U kunt zich afmelden voor de Influenzanet herinneringsmails/nieuwsbrief door op de knop hieronder te drukken."
+
+#: apps/reminder/templates/reminder/unsubscribe_successful.html:7
+msgid "You have been successfully unsubscribed from the mailing list"
+msgstr "U bent succesvol afgemeld voor de Influenzanet mailinglijst."
+
+#: apps/survey/views.py:50
+msgid "No symptoms"
+msgstr "Geen symptomen"
+
+#: apps/survey/views.py:52
+msgid "Flu symptoms"
+msgstr "Symptomen die passen bij griep"
+
+#: apps/survey/views.py:54
+msgid "Cold / allergy"
+msgstr "Symptomen die passen bij verkoudheid of allergie"
+
+#: apps/survey/views.py:56
+msgid "Gastrointestinal symptoms"
+msgstr "Symptomen die passen bij maag-/darmklachten"
+
+#: apps/survey/views.py:58
+msgid "Other non-influenza symptons"
+msgstr "Andere symptomen die niet passen bij griep"
+
+#: apps/survey/views.py:60
+msgid "Next status"
+msgstr "Volgende status"
+
+#: apps/survey/views.py:104
+msgid "You have to fill your profile data first."
+msgstr "U moet eerst uw profielgegevens invullen"
+
+#: apps/survey/views.py:179
+msgid "One or more questions have empty or invalid answer. Please fix it first."
+msgstr "Een of meer vragen zijn onbeantwoord of hebben een ongeldig antwoord. Controleer dit voordat u verder gaat."
+
+#: apps/survey/views.py:263
+msgid "A new person has been added."
+msgstr "Een nieuw persoon is toegevoegd"
+
+#: templates/404.html:4
+msgid "Page not found"
+msgstr "Pagina niet gevonden"
+
+#: templates/404.html:8
+msgid "The page you requested could not be found. We apologize for the inconvenience. Go to "
+msgstr "De pagina die u zoekt is niet gevonden. Excuses voor het ongemak."
+
+#: templates/404.html:8
+#: templates/500.html:8
+#: templates/registration/logout.html:8
+msgid "home"
+msgstr "Startpagina"
+
+#: templates/500.html:4
+msgid "Error"
+msgstr "Fout"
+
+#: templates/500.html:8
+msgid "An unexpected system error has occured. We apologize for the inconvenience. Go to "
+msgstr "Er is een onverwachte systeemfout opgetreden. Excuses voor het ongemak."
+
+#: templates/admin/pollster/survey/change_form.html:6
+msgid "History"
+msgstr "Geschiedenis"
+
+#: templates/admin/pollster/survey/change_form.html:9
+msgid "Full Editor"
+msgstr "Volledige editor"
+
+#: templates/base/sitebase.html:68
+msgid "My account"
+msgstr "Mijn account"
+
+#: templates/base/sitebase.html:69
+msgid "Log out"
+msgstr "Log uit"
+
+#: templates/base/sitebase.html:71
+msgid "Logged in as"
+msgstr "Ingelogd als"
+
+#: templates/base/sitebase.html:74
+#: templates/registration/boxbase.html:11
+#: templates/registration/password_reset_complete.html:12
+msgid "Log in"
+msgstr "Log in"
+
+#: templates/base/sitebase.html:75
+#: templates/registration/registration_form.html:4
+#: templates/registration/registration_form.html:9
+msgid "Register"
+msgstr "Doe mee!"
+
+#: templates/base/sitebase.html:77
+msgid "Forgot password?"
+msgstr "Wachtwoord vergeten?"
+
+#: templates/base/sitebase.html:88
+#: templates/search/search.html:9
+msgid "Search"
+msgstr "Zoeken"
+
+#: templates/base/sitebase.html:122
+msgid "Contact us"
+msgstr "Neem contact met ons op"
+
+#: templates/base/sitebase.html:122
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/contact_form/contact_form.html:10
+msgid "Send"
+msgstr "Verzenden"
+
+#: templates/journal/archive.html:3
+msgid "Latest Entries"
+msgstr "Laatste nieuwsberichten"
+
+#: templates/journal/archive.html:8
+#: templates/journal/archive_day.html:8
+#: templates/journal/archive_month.html:8
+#: templates/journal/archive_year.html:8
+#: templates/journal/latest.html:14
+msgid "Read more..."
+msgstr "Lees meer"
+
+#: templates/journal/archive.html:14
+#: templates/journal/archive_day.html:14
+#: templates/journal/archive_month.html:14
+#: templates/journal/archive_year.html:14
+#: templates/search/search.html:25
+msgid "Previous"
+msgstr "Vorige"
+
+#: templates/journal/archive.html:17
+#: templates/journal/archive_day.html:17
+#: templates/journal/archive_month.html:17
+#: templates/journal/archive_year.html:17
+#: templates/search/search.html:27
+msgid "Next"
+msgstr "Volgende"
+
+#: templates/journal/archive_day.html:3
+#: templates/journal/archive_month.html:3
+#: templates/journal/archive_year.html:3
+msgid "Entries for"
+msgstr "Nieuwsberichten voor"
+
+#: templates/journal/categories.html:3
+msgid "Archive"
+msgstr "Archief"
+
+#: templates/registration/activate.html:4
+#: templates/registration/activate.html:6
+#: templates/registration/activation_complete.html:4
+#: templates/registration/activation_complete.html:6
+msgid "Account Activation"
+msgstr "Account activatie"
+
+#: templates/registration/activate.html:7
+msgid "User activation failed."
+msgstr "Activatie mislukt"
+
+#: templates/registration/activate.html:9
+#: templates/registration/activation_complete.html:9
+#: templates/registration/registration_complete.html:9
+msgid "Back to the home page"
+msgstr "Ga terug naar de startpagina"
+
+#: templates/registration/activation_complete.html:7
+msgid "Activation is complete."
+msgstr "Activatie geslaagd"
+
+#: templates/registration/activation_complete.html:9
+msgid "or"
+msgstr "of"
+
+#: templates/registration/activation_complete.html:9
+msgid "proceed to the login page"
+msgstr "Ga door naar de log in pagina"
+
+#: templates/registration/boxbase.html:4
+#: templates/registration/boxbase.html:9
+msgid "Login"
+msgstr "Log in"
+
+#: templates/registration/boxbase.html:10
+msgid "Enter your username and password to log in."
+msgstr "Voer uw gebruikersnaam en wachtwoord in om in te loggen"
+
+#: templates/registration/boxbase.html:10
+msgid "Forgot your password?"
+msgstr "Wachtwoord vergeten?"
+
+#: templates/registration/index.html:8
+msgid "Change Password"
+msgstr "Wachtwoord veranderen"
+
+#: templates/registration/index.html:9
+msgid "Update Profile"
+msgstr "Profiel aanpassen"
+
+#: templates/registration/logout.html:4
+msgid "Logged out"
+msgstr "Uitgelogd"
+
+#: templates/registration/logout.html:8
+msgid "You have been logged out. Go to "
+msgstr "U bent succesvol uitgelogd."
+
+#: templates/registration/password_change_done.html:4
+#: templates/registration/password_change_done.html:8
+msgid "Password change successful"
+msgstr "Wachtwoord succesvol aangepast"
+
+#: templates/registration/password_change_done.html:10
+msgid "Your password was changed."
+msgstr "Uw wachtwoord is gewijzigd."
+
+#: templates/registration/password_change_form.html:4
+#: templates/registration/password_change_form.html:8
+msgid "Password change"
+msgstr "Wachtwoord veranderen"
+
+#: templates/registration/password_change_form.html:10
+msgid "Please enter your old password, for security's sake, and then enter your new password twice so we can verify you typed it in correctly."
+msgstr "Vul eerst uw oude wachtwoord in en vervolgens twee keer uw nieuwe wachtwoord"
+
+#: templates/registration/password_change_form.html:15
+msgid "Old password:"
+msgstr "Oud wachtwoord:"
+
+#: templates/registration/password_change_form.html:17
+#: templates/registration/password_reset_confirm.html:16
+msgid "New password:"
+msgstr "Nieuw wachtwoord:"
+
+#: templates/registration/password_change_form.html:19
+#: templates/registration/password_reset_confirm.html:18
+msgid "Confirm password:"
+msgstr "Bevestig uw nieuwe wachtwoord:"
+
+#: templates/registration/password_change_form.html:21
+#: templates/registration/password_reset_confirm.html:19
+msgid "Change my password"
+msgstr "Verander mijn wachtwoord"
+
+#: templates/registration/password_reset_complete.html:4
+#: templates/registration/password_reset_complete.html:8
+msgid "Password reset complete"
+msgstr "Wachtwoord resetten geslaagd"
+
+#: templates/registration/password_reset_complete.html:10
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "Uw wachtwoord is ingesteld. U kunt nu doorgaan en inloggen"
+
+#: templates/registration/password_reset_confirm.html:4
+#: templates/registration/password_reset_form.html:4
+#: templates/registration/password_reset_form.html:8
+msgid "Password reset"
+msgstr "Reset wachtwoord"
+
+#: templates/registration/password_reset_confirm.html:10
+msgid "Enter new password"
+msgstr "Voer een nieuw wachtwoord in"
+
+#: templates/registration/password_reset_confirm.html:12
+msgid "Please enter your new password twice so we can verify you typed it in correctly."
+msgstr "Vul uw nieuwe wachtwoord twee keer in zodat wij kunnen nagaan of u het goed heeft getypt"
+
+#: templates/registration/password_reset_confirm.html:24
+msgid "Password reset unsuccessful"
+msgstr "Wachtwoord resetten niet geslaagd"
+
+#: templates/registration/password_reset_confirm.html:26
+msgid "The password reset link was invalid, possibly because it has already been used.  Please request a new password reset."
+msgstr "De wachtwoord reset link is ongeldig, mogelijk omdat deze al eerder is gebruikt. Vraag een nieuwe wachtwoord reset aan."
+
+#: templates/registration/password_reset_done.html:4
+#: templates/registration/password_reset_done.html:8
+msgid "Password reset successful"
+msgstr "Wachtwoord resetten geslaagd"
+
+#: templates/registration/password_reset_done.html:10
+msgid "We've e-mailed you instructions for setting your password to the e-mail address you submitted. You should be receiving it shortly."
+msgstr "U ontvangt zodadelijk een e-mail met instructies over het instellen van een wachtwoord op het e-mailadres dat u bij ons heeft doorgegeven."
+
+#: templates/registration/password_reset_email.html:3
+msgid "You're receiving this e-mail because you requested a password reset"
+msgstr "U ontvangt deze e-mail omdat u een wachtwoord reset heeft aangevraagd"
+
+#: templates/registration/password_reset_email.html:4
+#, python-format
+msgid "for your user account at %(site_name)s"
+msgstr "voor uw gebruikersaccount op %(site_name)s"
+
+#: templates/registration/password_reset_email.html:6
+msgid "Please go to the following page and choose a new password:"
+msgstr "Ga naar de volgende pagina en kies een nieuw wachtwoord:"
+
+#: templates/registration/password_reset_email.html:10
+msgid "Your username, in case you've forgotten:"
+msgstr "Uw gebruikersnaam:"
+
+#: templates/registration/password_reset_email.html:12
+msgid "Thanks for using our site!"
+msgstr "Dank u voor het gebruik van deze website"
+
+#: templates/registration/password_reset_email.html:14
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Het team van %(site_name)s"
+
+#: templates/registration/password_reset_form.html:10
+msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
+msgstr "Bent u uw wachtwoord vergeten? Vul hieronder uw e-mailadres in en wij sturen u een e-mail met instructies om een nieuw wachtwoord in te stellen"
+
+#: templates/registration/password_reset_form.html:14
+msgid "E-mail address:"
+msgstr "E-mail adres:"
+
+#: templates/registration/password_reset_form.html:15
+msgid "Reset my password"
+msgstr "Reset mijn wachtwoord"
+
+#: templates/registration/registration_complete.html:4
+msgid "Registration complete"
+msgstr "Registratie geslaagd"
+
+#: templates/registration/registration_complete.html:6
+msgid "Registration complete."
+msgstr "Registratie geslaagd."
+
+#: templates/registration/registration_complete.html:7
+msgid "An e-mail containing information about how to activate your account has been sent to your e-mail address."
+msgstr "Een e-mail met informatie hoe u uw account kunt activeren is naar uw e-mailadres verstuurd"
+
+#: templates/registration/registration_form.html:8
+msgid "Registration Form"
+msgstr "Registratie formulier"
+
+#: templates/search/search.html:5
+msgid "Search result"
+msgstr "Zoekresultaat"
+
+#: templates/search/search.html:12
+msgid "Results"
+msgstr "Resultaten"
+
+#: templates/search/search.html:20
+msgid "No results found"
+msgstr "Geen resultaten gevonden"
+
+#: templates/survey/form.html:21
+msgid "Submit"
+msgstr "Stuur in"
+
+#: templates/survey/index.html:16
+msgid "Survey Form"
+msgstr "Vragenlijst"
+
+#: templates/survey/people.html:5
+msgid "People"
+msgstr "Mensen"
+
+#: templates/survey/people.html:13
+msgid "Edit"
+msgstr "Bewerk"
+
+#: templates/survey/people.html:14
+msgid "Profile"
+msgstr "Profiel"
+
+#: templates/survey/people.html:15
+msgid "Survey"
+msgstr "Vragenlijst"
+
+#: templates/survey/people.html:16
+#: templates/survey/thanks.html:19
+msgid "Remove"
+msgstr "Verwijder"
+
+#: templates/survey/people.html:21
+msgid "Add new person"
+msgstr "Voeg een nieuwe Griepmeter toe"
+
+#: templates/survey/people_add.html:5
+#: templates/survey/people_add.html:10
+msgid "Add Person"
+msgstr "Voeg Griepmeter toe"
+
+#: templates/survey/people_edit.html:5
+msgid "Edit Person"
+msgstr "Bewerk Griepmeter"
+
+#: templates/survey/people_edit.html:10
+msgid "Save"
+msgstr "Opslaan"
+
+#: templates/survey/people_remove.html:5
+msgid "Confirm removal"
+msgstr "Bevestig verwijderen"
+
+#: templates/survey/people_remove.html:8
+msgid "Confirm the removal of the person:"
+msgstr "Bevestig het verwijderen van deze Griepmeter:"
+
+#: templates/survey/people_remove.html:16
+msgid "Yes"
+msgstr "Ja"
+
+#: templates/survey/people_remove.html:22
+msgid "No"
+msgstr "Nee"
+
+#: templates/survey/profile_index.html:16
+msgid "Edit Profile"
+msgstr "Profiel bewerken"
+
+#: templates/survey/select_user.html:5
+msgid "Select User"
+msgstr "Selecteer gebruiker"
+
+#: templates/survey/thanks.html:6
+msgid "Thanks for taking the time to fill out this survey."
+msgstr "Hartelijk dank voor het invullen van deze vragenlijst"
+
+#: templates/survey/thanks.html:6
+msgid "Here is a summary of the information you entered for you and the members of your group or family:"
+msgstr "Hieronder vindt u een samenvatting van de informatie die u heeft ingevuld voor uzelf en eventueel de leden van uw groep of familie:"
+
+#: templates/survey/thanks.html:11
+msgid "Group members"
+msgstr "Groepsleden"
+
+#: templates/survey/thanks.html:11
+msgid "Health status"
+msgstr "Gezondheidsstatus"
+
+#: templates/survey/thanks.html:11
+msgid "Manage "
+msgstr "Beheer"
+
+#: templates/survey/thanks.html:16
+msgid "Change name"
+msgstr "Verander naam"
+
+#: templates/survey/thanks.html:17
+msgid "Change profile"
+msgstr "Verander profiel"
+
+#: templates/survey/thanks.html:18
+msgid "Enter symptoms"
+msgstr "Voer symptomen in"
+
+#: templates/survey/thanks_profile.html:5
+msgid "Thanks for changing your profile,"
+msgstr "Dank voor het aanpassen van uw profiel"
+
+#: templates/survey/thanks_profile.html:6
+msgid "Please, if you have not already done so, fill in"
+msgstr "Vul in, als u dat nog niet heeft gedaan"
+
+#: templates/survey/thanks_profile.html:6
+msgid "the symptoms questionaire"
+msgstr "De wekelijkse vragenlijst"
+
+msgid ""
+"Activate your account:\n"
+"\n"
+"Click the following URL or copy and paste it to the browser's address bar.\n"
+"\n"
+"http://%(site)s/accounts/activate/%(activation_key)s/\n"
+"\n"
+"This activation URL will expire in %(expiration_days)s days."
+msgstr ""
+"Activeer uw account:\n"
+"\n"
+"Klik op de volgende URL of kopieer deze naar de adresbalk van uw browser:\n"
+"http://%(site)s/accounts/activate/%(activation_key)s/\n"
+"\n"
+"Deze activatie-url blijft %(expiration_days)s dagen geldig."
+
+msgid "Activate your account! %(site)s"
+msgstr "Activeer uw account! %(site)s"
+
+msgid "Please check the answers for the highlighted questions."
+msgstr "Controleer aub de antwoorden voor de aangemerkte vragen"
+
+msgid "Weekly survey"
+msgstr "Wekelijkse vragenlijst"
+
+msgid "Manage household"
+msgstr "Beheer huishouden"
+
+msgid "You have received this email because you are registered with %(site_name)s. Your contribution helps us track the spread of flu. If you do not wish to receive this weekly reminder any longer, please <a href=\"%(unsubscribe_url)s\">unsubscribe</a> from our mailings."
+msgstr "U ontvangt deze mail omdat u staat geregistreerd als griepmeter bij De Grote GriepMeting (GGM). Uw meting helpt ons om de verspreiding van griep en verkoudheid in kaart te brengen. Al u niet langer wenst deel te nemen aan ons onderzoek <a href=\"%(unsubscribe_url)s\">meldt u zich dan af</a> voor onze wekelijkse nieuwsbrieven."
+
+msgid "Below is the list of participants currently managed by you. Click the corresponding option next to the participant to complete the background or symptoms questionnaire for that person, or to remove a participant."
+msgstr "Hier vindt u de lijst van personen die u beheert. Kies de gewenste optie naast de betreffende persoon om de aanmelding of meting te voltooien, of om die persoon te verwijderen."
+
+msgid "Background"
+msgstr "Aanmelding"
+
+msgid "Symptoms"
+msgstr "Meting"
+
+msgid "Before we take you to the symptoms questionnaire, please complete the short background questionnaire below. You will only have to complete this once."
+msgstr "Voordat we u naar de daadwerkelijke meting doorsturen, zouden we het op prijs stellen als u onderstaande vragen éénmalig beantwoordt:"
+
+msgid "Completing for participant"
+msgstr "Wordt ingevuld voor "
+
+msgid "Symptoms survey"
+msgstr "Meting"
+
+msgid "The flu status of each participant is based on the symptoms you reported. <strong>This is not a medical diagnosis</strong>. We only ask for symptoms indicative of influenza-like illness, common colds, gastric flu. If you have other symptoms, or you are at all worried, we recommend that you contact your doctor or telephone NHS Direct / NHS 24."
+msgstr "De griepstatus van iedere persoon is gebaseerd op de gegevens die u aan ons doorgeeft. <strong>Dit is geen medische diagnose</strong>. We vragen alleen naar symptomen die duiden op griep, verkoudheid en buikgriep. Indien u andere symptomen hebt of om wat voor reden dan ook bezorgd bent, raden we u aan contact op te nemen met uw huisarts."
+
+msgid "Unknown"
+msgstr "Onbekend"
+
+msgid "Questionnaire for participant"
+msgstr "Vragenlijst voor"
+
+msgid "Please check your spam folder in case you do not get this email in your Inbox. If you have any problems activating your account, please"
+msgstr "Indien u deze mail niet ontvangt, raden wij u aan in uw spam-map te kijken. Als u problemen hebt met het activeren van uw registratie, kunt u altijd"
+
+msgid "contact us"
+msgstr "contact op te nemen"
+
+# translations should reflect whatever can be seen on the map of the thanks page
+msgid "Regions in which we currently have reports of influenza-like illness are red, and ones in which none of our participants currently report influenza-like illness are blue."
+msgstr "In de <strong style=\"color: #0037ff;\">&#x25B8; blauw</strong> gekleurde postcodegebieden doen zich gevallen voor die op verkoudheid wijzen. In de <strong style=\"color: #f2b40e;\">&#x25B8; geel</strong> gekleurde gebieden doen zich (ook) verschijnselen van buikgriep voor. In de <strong style=\"color: #ff2300;\">&#x25B8; rood</strong> gekleurde postcodegebieden heersen (ook) griepachtige verschijnselen. In de <strong style=\"color: #707070;\">&#x25B8; grijze</strong> gebieden zijn wel metingen verricht, maar geen symptomen van bovengenoemde ziekten gevonden."
+
+# translations should reflect however often maps are updated
+msgid "Map updated hourly."
+msgstr "De kaart wordt ieder uur ververst."
+
+msgid "Please try to copy and paste the link from the activation email, making sure you've got all letters copied. If this fails, please try to"
+msgstr "U kunt proberen de link uit uw activatie-e-mail te kopiëren, waarna u hem nogmaals in uw browservenster plakt. Let u er a.u.b. dat u alle letters en cijfers kopieert. Als dit niet lukt kunt u proberen "
+
+msgid "log in"
+msgstr "in te loggen"
+
+msgid "using the username and password you provided during registration. If this still fails, please try to"
+msgstr "met de gebruikersnaam en het wachtwoord dat u hebt ingevuld tijdens de registratie. Als u hiermee niet verder komt willen wij u vragen opnieuw te"
+
+msgid "register"
+msgstr "Doe mee!"
+
+msgid "with a different username. If everything else fails, please do not hesitate to"
+msgstr "met een andere gebruikersnaam. Mocht u er niet uitkomen vragen wij u "
+
+msgid "Check this box if you wish to receive weekly reminders throughout the flu season"
+msgstr "Vink dit vakje aan indien u wekelijkse herinneringen per email wenst te ontvangen gedurende het griepseizoen"
+
+msgid "This email is already in use"
+msgstr "Dit email adres is al in gebruik"
+
+msgid "My settings"
+msgstr "Mijn instellingen"
+
+msgid "Your settings have been updated"
+msgstr "Uw instellingen zijn gewijzigd"
+
+msgid "Change password"
+msgstr "Wijzig wachtwoord"
+
+msgid "Fill out date"
+msgstr "Laatste meting"
+
+msgid "Member"
+msgstr "Griepmeter"
+
+msgid "Contest"
+msgstr "Prijsvraag"
+
+###########################
+# PyBBM translation below #
+###########################
+#: admin.py:23
+#: admin.py:42
+#: admin.py:61
+#: admin.py:88
+msgid "Additional options"
+msgstr "Aanvullende opties"
+
+#: admin.py:83
+msgid "IM"
+msgstr "IM"
+
+#: admin.py:93
+msgid "Ban options"
+msgstr "Ban opties"
+
+#: feeds.py:21
+#: feeds.py:22
+#: templates/pybb/base.html:13
+msgid "Latest posts on forum"
+msgstr "Laatste berichten op het forum"
+
+#: feeds.py:31
+#: feeds.py:32
+#: templates/pybb/base.html:14
+msgid "Latest topics on forum"
+msgstr "Laatste onderwerpen op het forum"
+
+#: forms.py:14
+#: forms.py:112
+#: models.py:108
+msgid "Subject"
+msgstr "Onderwerp"
+
+#: forms.py:15
+#: templates/pybb/post_template.html:61
+msgid "Attachment"
+msgstr "Bijlage"
+
+#: forms.py:42
+msgid "Attachment is too big"
+msgstr "Bijlage is te groot"
+
+#: models.py:40
+#: models.py:68
+msgid "Position"
+msgstr "Positie"
+
+#: models.py:69
+msgid "Description"
+msgstr "Beschrijving"
+
+#: models.py:70
+msgid "Moderators"
+msgstr "Moderator"
+
+#: models.py:71
+#: models.py:110
+#: models.py:191
+msgid "Updated"
+msgstr "Geactualiseerd"
+
+#: models.py:72
+#: models.py:116
+msgid "Post count"
+msgstr "Aantal berichten"
+
+#: models.py:76
+#: models.py:107
+msgid "Forum"
+msgstr "Forum"
+
+#: models.py:77
+msgid "Forums"
+msgstr "Forums"
+
+#: models.py:109
+#: models.py:190
+msgid "Created"
+msgstr "Aangemaakt"
+
+#: models.py:111
+#: models.py:189
+#: models.py:251
+#: models.py:303
+msgid "User"
+msgstr "Gebruiker"
+
+#: models.py:112
+msgid "Views count"
+msgstr "Aantal keer bekeken"
+
+#: models.py:113
+msgid "Sticky"
+msgstr "Permanent"
+
+#: models.py:114
+#: templates/pybb/forum.html:24
+msgid "Closed"
+msgstr "Gesloten"
+
+#: models.py:115
+msgid "Subscribers"
+msgstr "Abonnees"
+
+#: models.py:120
+#: models.py:188
+#: models.py:304
+msgid "Topic"
+msgstr "Onderwerp"
+
+#: models.py:121
+#: templates/pybb/forum.html:36
+#: templates/pybb/quick_access.html:47
+#: templates/pybb/user_posts.html:19
+#: templates/pybb/user_topics.html:25
+msgid "Topics"
+msgstr "Onderwerpen"
+
+#: models.py:192
+msgid "Markup"
+msgstr "Opmaak"
+
+#: models.py:194
+msgid "HTML version"
+msgstr "HTML versie"
+
+#: models.py:195
+msgid "Text version"
+msgstr "Tekst versie"
+
+#: models.py:196
+msgid "User IP"
+msgstr "Gebruiker IP"
+
+#: models.py:201
+#: models.py:323
+msgid "Post"
+msgstr "Bericht"
+
+#: models.py:202
+#: templates/pybb/quick_access.html:50
+#: templates/pybb/topic.html:29
+#: templates/pybb/topic.html.py:42
+msgid "Posts"
+msgstr "Berichten"
+
+#: models.py:247
+msgid "Caution"
+msgstr "Waarschuwing"
+
+#: models.py:248
+msgid "Ban"
+msgstr "Ban"
+
+#: models.py:252
+#: templates/pybb/user.html:46
+msgid "Site"
+msgstr "Site"
+
+#: models.py:253
+msgid "Jabber"
+msgstr "Jabber"
+
+#: models.py:254
+msgid "ICQ"
+msgstr "ICQ"
+
+#: models.py:255
+msgid "MSN"
+msgstr "MSN"
+
+#: models.py:256
+msgid "AIM"
+msgstr "AIM"
+
+#: models.py:257
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: models.py:258
+#: templates/pybb/user.html:43
+msgid "Location"
+msgstr "Plaats"
+
+#: models.py:259
+msgid "Signature"
+msgstr "Signature"
+
+#: models.py:260
+msgid "Signature HTML Version"
+msgstr "Signature HTML versie"
+
+#: models.py:261
+msgid "Time zone"
+msgstr "Tijdzone"
+
+#: models.py:262
+msgid "Language"
+msgstr "Taal"
+
+#: models.py:264
+msgid "Avatar"
+msgstr "Avatar"
+
+#: models.py:265
+msgid "Show signatures"
+msgstr "Laat signatures zien"
+
+#: models.py:266
+msgid "Default markup"
+msgstr "Standaard layout"
+
+#: models.py:267
+msgid "Ban status"
+msgstr "Ban status"
+
+#: models.py:268
+msgid "Ban till"
+msgstr "Ban actief tot"
+
+#: models.py:272
+msgid "Profiles"
+msgstr "Profielen"
+
+#: models.py:305
+msgid "Time"
+msgstr "Tijd"
+
+#: models.py:309
+msgid "Read"
+msgstr "Gelezen"
+
+#: models.py:310
+msgid "Reads"
+msgstr "maal gelezen"
+
+#: models.py:324
+msgid "Size"
+msgstr "grootte"
+
+#: models.py:325
+msgid "Content type"
+msgstr "Type content"
+
+#: models.py:326
+msgid "Path"
+msgstr "Pad"
+
+#: models.py:328
+msgid "Hash"
+msgstr "Hash"
+
+#: subscription.py:11
+#, python-format
+msgid ""
+"New reply from %(username)s to topic that you have subscribed on.\n"
+"---\n"
+"%(message)s\n"
+"---\n"
+"See topic: %(post_url)s\n"
+"Unsubscribe %(unsubscribe_url)s"
+msgstr ""
+"Nieuwe reactie van %(username)s op een bericht waarop je bent geabonneerd.\n"
+"---\n"
+"%(message)s\n"
+"---\n"
+"Bekijk bericht: %(post_url)s\n"
+"Afmelden van bericht %(unsubscribe_url)s"
+
+#: views.py:199
+#, python-format
+msgid "Added after %s minute"
+msgid_plural "Added after %s minutes"
+msgstr[0] "Toegevoegd na %s minuut"
+msgstr[1] "Toegevoegd na %s minuten"
+
+#: templates/pybb/add_post.html:23
+msgid "You banned"
+msgstr "Ban actief"
+
+#: templates/pybb/add_post.html:27
+#: templates/pybb/add_post.html.py:29
+#: templates/pybb/category.html:11
+#: templates/pybb/create_pm.html:7
+#: templates/pybb/edit_post.html:21
+#: templates/pybb/forum.html:12
+#: templates/pybb/topic.html:26
+msgid "Root"
+msgstr "Root"
+
+#: templates/pybb/add_post.html:33
+#: templates/pybb/add_post_form.html:9
+#: templates/pybb/forum.html:40
+msgid "New topic"
+msgstr "Nieuw onderwerp"
+
+#: templates/pybb/add_post.html:33
+#: templates/pybb/add_post_form.html:9
+msgid "New reply"
+msgstr "Nieuwe reactie"
+
+#: templates/pybb/add_post_form.html:5
+#: templates/pybb/add_post_form.html:13
+#: templates/pybb/merge_topics.html:35
+msgid "Preview"
+msgstr "Voorvertoning"
+
+#: templates/pybb/create_pm.html:7
+#: templates/pybb/create_pm.html.py:12
+msgid "New private message"
+msgstr "Nieuw priv� bericht"
+
+#: templates/pybb/delete_post.html:5
+msgid "Are you sure you want to delete this message?"
+msgstr "Weet je zeker dat je dit bericht wilt verwijderen?"
+
+#: templates/pybb/delete_post.html:10
+msgid "Yes, I am sure."
+msgstr "Ja, verwijder."
+
+#: templates/pybb/edit_post.html:24
+#: templates/pybb/edit_post.html.py:28
+msgid "Editing the post"
+msgstr "Bericht veranderen"
+
+#: templates/pybb/edit_profile.html:20
+#: templates/pybb/edit_profile.html:28
+msgid "Profile editing"
+msgstr "Profiel veranderen"
+
+#: templates/pybb/edit_profile.html:24
+msgid "Change the password"
+msgstr "Wachtwoord veranderen"
+
+#: templates/pybb/edit_profile.html:33
+msgid "Subscriptions on topics"
+msgstr "Abonnementen op onderwerpen"
+
+#: templates/pybb/edit_profile.html:40
+msgid "delete"
+msgstr "wis"
+
+#: templates/pybb/footer.html:15
+msgid "PYBB - django forum engine"
+msgstr "PYBB - django forum engine"
+
+#: templates/pybb/forum.html:25
+msgid "Important"
+msgstr "Belangrijk"
+
+#: templates/pybb/head.html:11
+#: templates/pybb/quick_access.html:53
+#: templates/pybb/users.html:6
+#: templates/pybb/users.html.py:20
+msgid "Users"
+msgstr "Gebruikers"
+
+#: templates/pybb/head.html:13
+msgid "My profile"
+msgstr "Mijn profiel"
+
+#: templates/pybb/head.html:15
+msgid "Admincp"
+msgstr "Admincp"
+
+#: templates/pybb/head.html:18
+msgid "Logged in as "
+msgstr "Ingelogd als"
+
+#: templates/pybb/head.html:20
+msgid "Sign up"
+msgstr "Registreren"
+
+#: templates/pybb/head.html:47
+msgid "Search powered by Google"
+msgstr "Zoekfunctie door Google"
+
+#: templates/pybb/merge_topics.html:11
+msgid "Enter topic id for add to merged topics"
+msgstr "Geef onderwerp-id in voor het toevoegen aan samengevoegde onderwerpen"
+
+#: templates/pybb/merge_topics.html:16
+msgid "Add"
+msgstr "Toevoegen"
+
+#: templates/pybb/merge_topics.html:24
+msgid "Choose main topic to merge"
+msgstr "Kies hoofd-onderwerp om samen te voegen"
+
+#: templates/pybb/merge_topics.html:31
+msgid "Merge"
+msgstr "Samenvoegen"
+
+#: templates/pybb/merge_topics.html:35
+msgid "Posts from changed topics"
+msgstr "Berichten van gewijzigde onderwerpen"
+
+#: templates/pybb/merge_topics.html:36
+#: templates/pybb/user.html:26
+msgid "Number of posts"
+msgstr "Aantal berichten"
+
+#: templates/pybb/pagination.html:6
+msgid "Enter page number"
+msgstr "Vul het pagina-nummer in"
+
+#: templates/pybb/pagination.html:15
+#: templates/pybb/pagination.html.py:23
+msgid "of"
+msgstr "van"
+
+#: templates/pybb/pagination.html:21
+msgid "Go to page..."
+msgstr "Ga naar pagina..."
+
+#: templates/pybb/pagination.html:22
+#: templates/pybb/topic_mini_pagination.html:3
+msgid "Page"
+msgstr "Pagina"
+
+#: templates/pybb/post_template.html:26
+#: templates/pybb/user.html:19
+msgid "Expire"
+msgstr "Verloopt"
+
+#: templates/pybb/post_template.html:39
+msgid "Delete post?"
+msgstr "Bericht wissen?"
+
+#: templates/pybb/post_template.html:40
+msgid "Delete"
+msgstr "Wissen"
+
+#: templates/pybb/post_template.html:55
+msgid "Edited"
+msgstr "Gewijzigd"
+
+#: templates/pybb/post_template.html:66
+msgid "quote"
+msgstr "quote"
+
+#: templates/pybb/quick_access.html:16
+msgid "Last topics"
+msgstr "Laatste onderwerpen"
+
+#: templates/pybb/quick_access.html:17
+msgid "Last posts"
+msgstr "Laatste berichten"
+
+#: templates/pybb/forum.html:31
+msgid "Views"
+msgstr "Keer bekeken"
+
+#: templates/pybb/forum.html:34
+msgid "Last post"
+msgstr "Laatste bericht"
+
+#: templates/pybb/quick_access.html:18
+#: templates/pybb/user.html:25
+msgid "Statistics"
+msgstr "Statistieken"
+
+#: templates/pybb/topic.html:48
+msgid "Unstick topic"
+msgstr "Verwijder hoofdbericht-status"
+
+#: templates/pybb/topic.html:50
+msgid "Stick topic"
+msgstr "Markeer bericht als hoofdbericht"
+
+#: templates/pybb/topic.html:54
+msgid "Open topic"
+msgstr "Maak onderwerp"
+
+#: templates/pybb/topic.html:56
+msgid "Close topic"
+msgstr "Sluit onderwerp"
+
+#: templates/pybb/topic.html:59
+msgid "Merge topics"
+msgstr "Onderwerpen samenvoegen"
+
+#: templates/pybb/topic.html:65
+msgid "Subscribe"
+msgstr "Abonneer"
+
+#: templates/pybb/user.html:30
+msgid "Find all posts"
+msgstr "Vind alle berichten"
+
+#: templates/pybb/user.html:34
+msgid "Number of topics"
+msgstr "Aantal onderwerpen"
+
+#: templates/pybb/user.html:37
+msgid "Find all topics"
+msgstr "Alle onderwerpen vinden"
+
+#: templates/pybb/user.html:40
+msgid "Date of registration"
+msgstr "Registreerdatum"
+
+#: templates/pybb/user.html:41
+msgid "Contacts"
+msgstr "Contacten"
+
+#: templates/pybb/user_topics.html:6
+#: templates/pybb/user_topics.html.py:11
+msgid "All topics created by"
+msgstr "Alle onderwerpen geschreven door"
+
+#: templatetags/pybb_tags.py:58
+msgid "seconds ago,seconds ago,seconds ago"
+msgstr "seconden geleden,seconden geleden,seconden geleden"
+
+#: templatetags/pybb_tags.py:61
+msgid "seconds ago"
+msgstr "seconden geleden"
+
+#: templatetags/pybb_tags.py:67
+msgid "minutes ago,minutes ago,minutes ago"
+msgstr "minuten geleden,minuten geleden,minuten geleden"
+
+#: templatetags/pybb_tags.py:70
+msgid "minutes ago"
+msgstr "minuten geleden"
+
+#: templatetags/pybb_tags.py:80
+#, python-format
+msgid "today, %s"
+msgstr "vandaag, %s"
+
+#: templatetags/pybb_tags.py:82
+#, python-format
+msgid "yesterday, %s"
+msgstr "gisteren, %s"
+
+#: templates/index.html:22
+msgid "Mark all forums as read"
+msgstr "Alle berichten als gelezen markeren"
+

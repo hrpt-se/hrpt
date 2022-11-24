@@ -1,0 +1,100 @@
+{% load cms_tags menu_tags sekizai_tags i18n static analytics %}
+
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_name }}: {% page_attribute page_title %}{% endblock title %}</title>
+    {% render_block "css" %}
+    {% block add_css %}{% endblock add_css %}
+    <link rel="stylesheet" href="{% static '/hrpt-responsive/css/foundation.min.css' %}">
+    <link rel="stylesheet" href="{% static '/hrpt-responsive/css/fohm_main.min.css' %}">
+    <link rel="stylesheet" href="{% static '/hrpt-responsive/css/style.css' %}">
+
+    {% render_block "js" %}
+    <script type="text/javascript" src="{% static '/hrpt-responsive/js/jquery-3.5.1.min.js' %}"></script>
+    <script type="text/javascript" src="{%  static '/hrpt-responsive/js/foundation.min.js' %}"></script>
+    {% block add_js %}{% endblock add_js %}
+    {% google_analytics %}
+</head>
+<body>
+    {% cms_toolbar %}
+    <header id="header" class="cf">
+        <div class="header-inner">
+            {% if 'accept-cookies' not in request.COOKIES %}
+                <div class="cookie-info">
+                    <p>Vi använder <a title="Om cookies på webbplatsen" href="/sv/cookies">cookies</a>
+                        för att ge dig access till funktioner som gör det enklare att använda webbplatsen.
+                        Genom att fortsätta godkänner du att vi använder cookies.</p>
+                    <p><button id="accept-cookies-button">Jag förstår</button></p>
+                </div>
+            {% endif %}
+            <div class="row top-bar">
+                <div class="medium-7 columns">
+                    <a href="/">
+                        <img class="menu-text" src="{% static '/hrpt-responsive/img/hrpt_logo.png' %}">
+                    </a>
+                </div>
+                <div class="medium-5 columns header-buttons">
+                    {% if user.is_authenticated %}
+                        <div>
+                            <p class="nav-supp logged-in-as">
+                                {% trans "Logged in as" %} <a href="/accounts/settings/">{{ user.username }}</a>
+                            </p>
+                        </div>
+
+                        <a href="/valkommen/" class="button menu-button">{% trans "My account" %}</a>
+                        <a href="/accounts/logout/" class="button menu-button">{% trans "Log out" %}</a>
+
+                    {% else %}
+                        <a href="/accounts/register/" class="button menu-button">{% trans "Register" %}</a>
+                        <a href="/accounts/login/" class="button menu-button">{% trans "Log in" %}</a>
+                    {% endif %}
+                     <a id="menu-toggler" class="button hide-for-medium float-right">&nbsp;</a>
+
+                </div>
+            </div>
+        </div>
+        <div class="nav-main show-for-medium">
+            <div class="nav-main-inner">
+                <div class="row column">
+                    {% show_menu 0 2 100 100 "hrpt-responsive/main_menu.html" %}
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="content-inner">
+        {% block content %}{% endblock content %}
+    </div>
+    <footer id="footer">
+        <div class="row">
+            <div class="medium-8 columns">
+                <p>Hälsorapport är en del av Influenzanet, ett europeiskt system för webbaserad syndromövervakning</p>
+                <h2>Kontakt</h2>
+
+                <p><a href="/sv/contact">Kontakta arbetsgruppen för Hälsorapport</a></p>
+                <p><a href="https://www.folkhalsomyndigheten.se">
+                    www.folkhalsomyndigheten.se
+                </a></p>
+            </div>
+            <div class="medium-4 columns">
+                <img src="{% static '/hrpt-responsive/img/folkhalsomyndigheten_l_neg_rgb.png' %}">
+            </div>
+        </div>
+    </footer>
+    <script>
+        $(document).foundation();
+        $(document).ready(function() {
+            $('#menu-toggler').click(function () {
+                $('.nav-main').toggleClass('override-hidden');
+            });
+
+            $('#accept-cookies-button').click(function() {
+                document.cookie = 'accept-cookies=true; path=/; max-age=315360000';
+                $('.cookie-info').remove();
+            });
+        })
+    </script>
+</body>
+</html>

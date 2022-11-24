@@ -1,0 +1,35 @@
+{% extends "base_admin.html" %}
+
+{% block navigation %}
+    <li><a href="{% url 'pollster_survey_list' %}">All Surveys</a></li>
+    {% if survey.is_editable %}
+    <li><a href="{% url 'pollster_survey_edit' survey.id %}">Edit Survey</a></li>
+    {% endif %}
+    <li><a href="{% url 'pollster_survey_test' survey.id %}">Test Survey</a></li>
+    {% if survey.group %}
+        <li><a href="{% url 'pollster_survey_access' survey.id %}">Survey access</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="wok-main-panel-content">
+    <div id="survey-translation-list">
+        <h1>Charts for {{ survey }}</h1>
+        <ul>
+            {% for chart in survey.chart_set.all %}
+            <li class="status-{{chart.status}}">
+                [{{chart.status}}] {{ chart.shortname }}
+                ( <a href="{% url 'pollster_survey_chart_edit' survey.id chart.shortname %}">edit</a> )
+            </li>
+            {% endfor %}
+            <li>
+                <form action="{% url 'pollster_survey_chart_add' survey.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ form_add.as_p }}
+                    <button class="link">create chart</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

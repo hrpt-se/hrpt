@@ -1,0 +1,27 @@
+{% extends "hrpt-responsive/singlecol.html" %}
+{% load i18n static %}
+
+{% block title %}
+    {{ block.super }}: {% trans "Register" %}
+{% endblock %}
+
+{% block add_js %}
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+
+{% block col1 %}
+    <h1>{% trans "Registration Form" %}</h1>
+    <p class="registration-footnote">{% trans "Registration requires ID-code." %}</p>
+    {% trans "register" %}
+    <form method="post" id="registration">{% csrf_token %}
+        {% for field in form %}
+            <label>{{ field.label }}
+                {{ field }}
+            </label>
+            <p class="help-text">{{ field.help_text }}</p>
+            {{ field.errors }}
+        {% endfor %}
+        <input type="submit" class="button" value="{% trans "Register" %}">
+    </form>
+{% endblock col1 %}
+

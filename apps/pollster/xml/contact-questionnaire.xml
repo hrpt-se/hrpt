@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<survey id="survey-22" xmlns="http://dndg.it/ns/pollster-1.0">
+    <title>Contact Survey</title>
+    <shortname>contact</shortname>
+    <version></version>
+    <created>2011-12-01T22:32:42.940295</created>
+    <updated>2011-12-19T18:31:28.419544</updated>
+    <questions>
+    
+        <question id="question-509">
+            <title>Compilation Date</title>
+            <data_name>timestamp</data_name>
+            <description></description>
+            <type>builtin</type>
+            <data_type>wok.pollster.datatypes.Timestamp</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual></visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+            </columns>
+            <rows>
+                
+            </rows>
+            <options>
+                
+            </options>
+        </question>
+    
+        <question id="question-515">
+            <title></title>
+            <data_name>NOTE</data_name>
+            <description>Flu is spread via social contacts. Measuring how we meet each other helps understand and predict flu epidemics. Think about the all people you met yesterday and where you met them. We ask you about two types of contacts: conversational (talking face to face) and physical (skin-to-skin contact, e.g. a handshake, kiss etc). Please note that some of your contacts may fit both categories.</description>
+            <type>single-choice</type>
+            <data_type>wok.pollster.datatypes.Text</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual></visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+            </columns>
+            <rows>
+                
+            </rows>
+            <options>
+                
+            </options>
+        </question>
+    
+        <question id="question-510">
+            <title>How many people did you have CONVERSATIONAL contact with yesterday (talking face to face)?</title>
+            <data_name>Q1</data_name>
+            <description></description>
+            <type>matrix-select</type>
+            <data_type>wok.pollster.datatypes.Numeric</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual>select</visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+                <column id="column-27">
+                    <title>0-4 years</title>
+                </column>
+                
+                <column id="column-28">
+                    <title>5-18 years</title>
+                </column>
+                
+                <column id="column-29">
+                    <title>19-44 years</title>
+                </column>
+                
+                <column id="column-30">
+                    <title>45-64 years</title>
+                </column>
+                
+                <column id="column-31">
+                    <title>65+ years</title>
+                </column>
+                
+            </columns>
+            <rows>
+                
+                <row id="row-27">
+                    <title>Home</title>
+                </row>
+                
+                <row id="row-28">
+                    <title>Work/School</title>
+                </row>
+                
+                <row id="row-29">
+                    <title>Other</title>
+                </row>
+                
+            </rows>
+            <options>
+                
+                <option id="option-2619">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>0</text>
+                    <value>0</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2620">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>1</text>
+                    <value>1</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2621">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>2</text>
+                    <value>2</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2622">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>3</text>
+                    <value>3</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2623">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>4</text>
+                    <value>4</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2624">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>5</text>
+                    <value>5</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2625">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>6</text>
+                    <value>6</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2626">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>7</text>
+                    <value>7</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2627">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>8</text>
+                    <value>8</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2628">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>9</text>
+                    <value>9</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2629">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>10</text>
+                    <value>10</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2630">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>11</text>
+                    <value>11</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2631">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>12</text>
+                    <value>12</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2632">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>13</text>
+                    <value>13</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2633">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>14</text>
+                    <value>14</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2634">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>15</text>
+                    <value>15</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2635">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>16-24</text>
+                    <value>16</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2636">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>25-49</text>
+                    <value>25</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2637">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>50-99</text>
+                    <value>50</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2638">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>100+</text>
+                    <value>100</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+            </options>
+        </question>
+    
+        <question id="question-511">
+            <title>How many people did you have PHYSICAL contact with yesterday (skin-to-skin contact, e.g. handshake, kiss)?</title>
+            <data_name>Q2</data_name>
+            <description>(This will usually include most of the people with whom you had conversational contact)</description>
+            <type>matrix-select</type>
+            <data_type>wok.pollster.datatypes.Numeric</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual>select</visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+                <column id="column-32">
+                    <title>0-4 years</title>
+                </column>
+                
+                <column id="column-33">
+                    <title>5-18 years</title>
+                </column>
+                
+                <column id="column-34">
+                    <title>19-44 years</title>
+                </column>
+                
+                <column id="column-35">
+                    <title>45-64 years</title>
+                </column>
+                
+                <column id="column-36">
+                    <title>65+ years</title>
+                </column>
+                
+            </columns>
+            <rows>
+                
+                <row id="row-30">
+                    <title>Home</title>
+                </row>
+                
+                <row id="row-31">
+                    <title>Work/School</title>
+                </row>
+                
+                <row id="row-32">
+                    <title>Other</title>
+                </row>
+                
+            </rows>
+            <options>
+                
+                <option id="option-2674">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>0</text>
+                    <value>0</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2639">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>1</text>
+                    <value>1</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2640">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>2</text>
+                    <value>2</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2641">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>3</text>
+                    <value>3</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2642">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>4</text>
+                    <value>4</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2643">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>5</text>
+                    <value>5</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2644">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>6</text>
+                    <value>6</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2645">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>7</text>
+                    <value>7</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2646">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>8</text>
+                    <value>8</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2647">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>9</text>
+                    <value>9</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2648">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>10</text>
+                    <value>10</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2649">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>11</text>
+                    <value>11</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2650">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>12</text>
+                    <value>12</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2651">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>13</text>
+                    <value>13</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2652">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>14</text>
+                    <value>14</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2653">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>15</text>
+                    <value>15</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2654">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>16-24</text>
+                    <value>16</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2655">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>25-49</text>
+                    <value>25</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2656">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>50-99</text>
+                    <value>50</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2657">
+                    
+                    
+                    <group></group>
+                    <data_name></data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>100+</text>
+                    <value>100</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+            </options>
+        </question>
+    
+        <question id="question-512">
+            <title>How much time did you spend on public transport (e.g. bus, train, underground) yesterday?</title>
+            <data_name>Q3</data_name>
+            <description></description>
+            <type>single-choice</type>
+            <data_type>wok.pollster.datatypes.Numeric</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual></visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+            </columns>
+            <rows>
+                
+            </rows>
+            <options>
+                
+                <option id="option-2658">
+                    
+                    
+                    <group></group>
+                    <data_name>Q3</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>No time at all</text>
+                    <value>0</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2659">
+                    
+                    
+                    <group></group>
+                    <data_name>Q3</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>0-30 minutes</text>
+                    <value>1</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2660">
+                    
+                    
+                    <group></group>
+                    <data_name>Q3</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>30 minutes - 1.5 hours</text>
+                    <value>2</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2661">
+                    
+                    
+                    <group></group>
+                    <data_name>Q3</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>1.5 hours - 4 hours</text>
+                    <value>3</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2662">
+                    
+                    
+                    <group></group>
+                    <data_name>Q3</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>Over 4 hours</text>
+                    <value>4</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+            </options>
+        </question>
+    
+        <question id="question-513">
+            <title>How long did you spend in an enclosed indoor space (e.g. office, classroom, bar, cinema) with more than 10 other people yesterday? (Not including public transport)</title>
+            <data_name>Q4</data_name>
+            <description></description>
+            <type>single-choice</type>
+            <data_type>wok.pollster.datatypes.Numeric</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual></visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+            </columns>
+            <rows>
+                
+            </rows>
+            <options>
+                
+                <option id="option-2663">
+                    
+                    
+                    <group></group>
+                    <data_name>Q4</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>No time at all</text>
+                    <value>0</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2664">
+                    
+                    
+                    <group></group>
+                    <data_name>Q4</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>0-30 minutes</text>
+                    <value>1</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2665">
+                    
+                    
+                    <group></group>
+                    <data_name>Q4</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>30 minutes - 1.5 hours</text>
+                    <value>2</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2666">
+                    
+                    
+                    <group></group>
+                    <data_name>Q4</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>1.5 hours - 4 hours</text>
+                    <value>3</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2667">
+                    
+                    
+                    <group></group>
+                    <data_name>Q4</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>Over 4 hours</text>
+                    <value>4</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+            </options>
+        </question>
+    
+        <question id="question-514">
+            <title>What was the furthest distance from home that you travelled yesterday?</title>
+            <data_name>Q5</data_name>
+            <description></description>
+            <type>single-choice</type>
+            <data_type>wok.pollster.datatypes.Numeric</data_type>
+            <open_option_data_type></open_option_data_type>
+            <starts_hidden>false</starts_hidden>
+            <is_mandatory>false</is_mandatory>
+            <visual></visual>
+            <tags></tags>
+            <regex></regex>
+            <error_message></error_message>
+            <columns>
+                
+            </columns>
+            <rows>
+                
+            </rows>
+            <options>
+                
+                <option id="option-2668">
+                    
+                    
+                    <group></group>
+                    <data_name>Q5</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>Under 1 mile</text>
+                    <value>0</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2669">
+                    
+                    
+                    <group></group>
+                    <data_name>Q5</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>1-4 miles</text>
+                    <value>1</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2670">
+                    
+                    
+                    <group></group>
+                    <data_name>Q5</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>5-9 miles</text>
+                    <value>2</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2671">
+                    
+                    
+                    <group></group>
+                    <data_name>Q5</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>10-29 miles</text>
+                    <value>3</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2672">
+                    
+                    
+                    <group></group>
+                    <data_name>Q5</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>30-100 miles</text>
+                    <value>4</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+                <option id="option-2673">
+                    
+                    
+                    <group></group>
+                    <data_name>Q5</data_name>
+                    <is_virtual>false</is_virtual>
+                    
+                    <text>Over 100 miles</text>
+                    <value>5</value>
+                    <is_open>false</is_open>
+                    
+                    <starts_hidden>false</starts_hidden>
+                    
+                </option>
+                
+            </options>
+        </question>
+    
+    </questions>
+    <rules>
+        
+    </rules>
+    <translations>
+        
+    </translations>
+</survey>

@@ -1,0 +1,50 @@
+<style>
+.survey_list_table{
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 13.44px;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+
+.survey_list_table  td{
+  border: 1px solid #ddd;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+</style>
+
+
+
+{%if replied_surveys or open_surveys %}
+Enkäter
+<table class="survey_list_table">
+        <tbody>
+          {% for s in open_surveys %}
+              <tr>
+                <td style="min-width:200px">{{ s.title }}</td>
+                <td><a href="/survey/show/{{s.shortname}}/">Tryck här för att besvara enkäten</a></td>
+              </tr>
+          {% endfor %}
+          {% for s in locked_surveys %}
+              <tr>
+                <td style="min-width:200px">{{ s.title }}</td>
+                <td>Besvara bakgrundsenkäten först</td>
+              </tr>
+          {% endfor %}
+          {% for s in locked_terms_surveys %}
+              <tr>
+                <td style="min-width:200px">{{ s.title }}</td>
+                <td>Ta del av information om datasamlingen först</td>
+              </tr>
+          {% endfor %}
+          {% for s in replied_surveys %}
+              <tr><td>{{ s.title }}</td><td>Redan besvarad enkät</td></tr>
+          {% endfor %}
+        </tbody>
+</table>
+
+{%else %}
+
+<p><i>Det finns inga enkäter</i><p>
+
+{%endif %}

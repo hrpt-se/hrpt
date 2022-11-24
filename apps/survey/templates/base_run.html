@@ -1,0 +1,29 @@
+{% extends "hrpt-responsive/singlecol.html" %}
+{% load static %}
+
+{% block add_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/jquery/css/jquery-ui-1.12.1.css" %}" media="all">
+    <link rel="stylesheet" type="text/css" href="{% static "/pollster/css/survey.css" %}" media="all">
+{% endblock %}
+
+{% block add_js %}
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery-ui-1.12.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.form.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.cookie.js" %}"></script>
+    {% if locale_code %}
+        {% with "/pollster/datejs/js/date-"|add:locale_code|add:".js" as locale_file %}
+            <script type="text/javascript" src="{% static locale_file %}"></script>
+        {% endwith %}
+    {% else %}
+        <script type="text/javascript" src="{% static "/pollster/datejs/js/date.js" %}"></script>
+    {% endif %}
+
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/csrf.js" %}"></script>
+    <script type="text/javascript">jQuery().cmsPatchCSRF()</script>
+
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.properties.js" %}"></script>
+    <script type="text/javascript" src="{% url 'pollster_urls' %}"></script>
+
+    {% block extrahead %}{% endblock %}
+{% endblock %}

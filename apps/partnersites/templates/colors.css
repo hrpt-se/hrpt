@@ -1,0 +1,53 @@
+/* Customisable styles */
+
+#account ul.anonymous li, #account ul.member li, #searchbar input#searchsubmit, input#commentsubmit {
+ background: #{{ settings.light_color }};
+}
+
+#account ul.anonymous li:hover, #account ul.member li:hover, #searchbar input#searchsubmit:hover, input#commentsubmit:hover {
+ background: #{{ settings.dark_color }};
+}
+
+#col2 p.title {
+ background: #{{ settings.light_color }};
+}
+
+#col1 a,
+#col2 a,
+#col3 a {
+ color: #{{ settings.dark_color }};
+}
+
+#box input#boxsubmit {
+ background: #{{ settings.light_color }};
+}
+
+#box input#boxsubmit:hover,
+#box input#boxsubmit:focus {
+ background: #{{ settings.dark_color }};
+}
+
+/* Forum */
+
+.forum a {
+ color: #{{ settings.light_color }};
+}
+
+.forum .pills .active a { background-color: #{{ settings.light_color }};}
+
+.forum .media-grid a:hover { border-color: #{{ settings.dark_color }};
+}
+
+.forum a.new-topic,
+.forum p.submit input {
+ color: #ffffff;
+ filter: none;
+ background: none repeat scroll 0 0 #{{ settings.light_color }};
+ border: 0;
+}
+
+.forum a.new-topic:hover,
+.forum p.submit input:hover {
+ background: none repeat scroll 0 0 #{{ settings.dark_color }};
+}
+

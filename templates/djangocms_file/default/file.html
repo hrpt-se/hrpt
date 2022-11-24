@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="dllink">
+    <img src="{% static "/hrpt-responsive/img/file_icons/" %}{{ instance.file_src.extension }}.gif" class="dlicon" alt="Icon">
+    <a href="{{ instance.file_src.url }}" rel="external">
+        {% if instance.file_name %}
+            {{ instance.file_name }}
+        {% else %}
+            {{ instance.file_src.label }}
+        {% endif %}
+    </a>
+    ({{ instance.file_src.size|filesizeformat }})
+</div>

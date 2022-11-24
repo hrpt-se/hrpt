@@ -1,0 +1,26 @@
+{% extends "survey/base.html" %}
+{% load i18n %}
+
+{% block col1 %}
+<h1>{% trans "Confirm removal" %}</h1>
+
+<p>
+  {% trans "Confirm the removal of the person:" %}
+  <ul>
+    <li>{{ person.name }}</li>
+  </ul>
+</p>
+
+<form method="post" style="display: inline;">
+{% csrf_token %}
+  <input type="submit" value="{% trans "Yes" %}" />
+  <input type="hidden" name="confirmed" value="Y"/>
+</form>
+
+<form method="post" style="display: inline;">
+{% csrf_token %}
+  <input type="submit" value="{% trans "No" %}" />
+  <input type="hidden" name="confirmed" value="N"/>
+</form>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base_admin.html" %}
+{% load static i18n %}
+
+{% block title %}{{ survey.translated_title }} - EPIWork Survey Designer{% endblock %}
+
+{% block navigation %}
+    <li><a href="{% url 'pollster_survey_list' %}">All Surveys</a></li>
+    {% if survey.id %}
+        {% if survey.is_editable %}
+            <li><a href="{% url 'pollster_survey_edit' survey.id %}">Edit Survey</a></li>
+        {% endif %}
+        <li><a href="{% url 'pollster_survey_translation_list' survey.id %}">Translate Survey</a></li>
+        <li><a href="{% url 'pollster_survey_chart_list' survey.id %}">Charts</a></li>
+        <li><a href="{% url 'pollster_survey_test' survey.id %}">Test Survey</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <style>
+        h2 { margin-bottom: 0; font-size: large; }
+        .row-disabled { pointer-events: none; opacity: 0.5; }
+        .section-header { padding-bottom: 8px; }
+        .section { width: 100%; }
+        td, th { padding-bottom: 12px; padding-right: 8px; }
+        td { width: 90%; }
+    </style>
+    <div id="wok-main-panel-content">
+        <h1>Access control - {{ survey.title }}</h1>
+        <form enctype="multipart/form-data" action="/admin/surveys-editor/pollster/{{ survey.id }}/access/" method="POST">
+            {% csrf_token %}
+            {{ users_form.media }}
+
+            <p>
+                Access selections will be applied in the order they are listed. Options will take priority over
+                all other selections. Filters will take priority over any individual user selections.
+            </p>
+
+            <h2 class="section-header">
+                Options
+            </h2>
+            <table class="section">
+                {{ options_form }}
+            </table>
+            <h2 class="section-header">
+                Filters
+            </h2>
+            <p>
+                Filters can be selected in any combination and are inclusive meaning the selected value will be included
+                in the filtration.
+
+                The filters will be applied to the selected users if a selection has been made or all
+                active users if no selection has been made.
+
+                If the option `All active` is selected the filters will have no effect.
+            </p>
+            <table class="section">
+                {{ filters_form }}
+            </table>
+            <h2 class="section-header">
+                Users
+            </h2>
+            <table class="section">
+                {{ users_form }}
+            </table>
+
+            <input type="submit" value="Save"/>
+        </form>
+    </div>
+{% endblock %}

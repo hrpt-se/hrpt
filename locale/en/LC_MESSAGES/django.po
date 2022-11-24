@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-19 14:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgid "This account is inactive."
+msgstr "This account has not yet been activated. Please click on the link in the email we sent you to activate the account. If you did not receive an email, please check your spam filters."
+
+msgid "Please check the answers for the highlighted questions."
+msgstr ""
+
+msgid "Forgot password?"
+msgstr "Forgot login details?"
+
+msgid "Username"
+msgstr "Username (case sensitive)"
+
+msgid "Password reset"
+msgstr "Forgotten login details"
+
+msgid "Forgotten your password? Enter your e-mail address below, and we'll e-mail instructions for setting a new one."
+msgstr "Forgotten your username and/or password? Enter your e-mail address below, and we'll email your username, and instructions for setting a new password."
+
+msgid "This value must contain only letters, numbers and underscores."
+msgstr "Please choose a username containing only letters, numbers and underscores, and no spaces."
+
+msgid "Map updated hourly."
+msgstr "Map updated every 2 minutes."
+
+msgid "Activate your account:\n\nClick the following URL or copy and paste it to the browser's address bar.\n\nhttp://%(site)s/accounts/activate/%(activation_key)s/\n\nThis activation URL will expire in %(expiration_days)s days."
+msgstr "Dear participant,\n\nThank you for registering for the Flusurvey.\n\nTo activate your account, please click on the following link or copy and paste it into your internet browser:\n\nhttp://%(site)s/accounts/activate/%(activation_key)s/\n\nYou will then be able to start taking part in the Flusurvey, helping us to track the spread of flu across the UK.\n\nThis activation URL will expire in %(expiration_days)s days.\n\nBest wishes,\nThe Flusurvey team\n%(site)s"
+
+msgid "Change profile"
+msgstr "Change background information"
+
+msgid "Thanks for taking the time to fill out this survey."
+msgstr "Thanks for taking the time to fill out this survey.</p><p>Had your flu jab recently? Click on <strong>Change background information</strong> below to let us know."

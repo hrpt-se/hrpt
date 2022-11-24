@@ -1,0 +1,10 @@
+{% load cms_tags i18n static %}
+
+{% block add_js %}
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock add_js %}
+
+<form method="post" action="/contact/" class="contact_form">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" id="commentsubmit" value="{% trans "Send" %}" />
+</form>

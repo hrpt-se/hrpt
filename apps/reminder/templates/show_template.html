@@ -1,0 +1,150 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <style>
+        #queued_mails_info {
+          background: #ECC;
+          margin: 3px;
+          width: 100%;
+          display: none;
+          float: left;
+          color: #511;
+          padding:10px
+        }
+
+
+        #queued_mails_fail {
+          background: #ECC;
+          margin: 3px;
+          width: 100%;
+          display: none;
+          float: left;
+          color: #511;
+          padding:10px
+        }
+
+
+        #queued_mails_complete{
+          background: #CEC;
+          margin: 3px;
+          width: 100%;
+          display: none;
+          float: left;
+          color: #151;
+          padding:10px
+        }
+    </style>
+    <script type="text/javascript" src="{% static '/hrpt-responsive/js/jquery-3.5.1.min.js' %}"></script>
+    <script type="text/javascript">
+        var url_pieces = window.location.pathname.split("/");
+        var template_id = url_pieces[url_pieces.length -2];
+
+
+        $(document).ajaxError(function() {
+            $("#queued_mails_info").slideUp("slow");
+            $("#queued_mails_fail").slideDown("slow");
+        });
+
+        $(document).ready(function() {
+            $('#btn_send_email_to_me').click(function() {
+                //TODO: change to authenticated user
+                $.post('/admin/manual-newsletters/templates/send_to_myself/' + template_id +'/', {csrfmiddlewaretoken: '{{ csrf_token }}'});
+            });
+
+            $("#btn_send_email").click(function(){
+                if(confirm("Queue all emails? This will add one email per user in the email queue.")){
+                    $("#queued_mails_info").slideDown("slow");
+                    let selected_survey = $('#survey_drop_down').val();
+                    let reminder = $('#reminder').prop("checked");
+                    let post_data = {csrfmiddlewaretoken: '{{ csrf_token }}'};
+
+                    if (selected_survey) {
+                        post_data['reminder_to_this_survey'] = selected_survey;
+                    }
+                    if (reminder) {
+                        post_data['reminder'] = reminder;
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/admin/manual-newsletters/send_manual_newsletter/' + template_id + '/',
+                        data: post_data,
+                        success: function() {
+                            $("#queued_mails_info").slideUp("slow");
+                            $("#queued_mails_complete").slideDown("slow");
+                        },
+                    });
+                } else {
+                    console.log("canceled!");
+                }
+            });
+
+            let reminder = $("#reminder");
+            reminder.prop("disabled", true);
+
+            $("#survey_drop_down").change(function () {
+                let reminder = $("#reminder");
+                reminder.prop("disabled", !this.value);
+                if (!this.value) { reminder.prop("checked", false); }
+            });
+        });
+
+        function iframeLoaded(iframe_id) {
+            var iFrameID = document.getElementById(iframe_id);
+            if(iFrameID) {
+                // here you can make the height, I delete it first, then I make it again
+                iFrameID.height = "";
+                iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+            }
+        }
+    </script>
+{% endblock extrastyle %}
+
+{% block content %}
+
+    <div id="queued_mails_info">
+        Wait a moment while the emails are being queued. Do not close this page!
+    </div>
+
+    <div id="queued_mails_complete">
+        All emails have been queued! We may now close this page!
+    </div>
+
+    <div id="queued_mails_fail">
+        An error have ocurred while queueing the emails.
+        Inspect the database table reminder_manualnewsletter.
+    </div>
+
+
+    <div>
+        <label for="survey_drop_down">Select group to send newsletter to:</label>
+        <select id="survey_drop_down">
+            <option value="">(send to all active users)</option>
+            {% for s in surveys %}
+                <option value="{{ s.shortname }}">{{ s.shortname }}</option>
+            {% endfor %}
+        </select>
+
+        <span style="padding-right: 12px;"></span>
+
+        <label for="reminder">Send only to users that did not reply:</label>
+        <input type="checkbox" id="reminder">
+
+        <span style="float: right;">
+            <button type="button" id="btn_send_email">Send</button>
+            <button type="button" id="btn_send_email_to_me">Send only to myself</button>
+        </span>
+    </div>
+
+    <h2>HTML Preview:</h2>
+    <iframe src="/admin/manual-newsletters/templates/iframed/{{id}}/" width="100%" id="htmliframe" onload="iframeLoaded('htmliframe')"></iframe>
+
+    <h2>Plain Text preview:</h2>
+    <p>
+        {{ plain_text_message|linebreaks }}
+    </p>
+
+{% endblock content %}

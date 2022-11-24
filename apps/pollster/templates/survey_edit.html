@@ -1,0 +1,42 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+{% block title %}EPIWork Survey Designer{% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css" href="{% static "pollster/wok/css/wok.pollster.css" %}" media="all" />
+    <script type="text/javascript" src="{% static "/pollster/jquery/js/jquery.hoverIntent.minified.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.datatypes.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.rules.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.virtualoptions.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.providers.js" %}"></script>
+    <script type="text/javascript" src="{% static "/pollster/wok/js/wok.pollster.designer.js" %}"></script>
+    <script type="text/javascript">$(function() { wok.pollster.createPollsterDesigner(null, {mode:"design"}); })</script>
+{% endblock %}
+
+{% block navigation %}
+    <li><a href="{% url 'pollster_survey_list' %}">All Surveys</a></li>
+    {% if survey.id %}
+        <li><a href="{% url 'pollster_survey_translation_list' survey.id %}">Translate Survey</a></li>
+        <li><a href="{% url 'pollster_survey_chart_list' survey.id %}">Charts</a></li>
+        <li><a href="{% url 'pollster_survey_test' survey.id %}">Test Survey</a></li>
+        {% if survey.group %}
+            <li><a href="{% url 'pollster_survey_access' survey.id %}">Survey access</a></li>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <div id="pollster-properties">
+        {% include "properties.html" %}
+    </div>
+    <div id="pollster-canvas">
+        {% include "questions_edit.html" %}
+    </div>
+    <div id="pollster-tools">
+        {% block pollster-tools %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

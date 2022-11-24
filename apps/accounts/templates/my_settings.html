@@ -1,0 +1,76 @@
+{% extends "hrpt-responsive/singlecol.html" %}
+{% load cms_tags i18n %}
+
+{% block col1 %}
+    <h1>{% trans "My settings" %}</h1>
+
+    {% if success %}
+        <div class="callout success">
+            <p>{% trans "Your settings have been updated" %}</p>
+        </div>
+    {% endif %}
+
+    <div class="usersettings">
+        <h2>{% trans "Email" %}</h2>
+
+        <form action="{% url 'settings' %}email/" method="post">
+            {% csrf_token %}
+            {% with field=email_form.email %}
+                <div class="input-group">
+                    <span class="input-group-label">{{ field.label }}</span>
+                    <input id="{{ field.id_for_label }}" type="email" name="{{ field.html_name }}" class="input-group-field" value="{{ field.value }}" required>
+                    <div class="input-group-button">
+                        <input type="submit" class="button" value="{% trans "Save" %}">
+                    </div>
+                </div>
+            {% endwith %}
+        </form>
+
+        <div class="clearfix">
+            <h2>{% trans "Password" %}</h2>
+            <form action="{% url 'settings' %}password/" method="post">
+                {{ password_form.non_field_errors }}
+                {% csrf_token %}
+                {% for field in password_form %}
+                    <label>{{ field.label }}
+                        {{ field }}
+                    </label>
+
+                    {% if field.errors %}
+                        <div class="callout alert">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <input type="submit" class="button float-right" value="{% trans "Save" %}">
+            </form>
+        </div>
+
+        <div class="clearfix">
+            <h2 class="clearfix">{% trans "Username" %}</h2>
+            <form action="{% url 'settings' %}username/" method="post">
+                {% csrf_token %}
+                {% with field=username_form.username %}
+                    <label>{{ field.label }}
+                        {{ field }}
+                    </label>
+                    <p class="help-text" id="passwordHelpText">{{ field.help_text }}</p>
+                {% endwith %}
+                <input type="submit" class="button float-right">
+            </form>
+        </div>
+
+        <div class="clearfix">
+            <h2>{% trans "Deactivation" %}</h2>
+            <form action="{% url 'settings' %}deactivate/" method="post">
+                {% csrf_token %}
+                {% with field=deactivate_form.is_active %}
+                    <input id="checkbox1" type="checkbox" {% if field.value %} checked{% endif %}>
+                    <label for="checkbox1">{{ field.label }}</label>
+                    <p class="help-text">{{ field.help_text }}</p>
+                {% endwith %}
+                <input type="submit" class="button float-right">
+            </form>
+        </div>
+    </div>
+{% endblock %}

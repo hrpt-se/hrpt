@@ -1,0 +1,83 @@
+{% extends "base_admin.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css" href="{% static "pollster/jquery/css/jquery.dataTables.min.css" %}" media="all" />
+    <script type="text/javascript" src="{% static "pollster/jquery/js/jquery.dataTables.min.js" %}"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#survey-table').DataTable({
+                "ordering": false
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block navigation %}
+    <li><a href="/admin">Back to Django admin</a></li>
+{% endblock %}
+
+{% block content %}
+<div id="wok-main-panel-content">
+    <div id="survey-list">
+        <h1>Surveys</h1>
+        <table id="survey-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Last updated</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for survey in surveys %}
+                <tr>
+                    <td>
+                        <a href="{% url 'pollster_survey_edit' survey.id %}">
+                            {{ survey.title }} ({{ survey.shortname }})
+                        </a>
+                    </td>
+                    <td>{{ survey.updated|naturaltime }}</td>
+                    <td>{{ survey.status }}</td>
+                    <td>
+                            <a class="ui-button link" href="{% url 'pollster_survey_test' survey.id %}">Test</a>
+                            {% if not survey.is_published %}
+                                <a class="ui-button" href="{% url 'pollster_survey_edit' survey.id %}">Edit</a>
+                            {% endif %}
+                            <a class="ui-button" href="{% url 'pollster_survey_export' survey.id %}">Export</a>
+                        {% if survey.is_draft %}
+                            <form action="{% url 'pollster_survey_publish' survey.id %}" method="POST">{% csrf_token %}<button class="ui-button link">Publish</button></form>
+                        {% elif survey.is_unpublished %}
+                            <form action="{% url 'pollster_survey_publish' survey.id %}" method="POST">{% csrf_token %}<button class="ui-button link">Re-publish</button></form>
+                        {% elif survey.is_published %}
+                            <a class="ui-button" href="{% url 'pollster_survey_results_csv' survey.id %}">Results</a>
+                            {% if survey.shortname == "intake" %}
+                                <a class="ui-button" href="{% url 'pollster_survey_results_csv_extended' survey.id %}">Extended results</a>
+                            {% endif %}
+                                <form action="{% url 'pollster_survey_unpublish' survey.id %}" method="POST">{% csrf_token %}<input type="submit" class="ui-button link" value="Unpublish" /></form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <ul>
+            <li>
+            <form action="{% url 'pollster_survey_import' %}" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                {{ form_import.data }}
+                <button>import survey</button>
+            </form>
+            </li>
+            <li>
+            <form action="{% url 'pollster_survey_add' %}" method="GET">
+                <button>new survey</button>
+            </form>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

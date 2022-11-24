@@ -1,0 +1,71 @@
+@font-face {
+    font-family: "KlavikaWebBasicLight";
+    src: url("/static/hrpt-responsive/fonts/KlavikaWebBasicLight.woff") format('woff');
+}
+
+@font-face {
+    font-family: "KlavikaWebBasicRegular";
+    src: url("/static/hrpt-responsive/fonts/KlavikaWebBasicRegular.woff") format('woff');
+}
+
+@font-face {
+    font-family: "KlavikaWebBasicRegular";
+    src: url("/static/hrpt-responsive/fonts/KlavikaWebBasicRegular.woff") format('woff');
+}
+
+header .columns {
+    padding-bottom: 10px;
+}
+
+#footer {
+    background: #2d5492;
+}
+
+#menu-toggler {
+    padding: 10px 20px;
+    background: #2d5492 url(/static/hrpt-responsive/img/burger.png) no-repeat 50% 50%;
+}
+
+.errorlist {
+    color: red;
+    font-weight: bold;
+}
+
+.top-bar {
+    background-color: #fff;
+    padding: 0;
+}
+
+.override-hidden {
+    display: block!important;
+}
+
+@media only screen and (max-width: 640px) {
+    input.button, a.button {
+        padding: 10px 20px;
+    }
+}
+
+@media only screen and (min-width: 640px) {
+    .header-buttons {
+        text-align: right;
+    }
+}
+
+.cookie-info {
+    margin: 0 0 20px;
+}
+
+.cookie-info button {
+    margin-left: 10px;
+    padding: 2px 7px;
+    font: 15px/25px Tahoma, sans-serif;
+}
+
+.m-shortcuts li a:before {
+    background: url(/static/hrpt-responsive/img/chevron-right.svg) no-repeat;
+}
+
+.nav-main-inner > div {
+    margin-bottom: 0;
+}

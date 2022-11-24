@@ -1,0 +1,11 @@
+{% extends "hrpt-responsive/singlecol.html" %}
+{% load i18n %}
+
+{% block title %}{{ block.super }}{% trans "Logged out" %}{% endblock %}
+
+{% block authentication %}{% endblock authentication %}
+
+{% block col1 %}
+    <h1>{% trans "Logged out" %}</h1>
+    <a href="/">{% trans "You have been logged out. Go to " %}<u>{% trans "home" %}</u></a>
+{% endblock col1 %}
